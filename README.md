@@ -10,6 +10,10 @@ npm install
 Build and run web server
 
 ```
+npm start
+```
+
+```
 webpack-dev-server --progress --colors
 ```
 
