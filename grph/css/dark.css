@@ -1,0 +1,246 @@
+svg {
+  background: #404040;
+}
+svg * {
+  font-family: Corbel, Helvetica, sans-serif;
+  font-size: 12px;
+}
+text {
+  fill: #bbbbbb;
+}
+path,
+line {
+  stroke: #505050;
+  stroke-width: 1pt;
+  fill: none;
+}
+line.grid,
+line.tick {
+  stroke-width: 0.5pt;
+}
+line.gridx {
+  stroke-width: 0px;
+}
+.graph-bubble line.gridx,
+.graph-bar line.gridx {
+  stroke-width: 0.5pt;
+}
+.graph-bar line.gridy {
+  stroke-width: 0pt;
+}
+rect.background {
+  fill: none;
+  stroke: 0pt;
+}
+.panel rect.background {
+  fill: #404040;
+}
+.crosshairs line {
+  stroke: #bbbbbb;
+  stroke-width: 0.5pt;
+  stroke-dasharray: 5,5;
+}
+.graph-bar .axisline {
+  stroke-width: 0pt;
+}
+.graph-bar .crosshairs line.hline {
+  stroke-width: 0pt;
+}
+div.tip {
+  padding: 5px;
+  font-family: Corbel, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #bbbbbb;
+  background: rgba(0, 0, 0, 0.5);
+}
+rect.colour1,
+circle.colour1 {
+  fill: #52a146;
+  fill-opacity: 0.8;
+  stroke: #52a146;
+  stroke-opacity: 1;
+}
+rect.colour2,
+circle.colour2 {
+  fill: #da6db6;
+  fill-opacity: 0.8;
+  stroke: #da6db6;
+  stroke-opacity: 1;
+}
+rect.colour3,
+circle.colour3 {
+  fill: #4294ad;
+  fill-opacity: 0.8;
+  stroke: #4294ad;
+  stroke-opacity: 1;
+}
+rect.colour4,
+circle.colour4 {
+  fill: #c97b2a;
+  fill-opacity: 0.8;
+  stroke: #c97b2a;
+  stroke-opacity: 1;
+}
+rect.colour5,
+circle.colour5 {
+  fill: #818dda;
+  fill-opacity: 0.8;
+  stroke: #818dda;
+  stroke-opacity: 1;
+}
+rect.colour6,
+circle.colour6 {
+  fill: #d45671;
+  fill-opacity: 0.8;
+  stroke: #d45671;
+  stroke-opacity: 1;
+}
+rect.colour7,
+circle.colour7 {
+  fill: #969328;
+  fill-opacity: 0.8;
+  stroke: #969328;
+  stroke-opacity: 1;
+}
+rect.colour8,
+circle.colour8 {
+  fill: #d85f46;
+  fill-opacity: 0.8;
+  stroke: #d85f46;
+  stroke-opacity: 1;
+}
+rect.colour9,
+circle.colour9 {
+  fill: #9d6ea7;
+  fill-opacity: 0.8;
+  stroke: #9d6ea7;
+  stroke-opacity: 1;
+}
+rect.colour.colourlow,
+circle.colour.colourlow {
+  fill-opacity: 0.0;
+}
+line.colour1,
+path.colour1 {
+  stroke: #52a146;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour2,
+path.colour2 {
+  stroke: #da6db6;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour3,
+path.colour3 {
+  stroke: #4294ad;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour4,
+path.colour4 {
+  stroke: #c97b2a;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour5,
+path.colour5 {
+  stroke: #818dda;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour6,
+path.colour6 {
+  stroke: #d45671;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour7,
+path.colour7 {
+  stroke: #969328;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour8,
+path.colour8 {
+  stroke: #d85f46;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour9,
+path.colour9 {
+  stroke: #9d6ea7;
+  stroke-opacity: 1;
+  fill: none;
+}
+line.colour.colourlow,
+path.colour.colourlow {
+  stroke-opacity: 0.5;
+}
+.chloro1 {
+  fill: #f7fcf0;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro2 {
+  fill: #e0f3db;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro3 {
+  fill: #ccebc5;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro4 {
+  fill: #a8ddb5;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro5 {
+  fill: #7bccc4;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro6 {
+  fill: #4eb3d3;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro7 {
+  fill: #2b8cbe;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro8 {
+  fill: #0868ac;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro9 {
+  fill: #084081;
+  fill-opacity: 1;
+  stroke: #000000;
+  stroke-opacity: 1;
+  stroke-width: 0.5pt;
+}
+.chloro.colourhigh {
+  stroke-width: 2px;
+}
