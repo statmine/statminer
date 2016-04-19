@@ -24,3 +24,4 @@ cd simple_table_data_service
 node server.js
 ```
 
+StatMiner can be accessed at [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/).
