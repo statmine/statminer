@@ -1,14 +1,20 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
 
-var Graph = React.createClass({
-  getInitialState: function() {
-    return {
-      graph : this.props.graph.graph
+class Graph extends React.Component {
+
+  constructor(props) {
+    super(props);
+    // set initial state
+    this.state = {
+      graph: props.graph.graph
     };
-  },
-  renderGraph: function() {
+    // bind methods to this
+    this.renderGraph = this.renderGraph.bind(this);
+  }
+
+  renderGraph() {
     if (this.props.graph.can_draw(this.props.schema, this.props.data, this.props.mapping)) {
       var svg = ReactDOM.findDOMNode(this);
       // clear previous graph
@@ -22,21 +28,23 @@ var Graph = React.createClass({
       // render
       this.state.graph(d3.select(svg));
     }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     this.renderGraph();
-  },
-  componentDidUpdate: function() {
+  }
+
+  componentDidUpdate() {
     this.renderGraph();
-  },
-  render: function() {
+  }
+
+  render() {
     if (this.props.graph.can_draw(this.props.schema, this.props.data, this.props.mapping)) {
       return (<svg width={this.props.width} height={this.props.height}></svg>);
     } else {
       return (<span>Invalid mapping</span>);
     }
   }
-});
-
+}
 
 module.exports = Graph;

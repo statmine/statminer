@@ -1,14 +1,21 @@
-var React = require('react');
+import React from 'react';
 
-var Selector_axis = React.createClass({
-  handleVariableChange: function(event) {
+class Selector_axis extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    this.handleVariableChange = this.handleVariableChange.bind(this);
+  }
+
+  handleVariableChange(event) {
     var value = event.target.value === "__empty" ? undefined : event.target.value;
     this.props.onVariableChange({
       name: this.props.description.name, 
       value: value
     });
-  },
-  render : function() {
+  }
+
+  render() {
     // create list with options = variables
     var description = this.props.description;
     var options = this.props.variables.map(function(v, i) {
@@ -28,7 +35,7 @@ var Selector_axis = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = Selector_axis;
 

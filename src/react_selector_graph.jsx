@@ -1,14 +1,20 @@
+import React from 'react';
+import Selector_axis from './react_selector_axis.jsx';
 
-var React = require('react');
-var Selector_axis = require('./react_selector_axis.jsx');
 
-var Selector_graph = React.createClass({
-  getInitialState: function() {
-    return {
-      selection : this.props.initialSelection
+class Selector_graph extends React.Component {
+  
+  constructor(props) {
+    super(props);
+    // set initial state
+    this.state = {
+      selection: props.initialSelection
     };
-  },
-  handleAxisVariableChange: function(change) {
+    // bind methods to this
+    this.handleAxisVariableChange = this.handleAxisVariableChange.bind(this);
+  }
+
+  handleAxisVariableChange(change) {
     var new_selection = this.state.selection;
     // check if variable in change.value has already been assigned to other 
     // axis; if so: remove selection
@@ -22,8 +28,9 @@ var Selector_graph = React.createClass({
     if (typeof this.props.onChange === "function") 
       this.props.onChange(new_selection);
     this.setState({selection: new_selection});
-  },
-  render : function() {
+  }
+
+  render() {
     if (this.props.variables === undefined || this.state.selection === undefined) {
       return (<div className="graph">Foo bar</div>);
     }
@@ -34,6 +41,8 @@ var Selector_graph = React.createClass({
     });
     return (<div className="graph">{axes}</div>);
   }
-});
+ 
+}
 
 module.exports = Selector_graph;
+

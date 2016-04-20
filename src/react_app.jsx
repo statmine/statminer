@@ -1,46 +1,51 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Graph from './react_graph.jsx';
+import Selector_graph from './react_selector_graph.jsx';
+import graph_descriptions from './graph_descriptions.js';
+import dataservice from './dataservice.js';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Graph = require('./react_graph.jsx');
-var Selector_graph = require('./react_selector_graph.jsx');
-var graph_descriptions = require('./graph_descriptions.js');
+class App extends React.Component {
 
-var App = React.createClass({
-  getInitialState: function() {
-    return { 
+  constructor(props) {
+    super(props);
+    // set initial state
+    this.state = {
       mapping: {},
       table_schema: undefined,
       data: undefined,
       schema: undefined
     };
-  },
-  componentDidMount: function() {
+    // bind methods to this
+    this.handleMappingChange = this.handleMappingChange.bind(this);
+  }
+
+  componentDidMount() {
     var self = this;
     // get the meta from the server; not sure if this is the right method to 
     // put this into
-    d3.json("http://localhost:8088/meta", function(e, d) {
+    dataservice.get_schema(function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
         return;
       }
       self.setState({table_schema: d});
     });
-  },
-  handleMappingChange: function(mapping) {
+  }
+
+  handleMappingChange(mapping) {
     this.setState({'mapping': mapping});
     var self = this;
-    d3.json("http://localhost:8088/data")
-      .header("Content-Type", "application/json")
-      .post(JSON.stringify(mapping), function(e, d) {
-        if (e) {
-          console.log("Failed to load data:", e);
-          return;
-        }
-        console.log(d);
-        self.setState({data: d.data, schema: d.meta});
-      });
-  },
-  render: function() {
+    dataservice.get_data(mapping, function(e, d) {
+      if (e) {
+        console.log("Failed to load data:", e);
+        return;
+      }
+      self.setState({data: d.data, schema: d.meta});
+    });
+  }
+
+  render() {
     return (<div>
       <Graph width="900" height="400" 
         graph={this.props.graph_descriptions[1]}
@@ -52,7 +57,7 @@ var App = React.createClass({
         onChange={this.handleMappingChange}/>
     </div>);
   }
-});
+}
 
 
 ReactDOM.render(
