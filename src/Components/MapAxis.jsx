@@ -16,10 +16,21 @@ class MapAxis extends React.Component {
       value: value
     });
   }
-  
-  componentWillMount(props){
-    
+
+/*  
+  componentWillMount(){
+    componentWillReceiveProps(this.props);
   }
+  
+  componentWillReceiveProps(props){
+    const {axis, onChange, variables} = props;
+    if (  axis.required 
+       && typeof onChange === "function"
+       ){
+      onChange({name: axis.name, value: variables[0].name})
+    }
+  }
+*/
 
   render() {
     // create list with options = variables
@@ -31,7 +42,11 @@ class MapAxis extends React.Component {
     
     // add empty option to front of list
     var selected_var = selection[axis.name] || EMPTY;
-    options.unshift(<option key={-1} value={EMPTY}>No variable selected</option>);
+    
+    //if (!axis.required){
+      options.unshift(<option key={-1} value={EMPTY}>No variable selected</option>);
+    //}
+    
     // create select
     return (
       <div className="axis">

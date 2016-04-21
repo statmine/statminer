@@ -42,6 +42,7 @@ class Mapping extends React.Component {
     const axes = description.axes.map(function(axis, i) {
       const types = axis.accepts;
       const fields = variables.fields.filter( (f) => types.indexOf(f.type) >=0 );
+      
       //console.log("fields", fields);
       return (
         <MapAxis key       = {i} 
