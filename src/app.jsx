@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Graph from './react_graph.jsx';
-import Selector_graph from './react_selector_graph.jsx';
-import Select_graphtype from './react_select_graphtype.jsx';
+import Graph from './Components/Graph.jsx';
+import Mapping from './Components/Mapping.jsx';
+import GraphType from './Components/GraphType.jsx';
 import graph_descriptions from './graph_descriptions.js';
-import dataservice from './dataservice.js';
+import dataservice from './Services/dataservice.js';
 
 class App extends React.Component {
 
@@ -56,21 +56,28 @@ class App extends React.Component {
   render() {
     
     const {mapping, table_schema, schema, data, graph_type} = this.state;
-    const graph_desc = this.props.graph_descriptions[graph_type];
+    //const {graph_descriptions} = this.props.graph_descriptions;
+    const {graph_descriptions} = this.props;
+    const graph_desc = graph_descriptions[graph_type];
     
     console.log("graph_desc:", graph_desc);
     console.log("objects", mapping, table_schema, schema, data);
     console.log("state:", this.state);
     
-    return (<div>
+    console.log(<div id="test"></div>)
+    
+    return (
+    <div>
       <Graph width="900" height="400" 
         graph={graph_desc}
         schema={schema} data={data} 
         mapping={mapping}/>
-      <Select_graphtype graphtypes={this.props.graph_descriptions}
-        initialSelection={this.props.graph_descriptions[this.state.graph_type].name}
+        
+      <GraphType graphtypes={graph_descriptions}
+        initialSelection={graph_desc.name}
         onTypeChange={this.handleGraphTypeChange}/>
-      <Selector_graph description={graph_desc} 
+        
+      <Mapping description={graph_desc}
         variables={table_schema} 
         initialSelection={mapping} 
         onChange={this.handleMappingChange}/>

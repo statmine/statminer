@@ -13,7 +13,12 @@ var dataservice = (function() {
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(mapping), on_data);
   }
-
+  
+  dataservice.get_table_list = function(on_list){
+    //TODO implement list of table
+    on_list();
+  }
+  
   return dataservice;
 })();
 

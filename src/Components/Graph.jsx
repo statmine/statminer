@@ -15,7 +15,9 @@ class Graph extends React.Component {
   }
 
   renderGraph() {
-    if (this.props.graph.can_draw(this.props.schema, this.props.data, this.props.mapping)) {
+    const {graph, schema, data, mapping} = this.props;
+    
+    if (graph.can_draw(schema, data, mapping)) {
       var svg = ReactDOM.findDOMNode(this);
       // clear previous graph
       d3.selectAll(svg.childNodes).remove();

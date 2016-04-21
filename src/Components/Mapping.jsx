@@ -1,8 +1,8 @@
 import React from 'react';
-import Selector_axis from './react_selector_axis.jsx';
+import MapAxis from './MapAxis.jsx';
 
 
-class Selector_graph extends React.Component {
+class Mapping extends React.Component {
   
   constructor(props) {
     super(props);
@@ -36,7 +36,7 @@ class Selector_graph extends React.Component {
     }
     var self = this;
     var axes = this.props.description.axes.map(function(d, i) {
-      return (<Selector_axis key={i} description={d} variables={self.props.variables.fields} 
+      return (<MapAxis key={i} description={d} variables={self.props.variables.fields} 
         selection={self.state.selection} onVariableChange={self.handleAxisVariableChange} />);
     });
     return (<div className="graph">{axes}</div>);
@@ -44,5 +44,5 @@ class Selector_graph extends React.Component {
  
 }
 
-module.exports = Selector_graph;
+module.exports = Mapping;
 

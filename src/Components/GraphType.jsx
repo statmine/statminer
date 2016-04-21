@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Select_graphtype extends React.Component {
+class GraphType extends React.Component {
   constructor(props) {
     super(props);
     // set initial state
@@ -44,4 +44,4 @@ class Select_graphtype extends React.Component {
   }
 }
 
-export default Select_graphtype;
+export default GraphType;

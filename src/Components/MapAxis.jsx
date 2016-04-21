@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Selector_axis extends React.Component {
+class MapAxis extends React.Component {
   
   constructor(props) {
     super(props);
@@ -17,11 +17,13 @@ class Selector_axis extends React.Component {
 
   render() {
     // create list with options = variables
-    var description = this.props.description;
-    var options = this.props.variables.map(function(v, i) {
+    const {description, variables} = this.props;
+    //var description = this.props.description;
+    var options = variables.map(function(v, i) {
       if (description.accepts.indexOf(v.type) < 0) return undefined;
       return (<option key={i} value={v.name}>{v.title}</option>);
     });
+    
     // add empty option to front of list
     var selected_var = this.props.selection[this.props.description.name] || "__empty";
     options.unshift(<option key={-1} value="__empty">No variable selected</option>);
@@ -37,5 +39,5 @@ class Selector_axis extends React.Component {
   }
 }
 
-module.exports = Selector_axis;
+module.exports = MapAxis;
 
