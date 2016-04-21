@@ -4,9 +4,6 @@ class GraphType extends React.Component {
   constructor(props) {
     super(props);
     // set initial state
-    this.state = {
-      selection: props.initialSelection
-    };
     // bind methods to this
     this.handleTypeChange = this.handleTypeChange.bind(this);
   }
@@ -30,7 +27,7 @@ class GraphType extends React.Component {
   }
   
   componentWillReceiveProps(props){
-    console.log("props..")
+    console.log("props...")
     if (props.value === undefined && typeof props.onChange === "function"){
       props.onChange(props.graphtypes[0]);
     }

@@ -16,13 +16,16 @@ class MapAxis extends React.Component {
       value: value
     });
   }
+  
+  componentWillMount(props){
+    
+  }
 
   render() {
     // create list with options = variables
-    const {axis, variables, selection} = this.props;
+    const {axis, variables, selection, value} = this.props;
      
     const options = variables.map(function(v) {
-      if (axis.accepts.indexOf(v.type) < 0) return undefined;
       return (<option key={v.name} value={v.name}>{v.title}</option>);
     });
     
@@ -34,7 +37,7 @@ class MapAxis extends React.Component {
       <div className="axis">
         <h3>{axis.title}</h3>
         <select value={selected_var} onChange={this.handleVariableChange}>
-        {options}
+          {options}
         </select>
       </div>
     );
