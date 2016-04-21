@@ -39,13 +39,20 @@ class Mapping extends React.Component {
     }
     
     const self = this;
-    const axes = description.axes.map(function(d, i) {
+    const axes = description.axes.map(function(axis, i) {
       return (
-        <MapAxis key={i} description={d} variables={self.props.variables.fields} 
-        selection={self.state.selection} onVariableChange={self.handleAxisVariableChange} />
+        <MapAxis key       = {i} 
+                 axis      = {axis} 
+                 variables = {variables.fields} 
+                 selection = {self.state.selection} 
+                 onChange  = {self.handleAxisVariableChange} 
+        />
       );
     });
-    return (<div className="graph">{axes}</div>);
+    return (
+      <div className="mapping">
+        {axes}
+      </div>);
   }
  
 }

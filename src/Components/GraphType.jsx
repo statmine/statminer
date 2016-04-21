@@ -18,9 +18,9 @@ class GraphType extends React.Component {
       var index = undefined;
       for (var i = 0; i < this.props.graphtypes.length; ++i) {
         if (this.props.graphtypes[i].name === value) {
-	  index = i;
-	  break;
-	}
+          index = i;
+          break;
+        }
       }
       this.props.onTypeChange({name: value, index: index});
     }
@@ -28,16 +28,19 @@ class GraphType extends React.Component {
 
   render() {
     // create list with options = variables
+    let {graphtypes, value} = this.props;
     
-    let options = this.props.graphtypes.map(function(v, i) {
+    let options = graphtypes.map(function(v, i) {
       return (<option key={i} value={v.name}>{v.title}</option>);
     });
     //
-    const value = this.state.selection || this.props.graphtypes[0].name;
+    
+    const select_value = value || this.state.selection || graphtypes[0].name;
+    
     // create select
     return (
       <div className="select_graphtype">
-        <select value={value} onChange={this.handleTypeChange}>
+        <select value={select_value} onChange={this.handleTypeChange}>
         {options}
         </select>
       </div>
