@@ -14,10 +14,13 @@ class App extends React.Component {
     // set initial state
     this.state = {
       mapping: {},
+      table_id: "",
+      table_info: undefined,
       table_schema: undefined,
       data: undefined,
       schema: undefined,
-      graph_type: 1
+      graph_type: 1,
+      graph_desc: null
     };
     
     // bind methods to this
@@ -34,6 +37,7 @@ class App extends React.Component {
         console.log("Failed to load meta:", e);
         return;
       }
+      console.log("table_schema:", d);
       self.setState({table_schema: d});
     });
   }
@@ -53,14 +57,14 @@ class App extends React.Component {
 
   handleGraphTypeChange(type) {
     console.log("handleGraphTypeChange", type);
-    this.setState({graph_type: type.index});
+    this.setState({graph_desc: type});
   }
 
   render() {
     
     const {mapping, table_schema, schema, data, graph_type} = this.state;
     const {graph_descriptions} = this.props;
-    const graph_desc = graph_descriptions[graph_type];
+    let graph_desc = this.state.graph_desc || graph_descriptions[graph_type];
     
     console.log("objects", mapping, table_schema, schema, data);
     console.log("state:", this.state);
@@ -70,11 +74,11 @@ class App extends React.Component {
         <Graph width="900" height="400" 
           graph={graph_desc}
           schema={schema} data={data} 
-          mapping={mapping}/>
+          mapping={mapping} />
           
         <GraphType graphtypes={graph_descriptions}
-          initialSelection={graph_desc.name}
-          onTypeChange={this.handleGraphTypeChange}/>
+          value = {graph_desc}
+          onChange={this.handleGraphTypeChange}/>
           
         <Mapping description={graph_desc}
           variables={table_schema} 

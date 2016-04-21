@@ -21,9 +21,9 @@ class MapAxis extends React.Component {
     // create list with options = variables
     const {axis, variables, selection} = this.props;
      
-    var options = variables.map(function(v, i) {
+    const options = variables.map(function(v) {
       if (axis.accepts.indexOf(v.type) < 0) return undefined;
-      return (<option key={i} value={v.name}>{v.title}</option>);
+      return (<option key={v.name} value={v.name}>{v.title}</option>);
     });
     
     // add empty option to front of list
@@ -41,5 +41,5 @@ class MapAxis extends React.Component {
   }
 }
 
-module.exports = MapAxis;
+export default MapAxis;
 

@@ -12,35 +12,49 @@ class GraphType extends React.Component {
   }
 
   handleTypeChange(event) {
-    var value = event.target.value;
-    this.setState({selection: value});
-    if (this.props.onTypeChange) {
-      var index = undefined;
-      for (var i = 0; i < this.props.graphtypes.length; ++i) {
-        if (this.props.graphtypes[i].name === value) {
-          index = i;
-          break;
+    const value = event.target.value;
+    //this.setState({selection: value});
+    const {graphtypes, onChange} = this.props;
+    if (typeof onChange === "function"){
+      for (var t of graphtypes){
+        if (value == t.name){
+          onChange(t);
+          return;
         }
       }
-      this.props.onTypeChange({name: value, index: index});
+    }
+  }
+  
+  componentWillMount(){
+    this.componentWillReceiveProps(this.props);
+  }
+  
+  componentWillReceiveProps(props){
+    console.log("props..")
+    if (props.value === undefined && typeof props.onChange === "function"){
+      props.onChange(props.graphtypes[0]);
     }
   }
 
   render() {
     // create list with options = variables
-    let {graphtypes, value} = this.props;
+    let {graphtypes, value, onChange} = this.props;
     
     let options = graphtypes.map(function(v, i) {
-      return (<option key={i} value={v.name}>{v.title}</option>);
+      return (<option key={v.name} value={v.name}>{v.title}</option>);
     });
     //
     
-    const select_value = value || this.state.selection || graphtypes[0].name;
-    
+    if (value === undefined){
+      if (typeof onChange === "function"){
+        onChange(graphtypes[0]);
+        return <div></div> ;
+      }
+    }    
     // create select
     return (
-      <div className="select_graphtype">
-        <select value={select_value} onChange={this.handleTypeChange}>
+      <div className="graphtype">
+        <select value={value.name} onChange={this.handleTypeChange}>
         {options}
         </select>
       </div>

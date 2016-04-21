@@ -35,7 +35,7 @@ class Mapping extends React.Component {
     const {selection} = this.state;
     
     if (variables === undefined || selection === undefined) {
-      return (<div className="graph">Foo bar</div>);
+      return (<div className="mapping">Foo bar</div>);
     }
     
     const self = this;
@@ -44,11 +44,12 @@ class Mapping extends React.Component {
         <MapAxis key       = {i} 
                  axis      = {axis} 
                  variables = {variables.fields} 
-                 selection = {self.state.selection} 
+                 selection = {selection} 
                  onChange  = {self.handleAxisVariableChange} 
         />
       );
     });
+    
     return (
       <div className="mapping">
         {axes}

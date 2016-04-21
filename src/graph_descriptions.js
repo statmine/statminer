@@ -18,11 +18,13 @@ var graph_descriptions = [
       {
         name : 'x',
         title : 'X-Axis',
-        accepts : ['date']
+        accepts : ['date'],
+        required: true
       }, {
         name : 'y',
         title : 'Y-Axis',
-        accepts: ['number']
+        accepts: ['number'],
+        required: true
       }, {
         name : 'colour',
         title : 'Colour',
@@ -55,11 +57,13 @@ var graph_descriptions = [
       {
         name : 'x',
         title : 'X-Axis',
-        accepts : ['number']
+        accepts : ['number'],
+        required: true
       }, {
         name : 'y',
         title : 'Y-Axis',
-        accepts: ['number']
+        accepts: ['number'],
+        required: true
       }, {
         name : 'size',
         title : 'Size',
