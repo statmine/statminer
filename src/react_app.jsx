@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Graph from './react_graph.jsx';
 import Selector_graph from './react_selector_graph.jsx';
+import Select_graphtype from './react_select_graphtype.jsx';
 import graph_descriptions from './graph_descriptions.js';
 import dataservice from './dataservice.js';
 
@@ -14,10 +15,12 @@ class App extends React.Component {
       mapping: {},
       table_schema: undefined,
       data: undefined,
-      schema: undefined
+      schema: undefined,
+      graph_type: 1
     };
     // bind methods to this
     this.handleMappingChange = this.handleMappingChange.bind(this);
+    this.handleGraphTypeChange = this.handleGraphTypeChange.bind(this);
   }
 
   componentDidMount() {
@@ -45,13 +48,21 @@ class App extends React.Component {
     });
   }
 
+  handleGraphTypeChange(type) {
+    console.log("handleGraphTypeChange", type);
+    this.setState({graph_type: type.index});
+  }
+
   render() {
     return (<div>
       <Graph width="900" height="400" 
-        graph={this.props.graph_descriptions[1]}
+        graph={this.props.graph_descriptions[this.state.graph_type]}
         schema={this.state.schema} data={this.state.data} 
         mapping={this.state.mapping}/>
-      <Selector_graph description={this.props.graph_descriptions[1]} 
+      <Select_graphtype graphtypes={this.props.graph_descriptions}
+        initialSelection={this.props.graph_descriptions[this.state.graph_type].name}
+	onTypeChange={this.handleGraphTypeChange}/>
+      <Selector_graph description={this.props.graph_descriptions[this.state.graph_type]} 
         variables={this.state.table_schema} 
         initialSelection={this.state.mapping} 
         onChange={this.handleMappingChange}/>
