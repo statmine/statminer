@@ -44,3 +44,4 @@ class Select_graphtype extends React.Component {
   }
 }
 
+export default Select_graphtype;

@@ -50,21 +50,29 @@ class App extends React.Component {
 
   handleGraphTypeChange(type) {
     console.log("handleGraphTypeChange", type);
-    this.setState({graph_type: type.index});
+    this.setState({graph_type: type.graph_type});
   }
 
   render() {
+    
+    const {mapping, table_schema, schema, data, graph_type} = this.state;
+    const graph_desc = this.props.graph_descriptions[graph_type];
+    
+    console.log("graph_desc:", graph_desc);
+    console.log("objects", mapping, table_schema, schema, data);
+    console.log("state:", this.state);
+    
     return (<div>
       <Graph width="900" height="400" 
-        graph={this.props.graph_descriptions[this.state.graph_type]}
-        schema={this.state.schema} data={this.state.data} 
-        mapping={this.state.mapping}/>
+        graph={graph_desc}
+        schema={schema} data={data} 
+        mapping={mapping}/>
       <Select_graphtype graphtypes={this.props.graph_descriptions}
         initialSelection={this.props.graph_descriptions[this.state.graph_type].name}
-	onTypeChange={this.handleGraphTypeChange}/>
-      <Selector_graph description={this.props.graph_descriptions[this.state.graph_type]} 
-        variables={this.state.table_schema} 
-        initialSelection={this.state.mapping} 
+        onTypeChange={this.handleGraphTypeChange}/>
+      <Selector_graph description={graph_desc} 
+        variables={table_schema} 
+        initialSelection={mapping} 
         onChange={this.handleMappingChange}/>
     </div>);
   }
@@ -76,3 +84,6 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
+/*
+
+*/
