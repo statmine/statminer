@@ -31,13 +31,19 @@ class Mapping extends React.Component {
   }
 
   render() {
-    if (this.props.variables === undefined || this.state.selection === undefined) {
+    const {variables, description} = this.props;
+    const {selection} = this.state;
+    
+    if (variables === undefined || selection === undefined) {
       return (<div className="graph">Foo bar</div>);
     }
-    var self = this;
-    var axes = this.props.description.axes.map(function(d, i) {
-      return (<MapAxis key={i} description={d} variables={self.props.variables.fields} 
-        selection={self.state.selection} onVariableChange={self.handleAxisVariableChange} />);
+    
+    const self = this;
+    const axes = description.axes.map(function(d, i) {
+      return (
+        <MapAxis key={i} description={d} variables={self.props.variables.fields} 
+        selection={self.state.selection} onVariableChange={self.handleAxisVariableChange} />
+      );
     });
     return (<div className="graph">{axes}</div>);
   }

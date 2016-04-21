@@ -10,6 +10,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
+    
     // set initial state
     this.state = {
       mapping: {},
@@ -18,6 +19,7 @@ class App extends React.Component {
       schema: undefined,
       graph_type: 1
     };
+    
     // bind methods to this
     this.handleMappingChange = this.handleMappingChange.bind(this);
     this.handleGraphTypeChange = this.handleGraphTypeChange.bind(this);
@@ -39,6 +41,7 @@ class App extends React.Component {
   handleMappingChange(mapping) {
     this.setState({'mapping': mapping});
     var self = this;
+    
     dataservice.get_data(mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
@@ -63,8 +66,6 @@ class App extends React.Component {
     console.log("graph_desc:", graph_desc);
     console.log("objects", mapping, table_schema, schema, data);
     console.log("state:", this.state);
-    
-    console.log(<div id="test"></div>)
     
     return (
     <div>

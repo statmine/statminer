@@ -41,7 +41,9 @@ class Graph extends React.Component {
   }
 
   render() {
-    if (this.props.graph.can_draw(this.props.schema, this.props.data, this.props.mapping)) {
+    const {graph, schema, data, mapping, filter} = this.props;
+    
+    if (graph.can_draw(schema, data, mapping)) {
       return (<svg width={this.props.width} height={this.props.height}></svg>);
     } else {
       return (<span>Invalid mapping</span>);
@@ -49,4 +51,4 @@ class Graph extends React.Component {
   }
 }
 
-module.exports = Graph;
+export default Graph;

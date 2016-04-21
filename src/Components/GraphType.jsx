@@ -28,11 +28,12 @@ class GraphType extends React.Component {
 
   render() {
     // create list with options = variables
-    var options = this.props.graphtypes.map(function(v, i) {
+    
+    let options = this.props.graphtypes.map(function(v, i) {
       return (<option key={i} value={v.name}>{v.title}</option>);
     });
     //
-    var value = this.state.selection || this.props.graphtypes[0].name;
+    const value = this.state.selection || this.props.graphtypes[0].name;
     // create select
     return (
       <div className="select_graphtype">
