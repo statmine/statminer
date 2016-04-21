@@ -50,38 +50,37 @@ class App extends React.Component {
 
   handleGraphTypeChange(type) {
     console.log("handleGraphTypeChange", type);
-    this.setState({graph_type: type.graph_type});
+    this.setState({graph_type: type.index});
   }
 
   render() {
     
     const {mapping, table_schema, schema, data, graph_type} = this.state;
-    //const {graph_descriptions} = this.props.graph_descriptions;
     const {graph_descriptions} = this.props;
     const graph_desc = graph_descriptions[graph_type];
     
-    console.log("graph_desc:", graph_desc);
     console.log("objects", mapping, table_schema, schema, data);
     console.log("state:", this.state);
     
     console.log(<div id="test"></div>)
     
     return (
-    <div>
-      <Graph width="900" height="400" 
-        graph={graph_desc}
-        schema={schema} data={data} 
-        mapping={mapping}/>
-        
-      <GraphType graphtypes={graph_descriptions}
-        initialSelection={graph_desc.name}
-        onTypeChange={this.handleGraphTypeChange}/>
-        
-      <Mapping description={graph_desc}
-        variables={table_schema} 
-        initialSelection={mapping} 
-        onChange={this.handleMappingChange}/>
-    </div>);
+      <div>
+        <Graph width="900" height="400" 
+          graph={graph_desc}
+          schema={schema} data={data} 
+          mapping={mapping}/>
+          
+        <GraphType graphtypes={graph_descriptions}
+          initialSelection={graph_desc.name}
+          onTypeChange={this.handleGraphTypeChange}/>
+          
+        <Mapping description={graph_desc}
+          variables={table_schema} 
+          initialSelection={mapping} 
+          onChange={this.handleMappingChange}/>
+      </div>
+    );
   }
 }
 
