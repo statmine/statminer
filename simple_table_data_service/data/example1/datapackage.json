@@ -1,0 +1,42 @@
+{
+  "name": "example1",
+  "title": "Example One",
+  "description": "Generated nonsense",
+  "resources": [
+    {
+      "path": "data.csv",
+      "fields": [
+        {
+          "name": "year",
+          "title": "Year",
+          "description": ""
+        },
+        {
+          "name": "region",
+          "title": "Region",
+          "description": ""
+        },
+        {
+          "name": "age",
+          "title": "Age",
+          "description": ""
+        },
+        {
+          "name": "sex",
+          "title": "Sex",
+          "description": ""
+        },
+        {
+          "name": "n",
+          "title": "Number of people",
+          "description": ""
+        },
+        {
+          "name": "mean_income",
+          "title": "Income",
+          "description": ""
+        }
+      ]
+    }
+  ]
+}
