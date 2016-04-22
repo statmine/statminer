@@ -15,6 +15,8 @@ class Graph extends React.Component {
 
     if (graph.can_draw(schema, data, mapping)) {
       
+      //TODO add a spinning wheel while drawing... 
+      
       var svg = ReactDOM.findDOMNode(this);
       // clear previous graph
       d3.selectAll(svg.childNodes).remove();

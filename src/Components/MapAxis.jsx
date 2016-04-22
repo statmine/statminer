@@ -40,9 +40,10 @@ class MapAxis extends React.Component {
       return (<option key={v.name} value={v.name}>{v.title}</option>);
     });
     
-    // add empty option to front of list
-    var selected_var = selection[axis.name] || EMPTY;
+    //let selected_var = (value && value.name)? value.name : EMPTY
+    let selected_var = selection[axis.name] || EMPTY
     
+    // add empty option to front of list
     //if (!axis.required){
       options.unshift(<option key={-1} value={EMPTY}>No variable selected</option>);
     //}
