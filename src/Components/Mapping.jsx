@@ -6,10 +6,12 @@ class Mapping extends React.Component {
   
   constructor(props) {
     super(props);
+    
     // set initial state
     this.state = {
       selection: props.initialSelection
     };
+    
     // bind methods to this
     this.handleAxisVariableChange = this.handleAxisVariableChange.bind(this);
   }
@@ -41,7 +43,13 @@ class Mapping extends React.Component {
     const self = this;
     const axes = description.axes.map(function(axis, i) {
       const types = axis.accepts;
-      const fields = variables.fields.filter( (f) => types.indexOf(f.type) >=0 );
+      const fields = variables.fields
+        .filter( (f) => types.indexOf(f.type) >=0 )
+        .sort((a,b) => a.title > b.title) // sort on title
+        ;
+      let value = selection[axis.name];
+      }
+      
       
       //console.log("fields", fields);
       return (
