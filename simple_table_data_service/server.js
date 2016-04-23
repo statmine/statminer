@@ -18,6 +18,17 @@ server.get('/meta', function(req, res, next) {
   });
 });
 
+server.get('/schema/:id', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  var path = 'data/' + req.params.id + '/datapackage.json';
+  fs.readFile(path, function(err, data) {
+    if (err) return next(err);
+    res.status(200);
+    res.end(data);
+    return next();
+  });
+});
+
 server.post('/data', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   //console.log(req.body);
