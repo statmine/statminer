@@ -32,7 +32,7 @@ function complete_query(schema, query) {
 // that will be returned in the resulting data set. 
 //
 function filter_schema(schema, query) {
-  return schema.fields.map(function(f) {
+  schema.fields = schema.fields.map(function(f) {
     if (f.categories) {
       var q = find_name(query, f.name);
       f.categories = f.categories.filter(function(c) {
@@ -47,6 +47,7 @@ function filter_schema(schema, query) {
     }
     return f;
   });
+  return schema;
 }
 
 // Filter data using query. 
@@ -90,6 +91,7 @@ server.get('/table/:id/schema', function(req, res, next) {
   var path = 'data/' + req.params.id + '/datapackage.json';
   fs.readFile(path, function(err, data) {
     if (err) return next(err);
+    res.header('Content-Type', 'application/json');
     res.status(200);
     res.end(data);
     return next();
@@ -101,6 +103,7 @@ server.get('/table/:id/data', function(req, res, next) {
   var path = 'data/' + req.params.id + '/data.csv';
   fs.readFile(path, function(err, data) {
     if (err) return next(err);
+    res.header('Content-Type', 'text/csv');
     res.status(200);
     res.end(data);
     return next();
@@ -132,6 +135,7 @@ server.post('/table/:id/query', function(req, res, next) {
         data = filter_data(data, query);
 
         // return data with schema
+        res.header('Content-Type', 'application/json');
         res.status(200);
         res.end(JSON.stringify({data: data, schema: schema}));
         return next();
@@ -139,6 +143,18 @@ server.post('/table/:id/query', function(req, res, next) {
     });
   });
 });
+
+server.get('/tables', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  fs.readFile('data/tables.json', function(err, data) {
+    if (err) return next(err);
+    res.header('Content-Type', 'application/json');
+    res.status(200);
+    res.end(data);
+    return next();
+  });
+});
+
 
 
 server.get('/meta', function(req, res, next) {

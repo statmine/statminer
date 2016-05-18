@@ -51,7 +51,7 @@ class App extends React.Component {
         console.log("Failed to load data:", e);
         return;
       }
-      self.setState({data: d.data, schema: d.meta});
+      self.setState({data: d.data, schema: d.schema});
     });
   }
 
