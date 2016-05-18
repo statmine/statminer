@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "csv-parse": "^1.1.0",
+    "path": "^0.12.7",
     "restify": "^4.0.4"
   }
 }
