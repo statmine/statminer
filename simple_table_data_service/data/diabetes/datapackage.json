@@ -1,0 +1,119 @@
+{
+	"name": "diabetes",
+        "title": "Diabetes en overgewicht", 
+	"summary": "Selectie uit de StatLine tabel 'Gezondheid, leefstijl, zorggebruik' met daarin informatie over voorkomen van diabetes en overgewicht. ",
+	"description": "Deze tabel bevat het merendeel van de uitkomsten van de jaarlijkse  module gezondheidsenquête uit het Permanent LeefSituatie Onderzoek  (POLS).  Het CBS houdt deze enquête met het doel een zo volledig mogelijk  overzicht te geven van ontwikkelingen in de gezondheid, medische  consumptie, leefstijl en het preventieve gedrag van de Nederlandse  bevolking.  Er worden onder andere vragen gesteld over algemene gezondheid,  chronische aandoeningen, lichamelijke beperkingen, contacten met  huisarts, fysiotherapeut, specialist en tandarts, ziekenhuisopnamen,  medicijngebruik, roken, alcoholgebruik, lichamelijke activiteit,  griepvaccinatie, cervix uitstrijkjes en mammografieën. In de tabel zijn de gegevens uit te splitsen naar de volgende  kenmerken:  - geslacht - leeftijdsklasse (2x) - geslacht x leeftijdsklasse (2x) - soort ziektekostenverzekering (tot 2006)  - opleidingsniveau - sociaal economische groep  - samenstelling huishouden - stedelijkheid woonplaats  Gegevens beschikbaar vanaf: 2000 of 2001 tot en met 2009.  Status van de cijfers: Definitief  Wijzigingen ten opzichte van de vorige versie: 16 maart 2010 De cijfers van het jaar 2009 zijn toegevoegd.   Wanneer komen er nieuwe cijfers? Tabel is stopgezet. ",
+	"url": "http://statline.cbs.nl/StatWeb/publication/?DM=SLNL&PA=03799&D1=139-141&D2=3-7&D3=0&D4=a&HDR=G2,T,G3&STB=G1&VW=T",
+
+        "resources": [
+          {
+            "path": "data.csv",
+            "schema": {
+              "fields": [
+                  {
+                          "name": "jaar",
+                          "title": "Jaar",
+                          "default": 2009,
+                          "type": "date"
+                  }, {
+                          "name": "leeftijd",
+                          "title": "Leeftijd",
+                          "aggregate": "Totaal",
+                          "default": "Totaal",
+                          "type": "categorical",
+                          "categories": [{
+                                  "name": "Totaal",
+                                  "title": "Totaal",
+                                  "description": ""
+                          }, {
+                                  "name": "0 tot 25",
+                                  "title": "0 tot 25",
+                                  "description": ""
+                          }, {
+                                  "name": "25 tot 35",
+                                  "title": "25 tot 35",
+                                  "description": ""
+                          }, {
+                                  "name": "35 tot 45",
+                                  "title": "35 tot 45",
+                                  "description": ""
+                          }, {
+                                  "name": "45 tot 55",
+                                  "title": "45 tot 55",
+                                  "description": ""
+                          }, {
+                                  "name": "55 tot 65",
+                                  "title": "55 tot 65",
+                                  "description": ""
+                          }, {
+                                  "name": "65 tot 75",
+                                  "title": "65 tot 75",
+                                  "description": ""
+                          }, {
+                                  "name": "75+",
+                                  "title": "75+",
+                                  "description": ""
+                          }]
+                  }, {
+                          "name": "geslacht",
+                          "title": "Geslacht",
+                          "aggregate": "Totaal",
+                          "default": "Totaal",
+                          "type": "categorical",
+                          "categories": [{
+                                  "name": "Totaal",
+                                  "title": "Totaal",
+                                  "description": ""
+                          }, {
+                                  "name": "Man",
+                                  "title": "Man",
+                                  "description": ""
+                          }, {
+                                  "name": "Vrouw",
+                                  "title": "Vrouw",
+                                  "description": ""
+                          }]
+                  }, { 
+                          "name": "suiker",
+                          "title": "Diabetes",
+                          "description": "% personen (0+) met de antwoordcategorie 'ja' op de vraag: Heeft u suikerziekte? ",
+                          "type": "number",
+                          "unit": "%"
+                  }, {
+                          "name": "suiker1",
+                          "title": "Diabetes type 1",
+                          "type": "number",
+                          "description": "% personen (0+) met de antwoordcategorie 'ja' op de vraag: Heeft u suikerziekte? En met 'ja' op twee vervolgvragen: Gebruikt u hiervoor op dit moment insuline \u00e9n Bent u insuline gaan gebruiken binnen 6 maanden nadat bij u suikerziekte was vastgesteld? ",
+                          "unit": "%"
+                  }, {
+                          "name": "suiker2",
+                          "title": "Diabetes type 2",
+                          "description": "% personen (0+) met de antwoordcategorie 'ja' op de vraag: Heeft u suikerziekte? en niet behorend tot de diabetes type1 personen. ",
+                          "type": "number",
+                          "unit": "%"
+                  }, {
+                          "name": "ondergewicht",
+                          "title": "Ondergewicht",
+                          "type": "number",
+                          "unit": "%"
+                  }, {
+                          "name": "normaalgewicht",
+                          "title": "Normaal gewicht",
+                          "type": "number",
+                          "unit": "%"
+                  }, {
+                          "name": "matigovergewicht",
+                          "title": "Matig overgewicht",
+                          "type": "number",
+                          "unit": "%"
+                  }, {
+                          "name": "ernstigovergewicht",
+                          "title": "Ernstig overgewicht",
+                          "type": "number",
+                          "unit": "%"
+                  }
+              ]
+            }
+          }
+        ]
+}
