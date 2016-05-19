@@ -22,8 +22,9 @@ function complete_query(schema, query) {
     var dimension = f.type == 'date' || f.categories !== undefined;
     var q = find_name(query, f.name);
     var selected = q !== undefined;
+    var categories = q === undefined ? undefined : q.categories;
     return {'name': f.name, 'selected': selected, 'default': f.default, 
-      'aggregate': f.aggregate};
+      'aggregate': f.aggregate, 'categories': categories};
   });
   return res;
 }
@@ -36,7 +37,10 @@ function filter_schema(schema, query) {
     if (f.categories) {
       var q = find_name(query, f.name);
       f.categories = f.categories.filter(function(c) {
-        if (q.selected) {
+        if (q.categories !== undefined) {
+          // select selected categories
+          return q.categories.indexOf(c.name) !== -1;
+        } else if (q.selected) {
           // select everything except aggregate
           return c.name !== q.aggregate;
         } else {
@@ -57,8 +61,10 @@ function filter_data(data, query) {
     var select = true
     for (var i = 0; i < query.length; ++i) {
       var q = query[i];
-      if (q.aggregate || q.default) {
-        if (q.selected) {
+      if (q.aggregate || q.default || q.categories) {
+        if (q.categories) {
+          select &= q.categories.map(function(d) { return '' + d;}).indexOf(d[q.name]) !== -1;
+        } else if (q.selected) {
           // select everything except aggregate
           select &= d[q.name] != q.aggregate;
         } else {
@@ -69,6 +75,7 @@ function filter_data(data, query) {
         // csv-parse imports all fields as strings, while the schema contains
         // the categories as number where relevant. It would be better if
         // the fields are converted to number based on the schema.
+        // For the same reason the map is used to convert categories to numeric
       }
     }
     return select;
@@ -113,9 +120,6 @@ server.get('/table/:id/data', function(req, res, next) {
 server.post('/table/:id/query', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   var query = req.body;
-
-  console.log(req.body);
-  console.log(req.params);
 
   fs.readFile('data/' + req.params.id + '/datapackage.json', function(err, table_schema) {
     if (err) return next(err);
