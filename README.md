@@ -18,11 +18,7 @@ npm start
 webpack-dev-server --progress --colors
 ```
 
-Before the app can be used the simple data service needs to be started, so data can be retrieved from the service
+Before the app can be used the [simple table service](https://github.com/statmine/simple_table_service) needs to be started, so data can be retrieved from the service
 
-```
-cd simple_table_data_service
-node server.js
-```
 
 StatMiner can be accessed at [http://localhost:8080/webpack-dev-server/](http://localhost:8080/webpack-dev-server/).
