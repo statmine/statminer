@@ -21,7 +21,6 @@ var dataservice = (function() {
         query.push({ name: mapping[axis]});
       }
     }
-    console.log("Query:", query);
     d3.json(address + '/table/diabetes/query')
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(query), on_data);

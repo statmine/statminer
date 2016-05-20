@@ -27,7 +27,6 @@ class GraphType extends React.Component {
   }
   
   componentWillReceiveProps(props){
-    console.log("props...")
     if (props.value === undefined && typeof props.onChange === "function"){
       props.onChange(props.graphtypes[0]);
     }

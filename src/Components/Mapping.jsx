@@ -1,5 +1,6 @@
 import React from 'react';
 import MapAxis from './MapAxis.jsx';
+import Filter from './Filter.jsx';
 
 
 class Mapping extends React.Component {
@@ -48,7 +49,6 @@ class Mapping extends React.Component {
         .sort((a,b) => a.title > b.title) // sort on title
         ;
       let value = selection[axis.name];
-      //console.log("fields", fields);
       return (
         <MapAxis key       = {i} 
                  axis      = {axis} 
@@ -63,6 +63,7 @@ class Mapping extends React.Component {
     return (
       <div className="mapping">
         {axes}
+        <Filter selection={selection} variables={variables.fields}/>
       </div>);
   }
  
