@@ -5,6 +5,8 @@ import Mapping from './Components/Mapping.jsx';
 import GraphType from './Components/GraphType.jsx';
 import graph_descriptions from './graph_descriptions.js';
 import dataservice from './Services/dataservice.js';
+import { Router, Route, hashHistory } from 'react-router';
+
 
 class App extends React.Component {
 
