@@ -14,14 +14,14 @@ var dataservice = (function() {
     });
   };
 
-  dataservice.get_data = function(mapping, on_data) {
-    let query = [];
+  dataservice.get_data = function(id, mapping, on_data) {
+    const query = []; 
     for (var axis in mapping) {
       if (mapping.hasOwnProperty(axis)) {
         query.push({ name: mapping[axis]});
       }
     }
-    d3.json(address + '/table/diabetes/query')
+    d3.json(address + `/table/${id}/query`)
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(query), on_data);
   }

@@ -14,7 +14,7 @@ class App extends React.Component {
     // set initial state
     this.state = {
       mapping: {},
-      table_id: "",
+      table_id: props.table_id || "diabetes",
       table_info: undefined,
       table_schema: undefined,
       data: undefined,
@@ -43,9 +43,11 @@ class App extends React.Component {
 
   handleMappingChange(mapping) {
     this.setState({'mapping': mapping});
+    const {table_id} = this.state;
+    
     var self = this;
     
-    dataservice.get_data(mapping, function(e, d) {
+    dataservice.get_data(table_id, mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
@@ -86,7 +88,7 @@ class App extends React.Component {
 
 
 ReactDOM.render(
-  <App graph_descriptions={graph_descriptions}/>, 
+  <App graph_descriptions={graph_descriptions} table_id="diabetes"/>, 
   document.getElementById('app')
 );
 
