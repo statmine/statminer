@@ -8,6 +8,7 @@ class Graph extends React.Component {
     super(props);
     // bind methods to this
     this.renderGraph = this.renderGraph.bind(this);
+    
   }
 
   renderGraph() {

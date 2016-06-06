@@ -21,10 +21,10 @@ class Mapping extends React.Component {
     var new_selection = this.state.selection;
     // check if variable in change.value has already been assigned to other 
     // axis; if so: remove selection
-    for (var axis  in new_selection) {
-      if (new_selection.hasOwnProperty(axis))
-        if (new_selection[axis] == change.value) new_selection[axis] = undefined;
-    }
+    // for (var axis  in new_selection) {
+    //   if (new_selection.hasOwnProperty(axis))
+    //     if (new_selection[axis] == change.value) new_selection[axis] = undefined;
+    // }
     // set variable to new axis
     new_selection[change.name] = change.value;
     // update state

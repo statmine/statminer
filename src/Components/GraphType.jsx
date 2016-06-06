@@ -10,7 +10,6 @@ class GraphType extends React.Component {
 
   handleTypeChange(event) {
     const value = event.target.value;
-    //this.setState({selection: value});
     const {graphtypes, onChange} = this.props;
     if (typeof onChange === "function"){
       for (var t of graphtypes){

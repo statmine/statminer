@@ -4,12 +4,12 @@ var dataservice = (function() {
   
   var dataservice = {};
 
-  dataservice.get_schema = function(on_schema) {
+  dataservice.get_schema = function(id, on_schema) {
     // TODO currently only the schema of the first resource in tehe data package
     // is returned; on_schema should be able to handle a complete data package 
     // which also contains info about the table (title, description).
-    d3.json(address + '/table/diabetes/schema', function(err, data) {
-      if (!err && data) data = data.resources[0].schema;
+    d3.json(address + `/table/${id}/schema`, function(err, data) {
+      //if (!err && data) data = data.resources[0].schema;
       on_schema(err, data);
     });
   };
@@ -28,7 +28,7 @@ var dataservice = (function() {
   
   dataservice.get_table_list = function(on_list){
     //TODO implement list of table
-    on_list();
+    d3.json(address, "tables", on_list);
   }
   
   return dataservice;

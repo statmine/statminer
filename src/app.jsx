@@ -17,11 +17,11 @@ class App extends React.Component {
     this.state = {
       mapping: {},
       table_id: props.table_id || "diabetes",
-      table_info: undefined,
+      table_info: null,
       table_schema: undefined,
       data: undefined,
       schema: undefined,
-      graph_type: 1,
+      graph_type: 0,
       graph_desc: null
     };
     
@@ -34,12 +34,17 @@ class App extends React.Component {
     var self = this;
     // get the meta from the server; not sure if this is the right method to 
     // put this into
-    dataservice.get_schema(function(e, d) {
+    const {table_id} = this.state;
+    if (!table_id){
+      return;
+    }
+    
+    dataservice.get_schema(table_id, function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
         return;
       }
-      self.setState({table_schema: d});
+      self.setState({ table_schema: (d ? d.resources[0].schema : d), table_info: d});
     });
   }
 
@@ -64,12 +69,14 @@ class App extends React.Component {
 
   render() {
     
-    const {mapping, table_schema, schema, data, graph_type} = this.state;
+    const {mapping, table_schema, schema, data, graph_type, table_info} = this.state;
     const {graph_descriptions} = this.props;
     let graph_desc = this.state.graph_desc || graph_descriptions[graph_type];
+    console.log(table_schema);
     
     return (
       <div>
+      <h2>{table_info?table_info.title:"<loading...>"}</h2>
         <Graph width="900" height="400" 
           graph={graph_desc}
           schema={schema} data={data} 
