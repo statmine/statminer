@@ -16,7 +16,7 @@ class App extends React.Component {
     // set initial state
     this.state = {
       mapping: {},
-      table_id: props.table_id || "diabetes",
+      table_id: props.table_id,
       table_info: null,
       table_schema: undefined,
       data: undefined,
@@ -44,7 +44,10 @@ class App extends React.Component {
         console.log("Failed to load meta:", e);
         return;
       }
-      self.setState({ table_schema: (d ? d.resources[0].schema : d), table_info: d});
+      self.setState({ 
+        table_schema : (d ? d.resources[0].schema : d)
+      , table_info   : d
+    });
     });
   }
 
@@ -72,11 +75,15 @@ class App extends React.Component {
     const {mapping, table_schema, schema, data, graph_type, table_info} = this.state;
     const {graph_descriptions} = this.props;
     let graph_desc = this.state.graph_desc || graph_descriptions[graph_type];
-    console.log(table_schema);
+    
+    const info = {title: "<Unknown>"};
+    Object.assign(info, table_info);
+    
+    console.log("info", info)
     
     return (
       <div>
-      <h2>{table_info?table_info.title:"<loading...>"}</h2>
+      <h2>{info.title}</h2>
         <Graph width="900" height="400" 
           graph={graph_desc}
           schema={schema} data={data} 

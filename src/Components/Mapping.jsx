@@ -49,6 +49,10 @@ class Mapping extends React.Component {
         .sort((a,b) => a.title > b.title) // sort on title
         ;
       let value = selection[axis.name];
+      if (axis.required && fields && fields.length && !value){
+        //selection[axis.name] = fields[0].name;
+        self.handleAxisVariableChange({name: axis.name, value: fields[0].name});
+      }
       return (
         <MapAxis key       = {i} 
                  axis      = {axis} 
