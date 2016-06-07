@@ -5,7 +5,7 @@ import Mapping from './Components/Mapping.jsx';
 import GraphType from './Components/GraphType.jsx';
 import graph_descriptions from './graph_descriptions.js';
 import dataservice from './Services/dataservice.js';
-import { Router, Route, hashHistory } from 'react-router';
+import { Router, Route, hashHistory, IndexRoute, IndexRedirect } from 'react-router';
 import GraphPage from './Pages/GraphPage.jsx';
 
 
@@ -102,10 +102,18 @@ import GraphPage from './Pages/GraphPage.jsx';
 //     );
 //   }
 // }
-const App = () => <div>this.props.children</div>
+
+const App = (props) => console.log(props);<div>{props.children}</div>
+const GraphApp = (props) => <GraphPage graph_descriptions={graph_descriptions} table_id ={props.table_id} />
 
 ReactDOM.render(
-  <GraphPage graph_descriptions={graph_descriptions} table_id="diabetes"/>, 
+  <Router history={hashHistory}>
+    <Route path="/" component={App}>
+      <IndexRedirect to="/graph/diabetes" />
+      <Route path="graph/:table_id" component={GraphApp} />
+    </Route>
+  </Router>,
+  // <GraphPage graph_descriptions={graph_descriptions} table_id="diabetes" />,
   document.getElementById('app')
 );
 
