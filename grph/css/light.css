@@ -52,7 +52,7 @@ div.tip {
   font-size: 12px;
   color: #333333;
   background: rgba(255, 255 , 255, 0.9);
-  border: 0.5px solid #333333;
+  border: 0.5px solid #999999;
 }
 rect.colour1,
 circle.colour1 {
