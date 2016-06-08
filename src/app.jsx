@@ -13,7 +13,7 @@ const App = (props) => <div>{props.children}</div>
 const GraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} {...props.params} />
 
 ReactDOM.render(
-  <Router history={browserHistory}>
+  <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRedirect to="/demo/graph/diabetes" />
       <Route path=":provider/graph/:table_id" component={GraphPageParams} />
