@@ -12,7 +12,7 @@ class GraphPage extends React.Component {
 
   constructor(props) {
     super(props);
-    
+    console.log("GraphPage:", props);
     // set initial state
     this.state = {
       mapping: {},
