@@ -67,7 +67,7 @@ class Mapping extends React.Component {
     return (
       <div className="mapping">
         {axes}
-        <Filter selection={selection} variables={variables.fields}/>
+        <Filter mapping={selection} variables={variables.fields}/>
       </div>);
   }
  

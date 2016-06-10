@@ -4,11 +4,23 @@ class FilterDimension extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    var new_category = event.target.value;
+    if (typeof this.props.onChange === "function") {
+      this.props.onChange({
+        variable: this.props.variable.name,
+        filter: new_category
+      });
+    }
   }
 
   render() {
-    const variable = this.props.variable;
+    const {variable, filter} = this.props;
 
+    // Create the list with categories on which can be filtered
     let options = []
     // TODO: a variable of type date doesn't have categories; how do we filter
     // such a variable when we don't know the valid values? A range with type 
@@ -18,10 +30,18 @@ class FilterDimension extends React.Component {
         (<option key={c.name} value={c.name}>{c.title}</option>));
     }
 
+    // Determine from filter which is the currently selecte categorie
+    // TODO: check length of filter; and validity
+    let selected_category = this.filter;
+    if (!selected_category) {
+      selected_category = variable.default || variable.aggregate;
+    }
+
+
     return (
       <div className="filterdimension">
         <h4>{variable.title}</h4>
-        <select>
+        <select value={selected_category} onChange={this.handleChange}>
           {options}
         </select>
       </div>
@@ -36,22 +56,23 @@ class Filter extends React.Component {
   }
 
   render() {
-    const selection = this.props.selection;
+    const mapping = this.props.mapping;
+    const filter = mapping._filter || {};
 
     // Select the unselected categorical variables
     let variables = this.props.variables.filter(function(variable) {
       if (variable.type === 'number') return false;
-      for (let i in selection) {
-        if (selection.hasOwnProperty(i) && selection[i] === variable.name) 
+      for (let i in mapping) {
+        if (i !== '_filter' && mapping.hasOwnProperty(i) && mapping[i] === variable.name) 
           return false
       }
       return true;
     }).map(function(variable, i) {
-      return (<FilterDimension variable={variable} key={i}/>);
-      //return (<p>{variable.title}</p>);
+      return (<FilterDimension variable={variable} filter={filter[variable]} 
+        key={i}/>);
     });
 
-    console.log(selection, variables);
+    console.log("Filter::", mapping, this.props.variables);
      
     // create select
     return (
