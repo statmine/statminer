@@ -28,6 +28,10 @@ class Mapping extends React.Component {
     // }
     // set variable to new axis
     new_selection[change.name] = change.value;
+    // Check if variable is used in filter; if so remove filter
+    if (change.value && new_selection._filter) {
+      delete new_selection._filter[change.value];
+    }
     // update state
     if (typeof this.props.onChange === "function") 
       this.props.onChange(new_selection);

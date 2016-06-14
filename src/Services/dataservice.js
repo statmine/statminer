@@ -29,7 +29,6 @@ var dataservice = (function() {
         }
       }
     }
-    console.log("QUERY", query);
     d3.json(address + `/table/${id}/query`)
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(query), on_data);
