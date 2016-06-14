@@ -15,6 +15,7 @@ class Mapping extends React.Component {
     
     // bind methods to this
     this.handleAxisVariableChange = this.handleAxisVariableChange.bind(this);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   handleAxisVariableChange(change) {
@@ -28,6 +29,14 @@ class Mapping extends React.Component {
     // set variable to new axis
     new_selection[change.name] = change.value;
     // update state
+    if (typeof this.props.onChange === "function") 
+      this.props.onChange(new_selection);
+    this.setState({selection: new_selection});
+  }
+
+  handleFilterChange(filter) {
+    let new_selection = this.state.selection;
+    new_selection._filter = filter;
     if (typeof this.props.onChange === "function") 
       this.props.onChange(new_selection);
     this.setState({selection: new_selection});
@@ -67,7 +76,8 @@ class Mapping extends React.Component {
     return (
       <div className="mapping">
         {axes}
-        <Filter mapping={selection} variables={variables.fields}/>
+        <Filter mapping={selection} variables={variables.fields}
+          onChange={this.handleFilterChange}/>
       </div>);
   }
  

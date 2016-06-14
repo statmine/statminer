@@ -17,10 +17,19 @@ var dataservice = (function() {
   dataservice.get_data = function(id, mapping, on_data) {
     const query = []; 
     for (var axis in mapping) {
-      if (mapping.hasOwnProperty(axis)) {
+      if (mapping.hasOwnProperty(axis) && axis !== "_filter") {
         query.push({ name: mapping[axis]});
       }
     }
+    if (mapping._filter) {
+      const filter = mapping._filter;
+      for (let axis in filter) {
+        if (filter.hasOwnProperty(axis)) {
+          query.push({ name: axis, categories: [filter[axis]]});
+        }
+      }
+    }
+    console.log("QUERY", query);
     d3.json(address + `/table/${id}/query`)
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(query), on_data);

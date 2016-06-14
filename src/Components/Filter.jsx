@@ -32,11 +32,10 @@ class FilterDimension extends React.Component {
 
     // Determine from filter which is the currently selecte categorie
     // TODO: check length of filter; and validity
-    let selected_category = this.filter;
+    let selected_category = filter;
     if (!selected_category) {
       selected_category = variable.default || variable.aggregate;
     }
-
 
     return (
       <div className="filterdimension">
@@ -53,11 +52,24 @@ class Filter extends React.Component {
   
   constructor(props) {
     super(props);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  handleFilterChange(event) {
+    if (typeof this.props.onChange === "function") {
+      // update filter
+      const mapping = this.props.mapping;
+      let filter = mapping._filter || {};
+      filter[event.variable] = event.filter;
+      // signal change
+      this.props.onChange(filter);
+    }
   }
 
   render() {
     const mapping = this.props.mapping;
     const filter = mapping._filter || {};
+    const self = this;
 
     // Select the unselected categorical variables
     let variables = this.props.variables.filter(function(variable) {
@@ -68,12 +80,10 @@ class Filter extends React.Component {
       }
       return true;
     }).map(function(variable, i) {
-      return (<FilterDimension variable={variable} filter={filter[variable]} 
-        key={i}/>);
+      return (<FilterDimension variable={variable} filter={filter[variable.name]} 
+        onChange={self.handleFilterChange} key={i}/>);
     });
 
-    console.log("Filter::", mapping, this.props.variables);
-     
     // create select
     return (
       <div className="filter">
