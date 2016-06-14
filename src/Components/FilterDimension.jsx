@@ -8,11 +8,16 @@ class FilterDimension extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  defaultCategory(variable) {
+    return variable.default || variable.aggregate;
+  }
+
   handleChange(event) {
     if (typeof this.props.onChange === "function") {
       this.props.onChange({
         variable: this.props.variable.name,
-        filter: event.value
+        filter: event ? event.value : 
+          this.defaultCategory(this.props.variable)
       });
     }
   }
@@ -28,10 +33,7 @@ class FilterDimension extends React.Component {
       variable.categories.map((c) => ({value: c.name, label: c.title}));
     // Determine from filter which is the currently selecte categorie
     // TODO: check length of filter; and validity
-    let selected_category = filter;
-    if (!selected_category) {
-      selected_category = variable.default || variable.aggregate;
-    }
+    let selected_category = filter || this.defaultCategory(variable);
     return (
       <div className="filterdimension">
         <h4>{variable.title}</h4>

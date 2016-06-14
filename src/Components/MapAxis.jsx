@@ -9,11 +9,12 @@ class MapAxis extends React.Component {
   }
 
   handleVariableChange(event) {
-    console.log(event);
-    this.props.onChange({
-      name: this.props.axis.name, 
-      value: event ? event.value : undefined
-    });
+    if (typeof this.props.onChange === "function") {
+      this.props.onChange({
+        name: this.props.axis.name, 
+        value: event ? event.value : undefined
+      });
+    }
   }
 
   render() {
