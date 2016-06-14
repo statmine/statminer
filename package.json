@@ -14,7 +14,8 @@
     "cbsodata": "github:statmine/cbsodata.js",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-router": "^2.4.1"
+    "react-router": "^2.4.1",
+    "react-select": "^1.0.0-beta13"
   },
   "devDependencies": {
     "babel-core": "^6.7.6",
