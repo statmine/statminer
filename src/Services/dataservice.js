@@ -25,7 +25,11 @@ var dataservice = (function() {
       const filter = mapping._filter;
       for (let axis in filter) {
         if (filter.hasOwnProperty(axis)) {
-          query.push({ name: axis, categories: [filter[axis]]});
+          if (filter[axis] instanceof Array) {
+            query.push({ name: axis, categories: filter[axis]});
+          } else {
+            query.push({ name: axis, categories: [filter[axis]]});
+          }
         }
       }
     }

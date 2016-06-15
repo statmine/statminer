@@ -12,19 +12,31 @@ class FilterDimension extends React.Component {
     return variable.default || variable.aggregate;
   }
 
+  selectedCategory(filter, variable) {
+    if (!filter) return this.defaultCategory(variable);
+    if (filter instanceof Array) {
+      if (filter.length > 0) {
+        return filter[0];
+      } else {
+        return this.defaultCategory(variable);
+      }
+    } else {
+      return filter;
+    }
+  }
+
   handleChange(event) {
     if (typeof this.props.onChange === "function") {
       this.props.onChange({
         variable: this.props.variable.name,
-        filter: event ? event.value : 
-          this.defaultCategory(this.props.variable)
+        filter: [event ? event.value : 
+          this.defaultCategory(this.props.variable)]
       });
     }
   }
 
   render() {
     const {variable, filter} = this.props;
-
     // Create the list with categories on which can be filtered
     // TODO: a variable of type date doesn't have categories; how do we filter
     // such a variable when we don't know the valid values? A range with type 
@@ -33,7 +45,7 @@ class FilterDimension extends React.Component {
       variable.categories.map((c) => ({value: c.name, label: c.title}));
     // Determine from filter which is the currently selecte categorie
     // TODO: check length of filter; and validity
-    let selected_category = filter || this.defaultCategory(variable);
+    const selected_category = this.selectedCategory(filter, variable);
     return (
       <div className="filterdimension">
         <h4>{variable.title}</h4>

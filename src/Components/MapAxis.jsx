@@ -6,6 +6,7 @@ class MapAxis extends React.Component {
   constructor(props) {
     super(props);
     this.handleVariableChange = this.handleVariableChange.bind(this);
+    this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   handleVariableChange(event) {
@@ -17,18 +18,53 @@ class MapAxis extends React.Component {
     }
   }
 
+  handleFilterChange(event) {
+    if (typeof this.props.onFilterChange === "function") {
+    }
+    console.log(event);
+  }
+
   render() {
     const {axis, variables, selection, value} = this.props;
     const selected_var = selection[axis.name];
     const options = variables.map(function(v) {
       return {value: v.name, label: v.title};
     });
+    // create filter
+    let filter = undefined;
+    if (selected_var) {
+      let variable = undefined;
+      for (let i = 0; i < variables.length; ++i) {
+        if (variables[i].name == selected_var) {
+          variable = variables[i];
+          break;
+        }
+      }
+      if (variable && variable.categories) {
+        var categories = variable.categories.map((c) =>
+          ({value: c.name, label: c.title}));
+
+        // check existence of current filter
+        const current_filter = selection._filter ? selection._filter[selected_var] : undefined;
+        const current_value = categories.filter((v) => 
+          (current_filter && current_filter.indexOf(v.value) !== -1));
+
+        console.log("FOOO", current_value);
+        filter = ([<h4>Select categories</h4>,
+          <Select value={current_value} options={categories} 
+            onChange={this.handleFilterChange} multi={true}/>
+        ]);
+      }
+    }
     // create select
     return (
       <div className="axis">
         <h3>{axis.title}</h3>
         <Select name="filter-categories" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange}/>
+        <div className="axis-filter">
+          {filter}
+        </div>
       </div>
     );
   }
