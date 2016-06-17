@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 
 class MapAxis extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.handleVariableChange = this.handleVariableChange.bind(this);
@@ -12,7 +12,7 @@ class MapAxis extends React.Component {
   handleVariableChange(event) {
     if (typeof this.props.onChange === "function") {
       this.props.onChange({
-        name: this.props.axis.name, 
+        name: this.props.axis.name,
         value: event ? event.value : undefined
       });
     }
@@ -20,8 +20,13 @@ class MapAxis extends React.Component {
 
   handleFilterChange(event) {
     if (typeof this.props.onFilterChange === "function") {
+      const {axis, selection} = this.props;
+      const filter = event ? event.map((c) => (c.value)) : [];
+      this.props.onFilterChange({
+        variable: selection[axis.name],
+        filter: filter
+      })
     }
-    console.log(event);
   }
 
   render() {
@@ -33,6 +38,7 @@ class MapAxis extends React.Component {
     // create filter
     let filter = undefined;
     if (selected_var) {
+      // lookup selected_var in schema
       let variable = undefined;
       for (let i = 0; i < variables.length; ++i) {
         if (variables[i].name == selected_var) {
@@ -40,18 +46,18 @@ class MapAxis extends React.Component {
           break;
         }
       }
+      // when variable is categorical show filter dialog
       if (variable && variable.categories) {
         var categories = variable.categories.map((c) =>
           ({value: c.name, label: c.title}));
-
-        // check existence of current filter
-        const current_filter = selection._filter ? selection._filter[selected_var] : undefined;
-        const current_value = categories.filter((v) => 
+        // check existence of current filter; derive value for select from this
+        const current_filter = selection._filter ?
+          selection._filter[selected_var] : undefined;
+        const current_value = categories.filter((v) =>
           (current_filter && current_filter.indexOf(v.value) !== -1));
-
-        console.log("FOOO", current_value);
+        // create filter diaglog
         filter = ([<h4>Select categories</h4>,
-          <Select value={current_value} options={categories} 
+          <Select value={current_value} options={categories}
             onChange={this.handleFilterChange} multi={true}/>
         ]);
       }
@@ -71,4 +77,3 @@ class MapAxis extends React.Component {
 }
 
 export default MapAxis;
-

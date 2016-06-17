@@ -4,23 +4,24 @@ import Filter from './Filter.jsx';
 
 
 class Mapping extends React.Component {
-  
+
   constructor(props) {
     super(props);
-    
+
     // set initial state
     this.state = {
       selection: props.initialSelection
     };
-    
+
     // bind methods to this
     this.handleAxisVariableChange = this.handleAxisVariableChange.bind(this);
+    this.handleAxisFilterChange = this.handleAxisFilterChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
   }
 
   handleAxisVariableChange(change) {
     var new_selection = this.state.selection;
-    // check if variable in change.value has already been assigned to other 
+    // check if variable in change.value has already been assigned to other
     // axis; if so: remove selection
     // for (var axis  in new_selection) {
     //   if (new_selection.hasOwnProperty(axis))
@@ -33,7 +34,16 @@ class Mapping extends React.Component {
       delete new_selection._filter[change.value];
     }
     // update state
-    if (typeof this.props.onChange === "function") 
+    if (typeof this.props.onChange === "function")
+      this.props.onChange(new_selection);
+    this.setState({selection: new_selection});
+  }
+
+  handleAxisFilterChange(change) {
+    let new_selection = this.state.selection;
+    if (!new_selection._filter) new_selection._filter = {};
+    new_selection._filter[change.variable] = change.filter;
+    if (typeof this.props.onChange === "function")
       this.props.onChange(new_selection);
     this.setState({selection: new_selection});
   }
@@ -41,7 +51,7 @@ class Mapping extends React.Component {
   handleFilterChange(filter) {
     let new_selection = this.state.selection;
     new_selection._filter = filter;
-    if (typeof this.props.onChange === "function") 
+    if (typeof this.props.onChange === "function")
       this.props.onChange(new_selection);
     this.setState({selection: new_selection});
   }
@@ -49,11 +59,11 @@ class Mapping extends React.Component {
   render() {
     const {variables, description} = this.props;
     const {selection} = this.state;
-    
+
     if (variables === undefined || selection === undefined) {
       return (<div className="mapping">Foo bar</div>);
     }
-    
+
     const self = this;
     const axes = description.axes.map(function(axis, i) {
       const types = axis.accepts;
@@ -67,16 +77,17 @@ class Mapping extends React.Component {
         self.handleAxisVariableChange({name: axis.name, value: fields[0].name});
       }
       return (
-        <MapAxis key       = {i} 
-                 axis      = {axis} 
-                 variables = {fields} 
-                 selection = {selection} 
+        <MapAxis key       = {i}
+                 axis      = {axis}
+                 variables = {fields}
+                 selection = {selection}
                  value     = {null}
-                 onChange  = {self.handleAxisVariableChange} 
+                 onChange  = {self.handleAxisVariableChange}
+                 onFilterChange = {self.handleAxisFilterChange}
         />
       );
     });
-    
+
     return (
       <div className="mapping">
         {axes}
@@ -84,8 +95,7 @@ class Mapping extends React.Component {
           onChange={this.handleFilterChange}/>
       </div>);
   }
- 
+
 }
 
 export default Mapping;
-
