@@ -28,10 +28,18 @@ class Mapping extends React.Component {
     //     if (new_selection[axis] == change.value) new_selection[axis] = undefined;
     // }
     // set variable to new axis
+    console.log("Mapping::handleAxisVariableChange", change);
     new_selection[change.name] = change.value;
     // Check if variable is used in filter; if so remove filter
     if (change.value && new_selection._filter) {
       delete new_selection._filter[change.value];
+    }
+    // when variable is removed from axis; also remove variable from filter
+    if (change.value === undefined) {
+      const prev = this.state.selection[change.name];
+      if (prev && new_selection._filter) {
+        delete new_selection._filter[prev]
+      }
     }
     // update state
     if (typeof this.props.onChange === "function")
