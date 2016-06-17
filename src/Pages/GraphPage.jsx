@@ -24,7 +24,7 @@ class GraphPage extends React.Component {
       graph_type: 0,
       graph_desc: null
     };
-    
+
     // bind methods to this
     this.handleMappingChange = this.handleMappingChange.bind(this);
     this.handleGraphTypeChange = this.handleGraphTypeChange.bind(this);
@@ -32,19 +32,19 @@ class GraphPage extends React.Component {
 
   componentDidMount() {
     var self = this;
-    // get the meta from the server; not sure if this is the right method to 
+    // get the meta from the server; not sure if this is the right method to
     // put this into
     const {table_id} = this.state;
     if (!table_id){
       return;
     }
-    
+
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
         return;
       }
-      self.setState({ 
+      self.setState({
         table_schema : (d ? d.resources[0].schema : d)
       , table_info   : d
     });
@@ -54,9 +54,9 @@ class GraphPage extends React.Component {
   handleMappingChange(mapping) {
     this.setState({'mapping': mapping});
     const {table_id} = this.state;
-    
+
     var self = this;
-    
+
     dataservice.get_data(table_id, mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
@@ -71,31 +71,31 @@ class GraphPage extends React.Component {
   }
 
   render() {
-    
+
     const {mapping, table_schema, schema, data, graph_type, table_info} = this.state;
     const {graph_descriptions} = this.props;
     let graph_desc = this.state.graph_desc || graph_descriptions[graph_type];
-    
+
     const info = {title: "<Unknown>"};
     Object.assign(info, table_info);
-    
+
     console.log("info", info)
-    
+
     return (
       <div>
       <h2>{info.title}</h2>
-        <Graph width="900" height="400" 
+        <Graph width="900" height="400"
           graph={graph_desc}
-          schema={schema} data={data} 
+          schema={schema} data={data}
           mapping={mapping} />
-          
+
         <GraphType graphtypes={graph_descriptions}
           value = {graph_desc}
           onChange={this.handleGraphTypeChange}/>
-          
+
         <Mapping description={graph_desc}
-          variables={table_schema} 
-          initialSelection={mapping} 
+          variables={table_schema}
+          initialMapping={mapping} 
           onChange={this.handleMappingChange}/>
       </div>
     );

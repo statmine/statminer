@@ -20,18 +20,18 @@ class MapAxis extends React.Component {
 
   handleFilterChange(event) {
     if (typeof this.props.onFilterChange === "function") {
-      const {axis, selection} = this.props;
+      const {axis, mapping} = this.props;
       const filter = event ? event.map((c) => (c.value)) : [];
       this.props.onFilterChange({
-        variable: selection[axis.name],
+        variable: mapping[axis.name],
         filter: filter
       })
     }
   }
 
   render() {
-    const {axis, variables, selection, value} = this.props;
-    const selected_var = selection[axis.name];
+    const {axis, variables, mapping, value} = this.props;
+    const selected_var = mapping[axis.name];
     const options = variables.map(function(v) {
       return {value: v.name, label: v.title};
     });
@@ -51,8 +51,8 @@ class MapAxis extends React.Component {
         var categories = variable.categories.map((c) =>
           ({value: c.name, label: c.title}));
         // check existence of current filter; derive value for select from this
-        const current_filter = selection._filter ?
-          selection._filter[selected_var] : undefined;
+        const current_filter = mapping._filter ?
+          mapping._filter[selected_var] : undefined;
         const current_value = categories.filter((v) =>
           (current_filter && current_filter.indexOf(v.value) !== -1));
         // create filter diaglog
