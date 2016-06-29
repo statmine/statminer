@@ -6,6 +6,45 @@ h1, h2, h3, h4 {
   font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
   color: #333333; }
 
+/* ==== TWO COLUMN LAYOUT ==== */
+#main {
+    min-height: 800px;
+    margin: 0px;
+    padding: 5px 0px;
+    display: flex;
+    flex-flow: row;
+}
+
+#main > article {
+    margin: 0px;
+    padding: 5px;
+    flex: 3 1 60%;
+    order: 2;
+}
+
+#main > nav {
+    margin: 0px;
+    padding: 5px;
+    border-right: 1px solid #eee;
+    flex: 0 0 350px;
+    order: 1;
+}
+
+/* Too narrow to support two columns */
+@media all and (max-width: 640px) {
+  #main, #page {
+    flex-direction: column;
+  }
+  #main > article, #main > nav {
+    /* Return them to document order */
+    order: 0;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+}
+
+/* ==== GRAPH FORMATTING ==== */
+
 svg * {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; }
 

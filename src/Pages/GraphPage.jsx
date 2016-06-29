@@ -82,21 +82,23 @@ class GraphPage extends React.Component {
     console.log("info", info)
 
     return (
-      <div>
-      <h2>{info.title}</h2>
-        <Graph width="900" height="400"
-          graph={graph_desc}
-          schema={schema} data={data}
-          mapping={mapping} />
-
-        <GraphType graphtypes={graph_descriptions}
-          value = {graph_desc}
-          onChange={this.handleGraphTypeChange}/>
-
-        <Mapping description={graph_desc}
-          variables={table_schema}
-          initialMapping={mapping} 
-          onChange={this.handleMappingChange}/>
+      <div id="main">
+        <article>
+          <h2>{info.title}</h2>
+          <Graph width="900" height="400"
+            graph={graph_desc}
+            schema={schema} data={data}
+            mapping={mapping} />
+        </article>
+        <nav>
+          <GraphType graphtypes={graph_descriptions}
+            value = {graph_desc}
+            onChange={this.handleGraphTypeChange}/>
+          <Mapping description={graph_desc}
+            variables={table_schema}
+            initialMapping={mapping}
+            onChange={this.handleMappingChange}/>
+        </nav>
       </div>
     );
   }
