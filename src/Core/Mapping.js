@@ -3,22 +3,22 @@
 //
 // Constructor:
 // Expects a description of the graph and the schema of the table.
-// 
+//
 // Computed properties:
 // - mapping (get): returns the mapping object
 //
 // Methods:
-// - add_variabe_to_axis(axis_name, variable_name): returns true when the 
+// - add_variabe_to_axis(axis_name, variable_name): returns true when the
 //   variable was successfully added to the axis; false otherwise
 //
 // - remove_variable_from_axis(axis_name, variable_name): returns true when
 //   the variable was successfully removes; false otherwise
 //
 // - add_filter(variable_name, filter): filter should be an array of category
-//   names. A filter can only be applied to a categorical variable. When the 
-//   variable is not assigned to one of the axes filter should contain only 
+//   names. A filter can only be applied to a categorical variable. When the
+//   variable is not assigned to one of the axes filter should contain only
 //   one category. Returns false when the filter could not be applied; true
-//   otherwise. A filter of false/[]/undefined removes any filters from 
+//   otherwise. A filter of false/[]/undefined removes any filters from
 //   variable.
 //
 class Mapping {
@@ -52,13 +52,11 @@ class Mapping {
     }
     // add filter to mapping
     mapping.filter = [];
-    for (let variable_name in filter) {
-      if (filter.hasOwnProperty(variable_name) &&
-          !this.variable_on_axis(variable_name)) {
-        mapping.filter.push({variable: variable_name,
-          filter: filter[variable_name]});
-      }
-    }
+    const self = this;
+    mapping.filter = this.schema.fields
+      .filter((x) => !self.variable_on_axis(x.name))
+      .filter((x) => (x.categories))
+      .map((x) => ({variable: x.name, filter: filter[x.name]}));
     return mapping;
   }
 
@@ -127,4 +125,3 @@ class Mapping {
 }
 
 export default Mapping;
-
