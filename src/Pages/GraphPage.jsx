@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Graph from '../Components/Graph.jsx';
-import Mapping from '../Components/Mapping.jsx';
+import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 import graph_descriptions from '../graph_descriptions.js';
 import dataservice from '../Services/dataservice.js';
@@ -94,7 +94,7 @@ class GraphPage extends React.Component {
           <GraphType graphtypes={graph_descriptions}
             value = {graph_desc}
             onChange={this.handleGraphTypeChange}/>
-          <Mapping description={graph_desc}
+          <Mapper description={graph_desc}
             variables={table_schema}
             initialMapping={mapping}
             onChange={this.handleMappingChange}/>

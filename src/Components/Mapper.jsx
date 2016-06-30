@@ -3,7 +3,7 @@ import MapAxis from './MapAxis.jsx';
 import Filter from './Filter.jsx';
 
 
-class Mapping extends React.Component {
+class Mapper extends React.Component {
 
   constructor(props) {
     super(props);
@@ -98,4 +98,4 @@ class Mapping extends React.Component {
 
 }
 
-export default Mapping;
+export default Mapper;
