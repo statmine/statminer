@@ -35,7 +35,15 @@ class Mapping {
     this.filter = {};
   }
 
+  set_schema(schema) {
+    // TODO Check if schema is valid; only accept schema when variables have
+    // not yet been assigned to axes; or check that new schema doesn't violate
+    // current mapping.
+    this.schema = schema;
+  }
+
   get mapping() {
+    if (!this.schema) return undefined;
     let mapping = {};
     const filter = this.filter;
     // create mapping
@@ -70,6 +78,7 @@ class Mapping {
   }
 
   add_variable_to_axis(axis_name, variable_name) {
+    if (!this.schema) return false;
     // lookup variable description in meta
     const variable = this.schema.fields.find((x) => x.name === variable_name);
     if (!variable) return false;
@@ -88,9 +97,11 @@ class Mapping {
   }
 
   remove_variable_from_axis(axis_name, variable_name) {
+    if (!this.schema) return false;
     if (!this.map[axis_name]) return false;
-    const i = this.map[axis_name].indexOf(variable_name);
-    if (i === -1) return false;
+    // TODO: ignore variable_name; delete all variables on axis
+    //const i = this.map[axis_name].indexOf(variable_name);
+    //if (i === -1) return false;
     this.map[axis_name] = [];
     // If variable is no longer on any axis; check if filter needs to be
     // modified; for now: delete filter
@@ -100,6 +111,7 @@ class Mapping {
   }
 
   add_filter(variable_name, filter) {
+    if (!this.schema) return false;
     // lookup variable description in meta
     const variable = this.schema.fields.find((x) => x.name === variable_name);
     if (!variable) return false;
