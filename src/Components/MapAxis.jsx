@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import FilterAxis from './FilterAxis.jsx'
-import {lookup} from '../Utils/utils.js'
+//import {lookup} from '../Utils/utils.js'
 
 
 class MapAxis extends React.Component {
@@ -28,19 +28,29 @@ class MapAxis extends React.Component {
   }
 
   render() {
-    const {axis, variables, mapping, value} = this.props;
-    const selected_var = mapping[axis.name];
-    const variable = lookup(variables, selected_var);
-    const options = variables.map(function(v) {
-      return {value: v.name, label: v.title};
-    });
+    const {axis, schema, mapping} = this.props;
+    // Create the list of fields from which can be selected for the axis.
+    // - Filter on supported types for axis
+    // - Sort on title
+    // - Map to option-list for react-select.
+    const supported_types = axis.accepts;
+    const options = schema.fields
+      .filter((f) => supported_types.indexOf(f.type) >= 0)
+      .sort((a,b) => a.title > b.title)
+      .map((f) => ({value: f.name, label: f.title}));
+    // Determine if and which variable is currently selected
+    const selected_var = mapping.length ? mapping[0].variable : undefined;
+    // Lookup schema and filter of selected variable for filter
+    const variable_schema = schema.fields.find((x) => x.name === selected_var);
+    const filter = mapping.length ? mapping[0].filter : undefined;
+    // Render
     return (
       <div className="axis">
         <h3>{axis.title}</h3>
-        <Select name="filter-categories" value={selected_var} options={options}
+        <Select name="filter-axis" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange}/>
-        <FilterAxis variable={variable} filter={mapping._filter}
-          onChange={this.handleFilterChange} />
+        <FilterAxis variable={variable_schema} filter={filter}
+            onChange={this.handleFilterChange} />
       </div>
     );
   }

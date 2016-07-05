@@ -26,9 +26,8 @@ class FilterAxis extends React.Component {
     var options = variable.categories.map((c) =>
       ({value: c.name, label: c.title}));
     // Check existence of current filter; derive value for select from this
-    const variable_filter = filter ? filter[variable.name] : undefined;
     const value = options.filter((v) =>
-      (variable_filter && variable_filter.indexOf(v.value) !== -1));
+      (filter && filter.indexOf(v.value) !== -1));
     // Create filter dialog
     return (
       <div className="axis-filter">

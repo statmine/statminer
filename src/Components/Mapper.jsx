@@ -94,7 +94,7 @@ class Mapper extends React.Component {
 
   render() {
     const {variables, description} = this.props;
-    const {mapping} = this.state;
+    const {mapping, mapping2} = this.state;
 
     console.log("Mapper::render", this.state.mapping2.mapping);
 
@@ -104,21 +104,12 @@ class Mapper extends React.Component {
 
     const self = this;
     const axes = description.axes.map(function(axis, i) {
-      const types = axis.accepts;
-      const fields = variables.fields
-        .filter((f) => types.indexOf(f.type) >=0)
-        .sort((a,b) => a.title > b.title); // sort on title
-      const value = mapping[axis.name];
-      // if (axis.required && fields && fields.length && !value) {
-      //   //mapping[axis.name] = fields[0].name;
-      //   self.handleAxisVariableChange({name: axis.name, value: fields[0].name});
-      // }
+      const mapping = mapping2.mapping[axis.name];
       return (
         <MapAxis key       = {i}
                  axis      = {axis}
-                 variables = {fields}
+                 schema    = {variables}
                  mapping   = {mapping}
-                 value     = {null}
                  onChange  = {self.handleAxisVariableChange}
                  onFilterChange = {self.handleAxisFilterChange}
         />
