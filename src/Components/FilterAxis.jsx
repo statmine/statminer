@@ -12,7 +12,7 @@ class FilterAxis extends React.Component {
     if (typeof this.props.onChange === "function") {
       const filter = event ? event.map((c) => (c.value)) : [];
       this.props.onChange({
-        variable: this.props.variable.name,
+        variable: this.props.schema.name,
         filter: filter
       });
     }
@@ -21,7 +21,7 @@ class FilterAxis extends React.Component {
   render() {
     const {schema, filter} = this.props;
     // Only need to render when a categorical variable is selected on the axis
-    if (!variable || !schema.categories) return null;
+    if (!schema || !schema.categories) return null;
     // Create the list of categories from which the user can select
     var options = schema.categories.map((c) =>
       ({value: c.name, label: c.title}));

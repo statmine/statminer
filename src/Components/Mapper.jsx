@@ -101,21 +101,18 @@ class Mapper extends React.Component {
     if (variables === undefined || mapping === undefined) {
       return (<div className="mapping">Foo bar</div>);
     }
-
+    // Create one element for each of the axes of the graph with which the
+    // variables for that axis can be selected
     const self = this;
     const axes = description.axes.map(function(axis, i) {
       const mapping = mapping2.mapping[axis.name];
       return (
-        <MapAxis key       = {i}
-                 axis      = {axis}
-                 schema    = {variables}
-                 mapping   = {mapping}
-                 onChange  = {self.handleAxisVariableChange}
-                 onFilterChange = {self.handleAxisFilterChange}
-        />
+        <MapAxis key={i} axis={axis}  schema={variables} mapping={mapping}
+          onChange={self.handleAxisVariableChange}
+          onFilterChange={self.handleAxisFilterChange}/>
       );
     });
-
+    // Return mapper componten
     return (
       <div className="mapping">
         {axes}

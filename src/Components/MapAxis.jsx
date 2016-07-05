@@ -48,8 +48,8 @@ class MapAxis extends React.Component {
       <div className="axis">
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
-          clearable={!axis.required} onChange={this.handleVariableChange}/>
-        <FilterAxis variable={variable_schema} filter={filter}
+          clearable={!axis.required} onChange={this.handleVariableChange} />
+        <FilterAxis schema={variable_schema} filter={filter}
             onChange={this.handleFilterChange} />
       </div>
     );
