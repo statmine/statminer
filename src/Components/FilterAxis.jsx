@@ -19,11 +19,11 @@ class FilterAxis extends React.Component {
   }
 
   render() {
-    const {variable, filter} = this.props;
+    const {schema, filter} = this.props;
     // Only need to render when a categorical variable is selected on the axis
-    if (!variable || !variable.categories) return null;
+    if (!variable || !schema.categories) return null;
     // Create the list of categories from which the user can select
-    var options = variable.categories.map((c) =>
+    var options = schema.categories.map((c) =>
       ({value: c.name, label: c.title}));
     // Check existence of current filter; derive value for select from this
     const value = options.filter((v) =>
