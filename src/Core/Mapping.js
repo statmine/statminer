@@ -42,6 +42,12 @@ class Mapping {
     this.schema = schema;
   }
 
+  default_category(variable_name) {
+    const variable = this.schema.fields.find((x) => x.name === variable_name);
+    if (!variable) return undefined;
+    return [variable.default || variable.aggregate];
+  }
+
   get mapping() {
     if (!this.schema) return undefined;
     let mapping = {};
@@ -65,7 +71,10 @@ class Mapping {
     mapping.filter = this.schema.fields
       .filter((x) => !self.variable_on_axis(x.name))
       .filter((x) => (x.categories))
-      .map((x) => ({variable: x.name, filter: filter[x.name]}));
+      .map((x) => ({
+        variable: x.name,
+        filter: filter[x.name] || this.default_category(x.name)
+      }));
     return mapping;
   }
 
