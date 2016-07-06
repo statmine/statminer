@@ -30,7 +30,7 @@ class FilterDimension extends React.Component {
     // TODO: check length of filter; and validity
     const selected_category = options.filter((v) =>
       (filter && filter.indexOf(v.value) !== -1))[0];
-    //const selected_category = this.selectedCategory(filter, schema);
+    // Create filter dialog
     return (
       <div className="filterdimension">
         <h4>{schema.title}</h4>
