@@ -2,7 +2,7 @@ import React from 'react';
 import FilterDimension from './FilterDimension.jsx';
 
 class Filter extends React.Component {
-  
+
   constructor(props) {
     super(props);
     this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -10,42 +10,27 @@ class Filter extends React.Component {
 
   handleFilterChange(event) {
     if (typeof this.props.onChange === "function") {
-      // update filter
-      const mapping = this.props.mapping;
-      let filter = mapping._filter || {};
-      filter[event.variable] = event.filter;
-      // signal change
-      this.props.onChange(filter);
+      this.props.onChange(event);
     }
   }
 
   render() {
-    const mapping = this.props.mapping;
-    const filter = mapping._filter || {};
+    const {filter, schema} = this.props;
     const self = this;
-
-    // Select the unselected categorical variables
-    let variables = this.props.variables.filter(function(variable) {
-      if (variable.type === 'number') return false;
-      for (let i in mapping) {
-        if (i !== '_filter' && mapping.hasOwnProperty(i) && mapping[i] === variable.name) 
-          return false
-      }
-      return true;
-    }).map(function(variable, i) {
-      return (<FilterDimension variable={variable} filter={filter[variable.name]} 
-        onChange={self.handleFilterChange} key={i}/>);
+    let filter_variables = filter.map(function(f, i) {
+      var variable_schema = schema.fields.find((x) => x.name === f.variable);
+      return (<FilterDimension key={i} schema={variable_schema}
+        filter={f.filter}  onChange={self.handleFilterChange} />);
     });
-
     // create select
     return (
       <div className="filter">
         <h3>Filter:</h3>
-        {variables}
+        {filter_variables}
       </div>
     );
   }
+
 }
 
 export default Filter;
-

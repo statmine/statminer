@@ -74,6 +74,9 @@ class Mapper extends React.Component {
   }
 
   handleFilterChange(filter) {
+    console.log("Mapper::handleFilterChange:", filter);
+    return this.handleAxisFilterChange(filter);
+
     console.log(filter);
     // NEW
     // TODO: now complete filter object is updated; change this as in
@@ -116,7 +119,7 @@ class Mapper extends React.Component {
     return (
       <div className="mapping">
         {axes}
-        <Filter mapping={mapping} variables={variables.fields}
+        <Filter filter={mapping2.mapping.filter} schema={variables}
           onChange={this.handleFilterChange}/>
       </div>);
   }

@@ -26,30 +26,33 @@ class FilterDimension extends React.Component {
   }
 
   handleChange(event) {
+    console.log("FilterDimension::handleChange:", event);
+    console.log(this.props.onChange);
     if (typeof this.props.onChange === "function") {
+      console.log("FilterDimension::handleChange:", "signal")
       this.props.onChange({
-        variable: this.props.variable.name,
-        filter: [event ? event.value : 
-          this.defaultCategory(this.props.variable)]
+        variable: this.props.schema.name,
+        filter: [event ? event.value :
+          this.defaultCategory(this.props.schema)]
       });
     }
   }
 
   render() {
-    const {variable, filter} = this.props;
+    const {schema, filter} = this.props;
     // Create the list with categories on which can be filtered
     // TODO: a variable of type date doesn't have categories; how do we filter
-    // such a variable when we don't know the valid values? A range with type 
+    // such a variable when we don't know the valid values? A range with type
     // (year/quarters/..)?
-    const options = !variable.categories ? [] : 
-      variable.categories.map((c) => ({value: c.name, label: c.title}));
+    const options = !schema.categories ? [] :
+      schema.categories.map((c) => ({value: c.name, label: c.title}));
     // Determine from filter which is the currently selecte categorie
     // TODO: check length of filter; and validity
-    const selected_category = this.selectedCategory(filter, variable);
+    const selected_category = this.selectedCategory(filter, schema);
     return (
       <div className="filterdimension">
-        <h4>{variable.title}</h4>
-        <Select value={selected_category} options={options} 
+        <h4>{schema.title}</h4>
+        <Select value={selected_category} options={options}
           onChange={this.handleChange}/>
       </div>
     );
