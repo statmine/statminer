@@ -61,6 +61,7 @@ class Mapping {
     // add filter to mapping
     mapping.filter = [];
     const self = this;
+    // TODO: select default category
     mapping.filter = this.schema.fields
       .filter((x) => !self.variable_on_axis(x.name))
       .filter((x) => (x.categories))

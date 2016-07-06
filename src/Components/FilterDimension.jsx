@@ -26,10 +26,7 @@ class FilterDimension extends React.Component {
   }
 
   handleChange(event) {
-    console.log("FilterDimension::handleChange:", event);
-    console.log(this.props.onChange);
     if (typeof this.props.onChange === "function") {
-      console.log("FilterDimension::handleChange:", "signal")
       this.props.onChange({
         variable: this.props.schema.name,
         filter: [event ? event.value :

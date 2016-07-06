@@ -45,9 +45,9 @@ class GraphPage extends React.Component {
         return;
       }
       self.setState({
-        table_schema : (d ? d.resources[0].schema : d)
-      , table_info   : d
-    });
+        table_schema : (d ? d.resources[0].schema : d),
+        table_info   : d
+      });
     });
   }
 
@@ -57,7 +57,7 @@ class GraphPage extends React.Component {
 
     var self = this;
 
-    dataservice.get_data(table_id, mapping, function(e, d) {
+    dataservice.get_data(table_id, mapping.mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
