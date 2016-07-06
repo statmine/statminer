@@ -10,7 +10,7 @@ class Graph extends React.Component {
 
   renderGraph() {
     const {graph, schema, data, mapping, height, width} = this.props;
-    const map = this.covertMapping(mapping.mapping);
+    const map = this.convertMapping(mapping.mapping);
     if (graph.can_draw(schema, data, map)) {
       //TODO add a spinning wheel while drawing...
       var svg = ReactDOM.findDOMNode(this);
@@ -32,9 +32,8 @@ class Graph extends React.Component {
     // StatMiner. Convert StatMiner mapping object to grph.js type
     let map = {};
     for (let axis in mapping) {
-      if (mapping.hasOwnProperty(axis) && mapping[axis].length && axis !== "filter") {
-        map[axis] = mapping[axis][0].variable;
-      }
+      if (mapping.hasOwnProperty(axis) && mapping[axis].length &&
+        axis !== "filter") map[axis] = mapping[axis][0].variable;
     }
     return map;
   }
@@ -48,7 +47,7 @@ class Graph extends React.Component {
   }
 
   render() {
-    const {graph, schema, data, mapping, filter, width, height} = this.props;
+    const {graph, schema, data, mapping, width, height} = this.props;
     const map = this.convertMapping(mapping.mapping);
     if (graph.can_draw(schema, data, map)) {
       return (<svg width={width} height={height}></svg>);

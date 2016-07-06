@@ -12,7 +12,6 @@ class GraphPage extends React.Component {
 
   constructor(props) {
     super(props);
-    console.log("GraphPage:", props);
     // set initial state
     this.state = {
       mapping: {},
@@ -53,11 +52,8 @@ class GraphPage extends React.Component {
 
   handleMappingChange(mapping) {
     this.setState({'mapping': mapping});
-    const {table_id} = this.state;
-
     var self = this;
-
-    dataservice.get_data(table_id, mapping.mapping, function(e, d) {
+    dataservice.get_data(this.state.table_id, mapping.mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
@@ -95,7 +91,7 @@ class GraphPage extends React.Component {
             value = {graph_desc}
             onChange={this.handleGraphTypeChange}/>
           <Mapper description={graph_desc}
-            variables={table_schema}
+            schema={table_schema}
             initialMapping={mapping}
             onChange={this.handleMappingChange}/>
         </nav>

@@ -10,7 +10,7 @@ class Mapper extends React.Component {
     // set initial state
     // TODO: initialMapping propertiy ignored; remove?
     this.state = {
-      mapping: new Mapping(props.description, props.variables)
+      mapping: new Mapping(props.description, props.schema)
     };
     // bind methods to this
     this.handleAxisVariableChange = this.handleAxisVariableChange.bind(this);
@@ -18,13 +18,13 @@ class Mapper extends React.Component {
   }
 
   componentWillReceiveProps(next_props) {
-    // Often the property variables will not be set when the contructor of
+    // Often the property schema will not be set when the contructor of
     // Mapper is called as the schema is obtained asynchronically. The property
-    // variables is set later. Therefore, we need to update the Mapper object
+    // schema is set later. Therefore, we need to update the Mapper object
     // with the new schema
-    if (next_props.variables) {
+    if (next_props.schema) {
       let mapping = this.state.mapping;
-      mapping.set_schema(next_props.variables);
+      mapping.set_schema(next_props.schema);
       this.setState({mapping: mapping})
     }
   }
@@ -52,9 +52,9 @@ class Mapper extends React.Component {
   }
 
   render() {
-    const {variables, description} = this.props;
+    const {schema, description} = this.props;
     const {mapping} = this.state;
-    if (variables === undefined)
+    if (schema === undefined)
       return (<div className="mapping">Foo bar</div>);
     // Create one element for each of the axes of the graph with which the
     // variables for that axis can be selected
@@ -62,7 +62,7 @@ class Mapper extends React.Component {
     const axes = description.axes.map(function(axis, i) {
       const axis_mapping = mapping.mapping[axis.name];
       return (
-        <MapAxis key={i} axis={axis} schema={variables} mapping={axis_mapping}
+        <MapAxis key={i} axis={axis} schema={schema} mapping={axis_mapping}
           onChange={self.handleAxisVariableChange}
           onFilterChange={self.handleFilterChange}/>
       );
@@ -71,7 +71,7 @@ class Mapper extends React.Component {
     return (
       <div className="mapping">
         {axes}
-        <Filter filter={mapping.mapping.filter} schema={variables}
+        <Filter filter={mapping.mapping.filter} schema={schema}
           onChange={this.handleFilterChange}/>
       </div>);
   }
