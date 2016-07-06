@@ -8,6 +8,7 @@ class Mapper extends React.Component {
   constructor(props) {
     super(props);
     // set initial state
+    // TODO: initialMapping propertiy ignored; remove?
     this.state = {
       mapping: new Mapping(props.description, props.variables)
     };
