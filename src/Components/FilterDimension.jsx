@@ -10,34 +10,36 @@ class FilterDimension extends React.Component {
 
   handleChange(event) {
     if (typeof this.props.onChange === "function") {
+      let filter = [];
+      if (event) {
+        if (event instanceof Array) filter = event.map((c) => (c.value));
+        else filter = [event.value];
+      }
       this.props.onChange({
         variable: this.props.schema.name,
-        filter: [event ? event.value :
-          this.defaultCategory(this.props.schema)]
+        filter: filter
       });
     }
   }
 
   render() {
-    const {schema, filter} = this.props;
-    // Create the list with categories on which can be filtered
-    // TODO: a variable of type date doesn't have categories; how do we filter
-    // such a variable when we don't know the valid values? A range with type
-    // (year/quarters/..)?
-    const options = !schema.categories ? [] :
-      schema.categories.map((c) => ({value: c.name, label: c.title}));
-    // Determine from filter which is the currently selecte categorie
-    // TODO: check length of filter; and validity
-    const selected_category = options.filter((v) =>
-      (filter && filter.indexOf(v.value) !== -1))[0];
+    const {schema, filter, multi} = this.props;
+    // Only need to render when a categorical variable is selected on the axis
+    if (!schema || !schema.categories) return null;
+    // Create the list of categories from which the user can select
+    var options = schema.categories.map((c) =>
+      ({value: c.name, label: c.title}));
+    // Check existence of current filter; derive value for select from this
+    let value = options.filter((v) =>
+      (filter && filter.indexOf(v.value) !== -1));
+    if (!multi) value = value[0];
     // Create filter dialog
     return (
       <div className="filterdimension">
-        <h4>{schema.title}</h4>
-        <Select value={selected_category} options={options}
-          onChange={this.handleChange}/>
-      </div>
-    );
+        <h4>Select categories</h4>
+        <Select value={value} options={options}
+          onChange={this.handleChange} multi={multi || false}/>
+      </div>);
   }
 }
 
