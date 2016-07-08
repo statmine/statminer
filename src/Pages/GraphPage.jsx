@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import Graph from '../Components/Graph.jsx';
 import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
-import graph_descriptions from '../graph_descriptions.js';
 import dataservice from '../Services/dataservice.js';
 import { Router, Route, hashHistory } from 'react-router';
 
@@ -20,8 +19,7 @@ class GraphPage extends React.Component {
       table_schema: undefined,
       data: undefined,
       schema: undefined,
-      graph_type: 0,
-      graph_desc: null
+      graph_type: 0
     };
 
     // bind methods to this
@@ -62,15 +60,17 @@ class GraphPage extends React.Component {
     });
   }
 
-  handleGraphTypeChange(type) {
-    this.setState({graph_desc: type});
+  handleGraphTypeChange(description) {
+    const type = this.props.graph_descriptions.findIndex(
+      (x) => (x.name === description.name));
+    this.setState({graph_type: type});
   }
 
   render() {
 
     const {mapping, table_schema, schema, data, graph_type, table_info} = this.state;
     const {graph_descriptions} = this.props;
-    let graph_desc = this.state.graph_desc || graph_descriptions[graph_type];
+    const graph_description = graph_descriptions[graph_type];
 
     const info = {title: "<Unknown>"};
     Object.assign(info, table_info);
@@ -82,15 +82,15 @@ class GraphPage extends React.Component {
         <article>
           <h2>{info.title}</h2>
           <Graph width="900" height="400"
-            graph={graph_desc}
+            graph={graph_description}
             schema={schema} data={data}
             mapping={mapping} />
         </article>
         <nav>
           <GraphType graphtypes={graph_descriptions}
-            value = {graph_desc}
+            value = {graph_description}
             onChange={this.handleGraphTypeChange}/>
-          <Mapper description={graph_desc}
+          <Mapper description={graph_description}
             schema={table_schema}
             initialMapping={mapping}
             onChange={this.handleMappingChange}/>
