@@ -126,7 +126,7 @@ class Mapping {
     const variable = this.schema.fields.find((x) => x.name === variable_name);
     if (!variable) return false;
     // if filter is empty/falsey remove any existing filter; and done
-    if (!filter) {
+    if (!filter || !filter.length) {
       delete this.filter[variable_name]
       return true;
     }
