@@ -18,11 +18,18 @@ class Mapper extends React.Component {
   }
 
   componentWillReceiveProps(next_props) {
-    // Often the property schema will not be set when the contructor of
-    // Mapper is called as the schema is obtained asynchronically. The property
-    // schema is set later. Therefore, we need to update the Mapper object
-    // with the new schema
-    if (next_props.schema) {
+
+    if (next_props.description.name !== this.props.description.name) {
+      // When the graph type has changed we need to create a new mapping object
+      // as the axes of the graph will probably have changed.
+      this.setState({
+        mapping: new Mapping(next_props.description, next_props.schema)
+      })
+    } else if (next_props.schema) {
+      // Often the property schema will not be set when the contructor of
+      // Mapper is called as the schema is obtained asynchronically. The
+      // property schema is set later. Therefore, we need to update the Mapper
+      // object with the new schema
       let mapping = this.state.mapping;
       mapping.set_schema(next_props.schema);
       this.setState({mapping: mapping})
