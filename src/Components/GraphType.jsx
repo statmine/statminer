@@ -40,9 +40,10 @@ class GraphType extends React.Component {
     });
     //
     
+    // TODO remove the onchange, this should not be in the render code. (triggers another render update)
     if (value === undefined){
       if (typeof onChange === "function"){
-        onChange(graphtypes[0]);
+        onChange(graphtypes[0]); 
         return <div></div> ;
       }
     }    
