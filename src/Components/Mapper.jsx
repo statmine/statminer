@@ -13,12 +13,8 @@ class Mapper extends React.Component {
 
   handleAxisVariableChange(change) {
     let mapping = this.props.mapping;
-    if (!change.value) {
-      mapping.remove_variable_from_axis(change.name);
-    } else {
-      mapping.add_variable_to_axis(change.name, change.value);
-    }
-    // signal mapping change
+    if (!change.value) mapping.remove_variable_from_axis(change.name);
+    else mapping.add_variable_to_axis(change.name, change.value);
     if (typeof this.props.onChange === "function")
       this.props.onChange(mapping);
   }
@@ -26,7 +22,6 @@ class Mapper extends React.Component {
   handleFilterChange(change) {
     let mapping = this.props.mapping;
     mapping.add_filter(change.variable, change.filter);
-    // signal mapping change
     if (typeof this.props.onChange === "function")
       this.props.onChange(mapping);
   }
@@ -54,7 +49,6 @@ class Mapper extends React.Component {
           onChange={this.handleFilterChange}/>
       </div>);
   }
-
 }
 
 export default Mapper;
