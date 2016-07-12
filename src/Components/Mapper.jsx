@@ -28,8 +28,8 @@ class Mapper extends React.Component {
 
   render() {
     const {mapping, schema, description} = this.props;
-    if (schema === undefined)
-      return (<div className="mapping">Foo bar</div>);
+    // If no data do not render
+    if (!mapping || !schema || !description) return null;
     // Create one element for each of the axes of the graph with which the
     // variables for that axis can be selected
     const self = this;
