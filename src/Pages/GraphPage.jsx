@@ -5,6 +5,7 @@ import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 import graph_descriptions from '../graph_descriptions.js';
 import dataservice from '../Services/dataservice.js';
+import cbsodataservice from '../Services/cbsodataservice.js';
 import { Router, Route, hashHistory } from 'react-router';
 
 
