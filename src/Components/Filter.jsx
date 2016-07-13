@@ -20,7 +20,7 @@ class Filter extends React.Component {
     let filter_variables = filter.map(function(f, i) {
       var variable_schema = schema.fields.find((x) => x.name === f.variable);
       return (<FilterDimension key={i} schema={variable_schema}
-        filter={f.filter}  onChange={self.handleFilterChange} />);
+        filter={f.filter}  onChange={self.handleFilterChange} prefix={variable_schema.title + ": "}/>);
     });
     // create select
     return (
