@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Graph from '../Components/Graph.jsx';
+import GraphDataDump from '../Components/GraphDataDump.jsx';
 import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 import dataservice from '../Services/dataservice.js';
@@ -78,6 +80,11 @@ class GraphPage extends React.Component {
         <article>
           <h2>{title}</h2>
           <Graph width="900" height="400"
+            schema={schema} data={data}
+            graph={graph_description}
+            schema={schema} data={data}
+            mapping={mapping} />
+          <GraphDataDump  schema={schema} data={data}
             graph={graph_description}
             schema={schema} data={data}
             mapping={mapping} />
