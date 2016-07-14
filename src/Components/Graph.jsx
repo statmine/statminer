@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Dimensions from 'react-dimensions'
 
 class Graph extends React.Component {
 
@@ -9,6 +10,8 @@ class Graph extends React.Component {
 
   renderGraph() {
     const {graph, schema, data, mapping, height, width} = this.props;
+    const w = (this.props.containerWidth - 10) || this.props.width;
+    const h = (this.props.containerHeight - 100) || this.props.height;
     const map = this.convertMapping(mapping.mapping);
     if (graph.can_draw(schema, data, map)) {
       //TODO add a spinning wheel while drawing...
@@ -16,11 +19,8 @@ class Graph extends React.Component {
       // clear previous graph
       d3.selectAll(svg.childNodes).remove();
       // setup of graph
-      graph.graph.width(width)
-        .height(height)
-        .schema(schema)
-        .assign(map)
-        .data(data);
+      graph.graph.width(w).height(h)
+        .schema(schema).assign(map).data(data);
       // render
       graph.graph(d3.select(svg));
     }
@@ -48,12 +48,17 @@ class Graph extends React.Component {
   render() {
     const {graph, schema, data, mapping, width, height} = this.props;
     const map = this.convertMapping(mapping.mapping);
+    const w = (this.props.containerWidth - 10) || this.props.width;
+    const h = (this.props.containerHeight - 100) || this.props.height;
+    // TODO: check if style is the best way to get the graph to scale correctly
+    // with its container
+    const style = { position: "absolute"};
     if (graph.can_draw(schema, data, map)) {
-      return (<svg width={width} height={height}></svg>);
+      return (<svg style={style} width={w} height={h}></svg>);
     } else {
       return (<span>Invalid mapping</span>);
     }
   }
 }
 
-export default Graph;
+export default Dimensions()(Graph);

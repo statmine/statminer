@@ -75,31 +75,38 @@ class GraphPage extends React.Component {
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
     const title = table_schema ? table_schema.title : undefined;
 
+
+
+
     return (
-      <div id="main">
-        <article>
-          <h2>{title}</h2>
-          <Graph width="900" height="400"
-            schema={schema} data={data}
-            graph={graph_description}
-            schema={schema} data={data}
-            mapping={mapping} />
-          <GraphDataDump  schema={schema} data={data}
-            graph={graph_description}
-            schema={schema} data={data}
-            mapping={mapping} />
-        </article>
-        <nav>
-          <GraphType graphtypes={this.props.graph_descriptions}
-            value = {graph_description}
-            onChange={this.handleGraphTypeChange}/>
-          <Mapper description={graph_description}
-            schema={fields}
-            mapping={mapping}
-            onChange={this.handleMappingChange}/>
-        </nav>
+      <div>
+        <div id="main">
+          <article>
+            <h2>{title}</h2>
+            <Graph width="900" height="400"
+              schema={schema} data={data}
+              graph={graph_description}
+              schema={schema} data={data}
+              mapping={mapping} />
+          </article>
+          <nav>
+            <GraphType graphtypes={this.props.graph_descriptions}
+              value = {graph_description}
+              onChange={this.handleGraphTypeChange}/>
+            <Mapper description={graph_description}
+              schema={fields}
+              mapping={mapping}
+              onChange={this.handleMappingChange}/>
+          </nav>
+        </div>
+        <GraphDataDump  schema={schema} data={data}
+          graph={graph_description}
+          schema={schema} data={data}
+          mapping={mapping} />
       </div>
     );
+
+
   }
 }
 
