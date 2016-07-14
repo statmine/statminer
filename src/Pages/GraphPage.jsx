@@ -4,15 +4,15 @@ import Graph from '../Components/Graph.jsx';
 import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 import graph_descriptions from '../graph_descriptions.js';
-import dataservice from '../Services/dataservice.js';
-import cbsodataservice from '../Services/cbsodataservice.js';
 import { Router, Route, hashHistory } from 'react-router';
 
 
 class GraphPage extends React.Component {
 
   constructor(props) {
+
     super(props);
+    
     // set initial state
     this.state = {
       mapping: {},
@@ -38,6 +38,7 @@ class GraphPage extends React.Component {
     if (!table_id){
       return;
     }
+    const dataservice = this.props.provider;
 
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
@@ -52,6 +53,8 @@ class GraphPage extends React.Component {
   }
 
   handleMappingChange(mapping) {
+    const dataservice = this.props.provider;
+    
     this.setState({'mapping': mapping});
     var self = this;
     dataservice.get_data(this.state.table_id, mapping.mapping, function(e, d) {

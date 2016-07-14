@@ -36,9 +36,13 @@ class MapAxis extends React.Component {
     const options = schema.fields
       .filter((f) => supported_types.indexOf(f.type) >= 0)
       .sort((a,b) => a.title > b.title)
-      .map((f) => ({value: f.name, label: f.title}));
+      .map((f) => ({value: f.name, label: f.title}))
+      ;
+
     // Determine if and which variable is currently selected
     const selected_var = mapping.length ? mapping[0].variable : undefined;
+    
+    const no_choice = (selected_var) && options.length < 2;
     // Lookup schema and filter of selected variable for filter
     const variable_schema = schema.fields.find((x) => x.name === selected_var);
     const filter = mapping.length ? mapping[0].filter : undefined;
@@ -47,7 +51,7 @@ class MapAxis extends React.Component {
       <div className="axis">
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
-          clearable={!axis.required} onChange={this.handleVariableChange} />
+          clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice} />
         <FilterDimension schema={variable_schema} filter={filter}
             onChange={this.handleFilterChange} multi={true} />
       </div>

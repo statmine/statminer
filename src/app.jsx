@@ -5,7 +5,7 @@ import graph_descriptions from './graph_descriptions.js';
 import { Router, Route, hashHistory, browserHistory, IndexRoute, IndexRedirect } from 'react-router';
 import GraphPage from './Pages/GraphPage.jsx';
 import simpledata_svc from './Services/dataservice.js';
-import cbsodata_svc from './Services/cbsodataservice.js';
+import cbsodata_svc from './Services/cbsodata/dataservice.js';
 
 
 // App is a simple container needed for Route
@@ -18,11 +18,10 @@ const CbsGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descr
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="/demo/graph/diabetes" />
+      <IndexRedirect to="demo/graph/diabetes" />
       <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
       <Route path="cbs/graph/:table_id" component={CbsGraphPageParams} />
     </Route>
   </Router>,
-  // <GraphPage graph_descriptions={graph_descriptions} table_id="diabetes" />,
   document.getElementById('app')
 );
