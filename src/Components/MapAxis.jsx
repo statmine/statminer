@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import FilterDimension from './FilterDimension.jsx'
+import DimensionFilter from './DimensionFilter.jsx'
 
 
 class MapAxis extends React.Component {
@@ -27,6 +27,7 @@ class MapAxis extends React.Component {
   }
 
   render() {
+    //test
     const {axis, schema, mapping} = this.props;
     // Create the list of fields from which can be selected for the axis.
     // - Filter on supported types for axis
@@ -52,7 +53,7 @@ class MapAxis extends React.Component {
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice} />
-        <FilterDimension schema={variable_schema} filter={filter}
+        <DimensionFilter schema={variable_schema} filter={filter}
             onChange={this.handleFilterChange} multi={true} />
       </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
-class FilterDimension extends React.Component {
+class DimensionFilter extends React.Component {
 
   constructor(props) {
     super(props);
@@ -38,11 +38,11 @@ class FilterDimension extends React.Component {
     if (!multi) value = value[0];
     // Create filter dialog
     return (
-      <div className="filterdimension">
+      <div className="dimensionFilter">
         <Select value={value} options={options}
           onChange={this.handleChange} multi={multi || false} />
       </div>);
   }
 }
 
-export default FilterDimension;
+export default DimensionFilter;

@@ -1,5 +1,5 @@
 import React from 'react';
-import FilterDimension from './FilterDimension.jsx';
+import DimensionFilter from './DimensionFilter.jsx';
 
 class Filter extends React.Component {
 
@@ -19,7 +19,7 @@ class Filter extends React.Component {
     const self = this;
     let filter_variables = filter.map(function(f, i) {
       var variable_schema = schema.fields.find((x) => x.name === f.variable);
-      return (<FilterDimension key={i} schema={variable_schema}
+      return (<DimensionFilter key={i} schema={variable_schema}
         filter={f.filter}  onChange={self.handleFilterChange} prefix={variable_schema.title + ": "}/>);
     });
     // create select

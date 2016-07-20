@@ -138,3 +138,12 @@ line.colour8, path.colour8 {
   stroke: #e94c0a;
   stroke-opacity: 1;
   fill: none; }
+
+line.colour.colourlow,
+path.colour.colourlow {
+  stroke-opacity: 0.5; }
+
+rect.colour.colourlow,
+circle.colour.colourlow {
+  fill-opacity: 0.2;
+  stroke-opacity: 0.5; }
