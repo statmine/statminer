@@ -8,6 +8,9 @@ TOPIC = "Cbs.OData.Topic"
 DIMENSION = ["Cbs.OData.Dimension", TIME, GEO]
 NUMERIC = ["Double", "Float", "Integer", "Long"]
 
+# HACK!!!
+cached_meta = name: null
+
 # cleaning up statline stuff
 to_label = (label) ->
 	label = label.replace /_/g, ""
@@ -88,22 +91,22 @@ add_categories = (table, dimkey, codelist) ->
 	dim.aggregate = cats[idx].id unless idx
 	table
 
-odata_to_smp = (metadata) ->
-	data_properties = metadata.DataProperties
-	table_infos = metadata.TableInfos
-	dim_keys = get_dims data_properties
+# odata_to_smp = (metadata) ->
+# 	data_properties = metadata.DataProperties
+# 	table_infos = metadata.TableInfos
+# 	dim_keys = get_dims data_properties
 	
-	#codelists = (metadata[dimkey] for dimkey in dim_keys)
+# 	#codelists = (metadata[dimkey] for dimkey in dim_keys)
 
-	#console.log to_dimension(data_properties[1])
-	#console.log add_data_props to_table(table_infos), dat   a_properties
-	table = to_table table_infos
-	add_data_props table, data_properties
-	for dimkey in dim_keys
-		add_categories table, dimkey, metadata[dimkey]
-	table
+# 	#console.log to_dimension(data_properties[1])
+# 	#console.log add_data_props to_table(table_infos), dat   a_properties
+# 	table = to_table table_infos
+# 	add_data_props table, data_properties
+# 	for dimkey in dim_keys
+# 		add_categories table, dimkey, metadata[dimkey]
+# 	table
 
-odata_to_schema = (metadata) ->
+odata_to_datapackage= (metadata) ->
 	data_properties = metadata.DataProperties
 	ti = metadata.TableInfos[0]
 	
@@ -152,13 +155,17 @@ odata_to_schema = (metadata) ->
 	datapkg.resources.push schema
 	datapkg
 
-get_meta = (table) ->
-	api.get_meta(table)
-	.then(odata_to_smp)
+# get_meta = (table) ->
+# 	api.get_meta(table)
+# 	.then(odata_to_smp)
 
-get_schema = (table) ->
+get_datapackage = (table) ->
 	api.get_meta(table)
-	.then(odata_to_schema)
+	.then(odata_to_datapackage)
+	.then((dpkg) ->
+	   cached_meta = dpkg
+	   dpkg 
+	)
 
 # odata cannot handle large filter statements, so we get more and do a post filter on the data
 prefilter = (filter) ->
@@ -170,9 +177,21 @@ prefilter = (filter) ->
 		res[v] = varfilter
 	{filter:filter, post_filter:post_filter, odata_filter: odata_filter}
 
+
 get_data = (table, filter, select) ->
 	pf = prefilter filter
+	
+	add_fields = (data) ->
+	  console.log "hello"
+	  if cached_meta.name is table
+	    schema: get_data_fields(cached_meta, filter, select), data: data
+	  else
+	    get_datapackage(table).then(() -> add_fields(data))
+		
 	api.get_data(table, pf.odata_filter, select)
+	  .then((data) ->
+	    add_fields(data)
+	  )
 	
 shallow_clone = (obj, res={}) ->
 	for k,v of obj
@@ -212,37 +231,37 @@ module.exports =
 	get_data: get_data
 	get_data_fields: get_data_fields
 	get_tables: get_tables
-	get_schema: get_schema
+	get_datapackage: get_datapackage
+	get_schema: get_datapackage
 	#search: search
 
 
-# test = on
-# if test?
-# 	# fs = require 'fs'
-# 	# metadata = require "./cbsodata.json"
-# 	#get_tables().then(console.log)
-# 	my_filter = 
-# 		Goods: ['K', 'C']
-# 		Periods: ['2008JJ00']
+test = on
+if test?
+	# fs = require 'fs'
+	# metadata = require "./cbsodata.json"
+	#get_tables().then(console.log)
+	my_filter = 
+		Goods: ['K', 'C']
+		Periods: ['2008JJ00']
 	
-# 	select = ["Goods","Periods","ExportValue_2"]
+	select = ["Goods","Periods","ExportValue_2"]
 		
-# 	# get_data("80576eng", my_filter, ["Goods","Periods","ExportValue_2"])
-# 	#   .then console.log
+	get_data("80576eng", my_filter, ["Goods","Periods","ExportValue_2"])
+	  .then console.log
 	  
-# 	get_schema("80576eng")
-# 	  .then((schema) ->
-# 		   data_schema = get_data_fields schema, my_filter, select
-# 		   console.log data_schema.resources[0]
-# 	)
-	# get_schema("80576eng")
+	# get_datapackage("80576eng")
+	#   .then((schema) ->
+	# 	   data_schema = get_data_fields schema, my_filter, select
+	# )
+	# get_datapackage("80576eng")
 	#   .then (meta) ->
 	#      console.log meta.resources[0].fields[0] 
 	#get_data().then(console.log)
-	#console.log (JSON.stringify (odata_to_schema metadata), true)
-	#console.log odata_to_schema metadata
-	#get_schema("71311NED").then(console.log)
-	#get_schema("71311NED").
+	#console.log (JSON.stringify (odata_to_datapackage)metadata), true)
+	#console.log odata_to_datapackage)metadata
+	#get_datapackage("71311NED").then(console.log)
+	#get_datapackage("71311NED").
 	#then((meta) -> console.log meta)
 
 	#.then((str) -> fs.writeFileSync("smp.json", str))
