@@ -2,11 +2,13 @@ import React from 'react';
 
 import Graph from '../Components/Graph.jsx';
 import GraphDataDump from '../Components/GraphDataDump.jsx';
-import Mapper from '../Components/Mapper.jsx';
-import GraphType from '../Components/GraphType.jsx';
-import graph_descriptions from '../graph_descriptions.js';
-import { Router, Route, hashHistory } from 'react-router';
+
 import Mapping from "../Core/Mapping.js";
+import Mapper from '../Components/Mapper.jsx';
+
+import GraphType from '../Components/GraphType.jsx';
+// import graph_descriptions from '../graph_descriptions.js';
+import { Router, Route, hashHistory } from 'react-router';
 
 class GraphPage extends React.Component {
 
@@ -39,7 +41,7 @@ class GraphPage extends React.Component {
     }
     const dataservice = this.props.provider;
 
-    let self = this;
+    const self = this;
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
