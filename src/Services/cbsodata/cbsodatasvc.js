@@ -17,7 +17,9 @@
 
   NUMERIC = ["Double", "Float", "Integer", "Long"];
 
-  cached_meta = null;
+  cached_meta = {
+    name: null
+  };
 
   to_label = function(label) {
     label = label.replace(/_/g, "");
@@ -243,12 +245,15 @@
     var add_fields, pf;
     pf = prefilter(filter);
     add_fields = function(data) {
-      var res;
       if (cached_meta.name === table) {
-        return res = {
+        return {
           schema: get_data_fields(cached_meta, filter, select),
           data: data
         };
+      } else {
+        return get_datapackage(table).then(function() {
+          return add_fields(data);
+        });
       }
     };
     return api.get_data(table, pf.odata_filter, select).then(function(data) {
@@ -316,7 +321,7 @@
     get_schema: get_datapackage
   };
 
-  test = true;
+  test = false;
 
   if (test != null) {
     my_filter = {

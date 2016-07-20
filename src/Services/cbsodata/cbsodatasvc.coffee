@@ -182,7 +182,6 @@ get_data = (table, filter, select) ->
 	pf = prefilter filter
 	
 	add_fields = (data) ->
-	  console.log "hello"
 	  if cached_meta.name is table
 	    schema: get_data_fields(cached_meta, filter, select), data: data
 	  else
@@ -236,7 +235,7 @@ module.exports =
 	#search: search
 
 
-test = on
+test = off
 if test?
 	# fs = require 'fs'
 	# metadata = require "./cbsodata.json"
