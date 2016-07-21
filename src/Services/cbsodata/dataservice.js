@@ -3,17 +3,29 @@ const api  = require('./cbsodatasvc.js');
 const meta_cache = {}
 
 function get_data(table_id, mapping, on_data){
-    api.get_data(table_id, mapping, null).then( (result, err) =>{
-        let res = { data: result
-                  , schema: api.get_data_fields(meta_cache[table_id], mapping.filter, mapping.select) 
-                  }
-        on_data(err, res);
+    const filter = {};
+    const res = {};
+    for (let a in mapping){
+        let vf = mapping[a];
+        if (vf.length){
+            vf = vf[0]
+        } else {
+            continue
+        }
+        if (vf.filter){
+            filter[vf.variable] = vf.filter;
+        }
+        res[vf.variable] = true;
+    }
+    const select = Object.keys(res);
+    console.log(filter, res);
+    api.get_data(table_id, filter, select).then( (result, err) =>{
+        on_data(err, result);
     });
 } 
 
 function get_schema(table_id, on_schema){
     api.get_schema(table_id).then((result, err) =>{
-        meta_cache[table_id] = result;
         on_schema(err, result);
     })
 }
