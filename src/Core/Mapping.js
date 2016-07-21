@@ -78,6 +78,7 @@ class Mapping {
     
     //utility function 
     function extract_variable_filter(x){
+
       if (filter[x]){
         return {variable: x, filter: filter[x]}
       } else {
@@ -127,7 +128,23 @@ class Mapping {
     // if the variable is not yet on an axis; check if filter needs to be
     // modified; for now: delete filter
     if (!this.variable_on_axis(variable.name))
-      delete this.filter[variable.name];
+      delete this.filter[variable_name];
+
+    // choose a small selection without the aggregate.
+    if (variable.type === "categorical"){
+      let filter = variable.categories
+        .map((x) => x.name);
+
+      if (filter.length > 2){
+        filter = filter
+         .slice(0,6)
+         .filter((x) => x != variable.aggregate)
+         .slice(0,5)
+         ;
+      }
+      this.filter[variable_name] = filter;
+    }
+
     // add variable to axis
     this.map[axis.name] = [variable_name];
     return true;

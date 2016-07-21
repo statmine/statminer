@@ -31,7 +31,8 @@ let bubblechart_description = {
     }, {
       name : 'object',
       title : 'Object',
-      accepts: ['categorical', 'date']
+      accepts: ['categorical', 'date'],
+      required: true
     }, {
       name : 'colour',
       title : 'Colour',
