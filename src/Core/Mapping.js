@@ -109,6 +109,10 @@ class Mapping {
   remove_variable_from_axis(axis_name, variable_name) {
     if (!this.schema) return false;
     if (!this.map[axis_name]) return false;
+    // TODO: we currently ignore the variable_name; however, in order to update
+    // the filter we need a variable_name; take the first variable on the axis.
+    if (variable_name === undefined && this.map[axis_name].length)
+      variable_name = this.map[axis_name][0];
     // TODO: ignore variable_name; delete all variables on axis
     //const i = this.map[axis_name].indexOf(variable_name);
     //if (i === -1) return false;
@@ -116,7 +120,7 @@ class Mapping {
     // If variable is no longer on any axis; check if filter needs to be
     // modified; for now: delete filter
     if (!this.variable_on_axis(variable_name))
-      delete this.filter[variable_name];
+     delete this.filter[variable_name];
     return true;
   }
 

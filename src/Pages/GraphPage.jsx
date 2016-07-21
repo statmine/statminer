@@ -13,7 +13,7 @@ class GraphPage extends React.Component {
   constructor(props) {
 
     super(props);
-    
+
     // set initial state
     const graph_type = 0; // TODO introduce initialGraphType property
     const graph_description = props.graph_descriptions[graph_type];
@@ -56,7 +56,7 @@ class GraphPage extends React.Component {
 
   handleMappingChange(mapping) {
     const dataservice = this.props.provider;
-    
+
     this.setState({'mapping': mapping});
     let self = this;
     dataservice.get_data(this.state.table_id, mapping.mapping, function(e, d) {
@@ -82,9 +82,6 @@ class GraphPage extends React.Component {
     const graph_description = this.props.graph_descriptions[graph_type];
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
     const title = table_schema ? table_schema.title : undefined;
-
-
-
 
     return (
       <div>
@@ -113,8 +110,6 @@ class GraphPage extends React.Component {
           mapping={mapping} />
       </div>
     );
-
-
   }
 }
 
