@@ -11,7 +11,11 @@
     "csswatch": "node-sass --watch --output css css"
   },
   "author": "Edwin de Jonge, Jan van der Laan",
-  "license": "GPL-2",
+  "license": "GPL-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/statmine/statminer.git"
+  },
   "dependencies": {
     "cbsodata": "statmine/cbsodata.js",
     "react": "^0.14.7",
