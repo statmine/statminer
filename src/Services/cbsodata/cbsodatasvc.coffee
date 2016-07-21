@@ -155,6 +155,8 @@ odata_to_datapackage= (metadata) ->
           title: ocat.Title
           description: ocat.Description
         categories.push cat
+      field.aggregate = categories[0].name unless field.type is "date"
+      field.default = field.aggregate || categories[categories.length-1].name
     fields.push field
   
   datapkg.resources.push schema

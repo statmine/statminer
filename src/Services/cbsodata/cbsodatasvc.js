@@ -216,6 +216,10 @@
           };
           categories.push(cat);
         }
+        if (field.type !== "date") {
+          field.aggregate = categories[0].name;
+        }
+        field["default"] = field.aggregate || categories[categories.length - 1].name;
       }
       fields.push(field);
     }
