@@ -25,13 +25,13 @@ class Mapping {
   constructor(graph, schema) {
     this.schema = schema;
     this.graph = graph;
-    // initialise mapping object
+    // initialise mapping object, keeps variables by axis name
     this.map = {};
     for (let i = 0; i != graph.axes.length; ++i) {
       var axis = graph.axes[i];
       this.map[axis.name] = [];
     }
-    // initialise filter object
+    // initialise filter object, keeps filters by variable name
     this.filter = {};
   }
 
@@ -45,23 +45,50 @@ class Mapping {
   default_category(variable_name) {
     const variable = this.schema.fields.find((x) => x.name === variable_name);
     if (!variable) return undefined;
-    return [variable.default || variable.aggregate];
+    return [variable.default || variable.aggregate || variable.categories[0].name];
+  }
+
+  fill_required_axes() {
+    if (!this.schema){
+      return false;
+    }
+
+    const {map, graph, schema} = this;
+  
+    for (let i = 0; i != graph.axes.length; ++i){
+      var axis = graph.axes[i];
+      if (axis.required && map[axis.name].length == 0){
+        for (let f = 0; f != schema.fields.length; ++f){
+          const field = schema.fields[f];
+          if ( !this.variable_on_axis(field.name) 
+             && this.add_variable_to_axis(axis.name, field.name)
+             ){
+               break;
+             }
+        }
+      }
+    }
   }
 
   get mapping() {
     if (!this.schema) return undefined;
+    this.fill_required_axes();
     let mapping = {};
-    const filter = this.filter;
+    const {filter, graph} = this;
+    
+    //utility function 
+    function extract_variable_filter(x){
+      if (filter[x]){
+        return {variable: x, filter: filter[x]}
+      } else {
+        return {variable: x}
+      }
+    }
+
     // create mapping
-    for (let axis_name in this.map) {
+    for (let axis_name in this.map){
       if (this.map.hasOwnProperty(axis_name)) {
-        mapping[axis_name] = this.map[axis_name].map(function(x) {
-          if (filter[x]) {
-            return {variable: x, filter: filter[x]};
-          } else {
-            return {variable: x};
-          }
-        });
+        mapping[axis_name] = this.map[axis_name].map(extract_variable_filter);
       }
     }
     // add filter to mapping
@@ -73,7 +100,7 @@ class Mapping {
       .filter((x) => (x.categories))
       .map((x) => ({
         variable: x.name,
-        filter: filter[x.name] || this.default_category(x.name)
+        filter: filter[x.name] || self.default_category(x.name)
       }));
     return mapping;
   }

@@ -53,6 +53,7 @@ class GraphPage extends React.Component {
         table_schema : d,
         mapping : mapping
       });
+      self.handleMappingChange(mapping);
     });
   }
 
