@@ -1,24 +1,20 @@
 const api  = require('./cbsodatasvc.js');
 
-const meta_cache = {}
-
 function get_data(table_id, mapping, on_data){
     const filter = {};
     const res = {};
     for (let a in mapping){
-        let vf = mapping[a];
-        if (vf.length){
-            vf = vf[0]
-        } else {
-            continue
+        const vfs = mapping[a];
+        for (let b in vfs){
+            const vf = vfs[b];
+            if (vf.filter){
+                filter[vf.variable] = vf.filter;
+            }
+            res[vf.variable] = true;
         }
-        if (vf.filter){
-            filter[vf.variable] = vf.filter;
-        }
-        res[vf.variable] = true;
     }
     const select = Object.keys(res);
-    console.log(filter, res);
+    //console.log(filter, res);
     api.get_data(table_id, filter, select).then( (result, err) =>{
         on_data(err, result);
     });
@@ -31,6 +27,14 @@ function get_schema(table_id, on_schema){
 }
 
 function get_table_list(on_list){
+    api.get_tables()
+    .then((result, err) => {
+        //console.log(result)
+        result = result.map( (ti) => {
+          return { name: ti.Identifier, title: ti.Title, summary: ti.Summary}
+        });
+        on_list(err, result)
+    }) 
 }
 
 export default {

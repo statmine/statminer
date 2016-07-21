@@ -32,7 +32,7 @@ var dataservice = (function() {
 
   dataservice.get_table_list = function(on_list){
     //TODO implement list of table
-    d3.json(address, "tables", on_list);
+    d3.json(address, "/tables", on_list);
   }
 
   return dataservice;

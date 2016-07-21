@@ -23,87 +23,87 @@ to_tablelistitem = (odata_table) ->
     summary: odata_table.Summary
   item
 
-to_table = (odata_tableinfo) ->
-  odata_tableinfo = odata_tableinfo[0]
-  table = 
-    id: odata_tableinfo.Identifier
-    name: odata_tableinfo.ShortTitle
-    summary: odata_tableinfo.Summary
-    description: odata_tableinfo.Description
-    variables: {}
-    dimensions: {}
-  table
+# to_table = (odata_tableinfo) ->
+#   odata_tableinfo = odata_tableinfo[0]
+#   table = 
+#     id: odata_tableinfo.Identifier
+#     name: odata_tableinfo.ShortTitle
+#     summary: odata_tableinfo.Summary
+#     description: odata_tableinfo.Description
+#     variables: {}
+#     dimensions: {}
+#   table
 
-to_variable = (odata_topic) ->
-  variable = 
-    id: odata_topic.Key
-    name: to_label(odata_topic.Title)
-    description: odata_topic.Description
-    unit: odata_topic.Unit
-    type:  'numeric' # odata_topic.Datatype
-    ID: odata_topic.ID
-  variable
+# to_variable = (odata_topic) ->
+#   variable = 
+#     id: odata_topic.Key
+#     name: to_label(odata_topic.Title)
+#     description: odata_topic.Description
+#     unit: odata_topic.Unit
+#     type:  'numeric' # odata_topic.Datatype
+#     ID: odata_topic.ID
+#   variable
 
-to_dimension = (odata_dim) ->
-  dim = 
-    id: odata_dim.Key
-    name: odata_dim.Title
-    description: odata_dim.Description
-    ID: odata_dim.ID
-    type: ["categorical"]
-  if odata_dim['odata.type'] is GEO
-    dim.type.push "geo"
-  if odata_dim['odata.type'] is TIME
-    dim.type.push "date"
-    dim.type.push "ordinal"
-    dim.istime = true
-  dim
+# to_dimension = (odata_dim) ->
+#   dim = 
+#     id: odata_dim.Key
+#     name: odata_dim.Title
+#     description: odata_dim.Description
+#     ID: odata_dim.ID
+#     type: ["categorical"]
+#   if odata_dim['odata.type'] is GEO
+#     dim.type.push "geo"
+#   if odata_dim['odata.type'] is TIME
+#     dim.type.push "date"
+#     dim.type.push "ordinal"
+#     dim.istime = true
+#   dim
 
-to_category = (odata_code) ->
-  cat = 
-    id: odata_code.Key
-    name: odata_code.Title
-    level: odata_code.Key
-    description: odata_code.Description
-  cat
+# to_category = (odata_code) ->
+#   cat = 
+#     id: odata_code.Key
+#     name: odata_code.Title
+#     level: odata_code.Key
+#     description: odata_code.Description
+#   cat
 
-get_dims = (data_props) ->
-  (d.Key for d in data_props when d['odata.type'] in DIMENSION)
+# get_dims = (data_props) ->
+#   (d.Key for d in data_props when d['odata.type'] in DIMENSION)
 
-add_data_props = (table, data_props) ->
-  variables = (to_variable t for t in data_props when t.Datatype in NUMERIC)
-  for v in variables when v.id and v.id isnt ""
-    table.variables[v.id] = v
-  dimensions = (to_dimension d for d in data_props when d['odata.type'] in DIMENSION)
-  for d in dimensions
-    table.dimensions[d.id] = d
-  table
+# add_data_props = (table, data_props) ->
+#   variables = (to_variable t for t in data_props when t.Datatype in NUMERIC)
+#   for v in variables when v.id and v.id isnt ""
+#     table.variables[v.id] = v
+#   dimensions = (to_dimension d for d in data_props when d['odata.type'] in DIMENSION)
+#   for d in dimensions
+#     table.dimensions[d.id] = d
+#   table
 
-add_categories = (table, dimkey, codelist) ->
-  #console.log dimkey
-  dim = table.dimensions[dimkey]
+# add_categories = (table, dimkey, codelist) ->
+#   #console.log dimkey
+#   dim = table.dimensions[dimkey]
 
-  cats = (to_category(code) for code in codelist)
-  dim.categories = cats
-  idx = if dim.istime then (cats.length - 1) else 0
-  dim.default = cats[idx].id
-  dim.aggregate = cats[idx].id unless dim.istime
-  table
+#   cats = (to_category(code) for code in codelist)
+#   dim.categories = cats
+#   idx = if dim.istime then (cats.length - 1) else 0
+#   dim.default = cats[idx].id
+#   dim.aggregate = cats[idx].id unless dim.istime
+#   table
 
-# odata_to_smp = (metadata) ->
-# 	data_properties = metadata.DataProperties
-# 	table_infos = metadata.TableInfos
-# 	dim_keys = get_dims data_properties
+# # odata_to_smp = (metadata) ->
+# # 	data_properties = metadata.DataProperties
+# # 	table_infos = metadata.TableInfos
+# # 	dim_keys = get_dims data_properties
   
-# 	#codelists = (metadata[dimkey] for dimkey in dim_keys)
+# # 	#codelists = (metadata[dimkey] for dimkey in dim_keys)
 
-# 	#console.log to_dimension(data_properties[1])
-# 	#console.log add_data_props to_table(table_infos), dat   a_properties
-# 	table = to_table table_infos
-# 	add_data_props table, data_properties
-# 	for dimkey in dim_keys
-# 		add_categories table, dimkey, metadata[dimkey]
-# 	table
+# # 	#console.log to_dimension(data_properties[1])
+# # 	#console.log add_data_props to_table(table_infos), dat   a_properties
+# # 	table = to_table table_infos
+# # 	add_data_props table, data_properties
+# # 	for dimkey in dim_keys
+# # 		add_categories table, dimkey, metadata[dimkey]
+# # 	table
 
 odata_to_datapackage= (metadata) ->
   data_properties = metadata.DataProperties
@@ -277,19 +277,21 @@ module.exports =
   #search: search
 
 
-test = on
-if test
-  # fs = require 'fs'
-  # metadata = require "./cbsodata.json"
-  #get_tables().then(console.log)
-  my_filter = 
-    Goods: ['K', 'C']
-    Periods: ['2008JJ00']
+# test = on
+# if test
+#   # fs = require 'fs'
+#   # metadata = require "./cbsodata.json"
+#   #get_tables().then(console.log)
+#   # my_filter = 
+#   #   Goods: ['K', 'C']
+#   #   Periods: ['2008JJ00']
   
-  select = ["Goods","Periods","ExportValue_2"]
+#   get_tables().then console.log
+  # select = ["Goods","Periods","ExportValue_2"]
 
-  get_data("80576eng", my_filter, select)
-    .then (res) -> console.log res
+  # get_data("80576eng", my_filter, select)
+  #   .then (res) -> console.log res
+
   # values = ["2001JJ00", "2001KW01", "2001MM04","bla"]
   # enc_values = values.map datefield_encoder
   # console.log enc_values
