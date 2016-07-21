@@ -1,6 +1,8 @@
 StatMiner
 ====================================
 
+![https://travis-ci.org/statmine/statminer.svg?branch=dev](https://travis-ci.org/statmine/statminer.svg?branch=dev)
+
 Install modules
 
 ```
