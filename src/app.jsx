@@ -20,8 +20,8 @@ const CbsGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descr
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-     <IndexRedirect to="demo/graph/diabetes" />
      <IndexRedirect to="cbs/graph/80576eng" />
+     <IndexRedirect to="demo/graph/diabetes" />
       <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
       <Route path="cbs/graph/:table_id" component={CbsGraphPageParams} />
     </Route>
