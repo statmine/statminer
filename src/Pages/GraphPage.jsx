@@ -66,6 +66,7 @@ class GraphPage extends React.Component {
         console.log("Failed to load data:", e);
         return;
       }
+      console.log("schema", d.schema);
       self.setState({data: d.data, schema: d.schema});
     });
   }

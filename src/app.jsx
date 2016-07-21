@@ -15,11 +15,13 @@ const App = (props) => <div>{props.children}</div>
 const DemoGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} provider={simpledata_svc} {...props.params} />
 const CbsGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} provider={cbsodata_svc} {...props.params} />
 
+//<IndexRedirect to="cbs/graph/80576eng" />
+
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      // <IndexRedirect to="demo/graph/diabetes" />
-      <IndexRedirect to="cbs/graph/80576eng" />
+     <IndexRedirect to="demo/graph/diabetes" />
+     <IndexRedirect to="cbs/graph/80576eng" />
       <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
       <Route path="cbs/graph/:table_id" component={CbsGraphPageParams} />
     </Route>
