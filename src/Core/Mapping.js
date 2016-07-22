@@ -74,7 +74,7 @@ class Mapping {
     if (!this.schema) return undefined;
     this.fill_required_axes();
     let mapping = {};
-    const {filter, graph} = this;
+    const {filter} = this;
     
     //utility function 
     function extract_variable_filter(x){
