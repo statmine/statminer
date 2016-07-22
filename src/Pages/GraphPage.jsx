@@ -9,6 +9,8 @@ import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 // import graph_descriptions from '../graph_descriptions.js';
 import { Router, Route, hashHistory } from 'react-router';
+import debounce from 'debounce';
+
 
 class GraphPage extends React.Component {
 
@@ -40,7 +42,6 @@ class GraphPage extends React.Component {
       return;
     }
     const dataservice = this.props.provider;
-
     const self = this;
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
@@ -58,10 +59,11 @@ class GraphPage extends React.Component {
 
   handleMappingChange(mapping) {
     const dataservice = this.props.provider;
+    const get_data = debounce(dataservice.get_data, 200);
 
     this.setState({'mapping': mapping});
     let self = this;
-    dataservice.get_data(this.state.table_id, mapping.mapping, function(e, d) {
+    get_data(this.state.table_id, mapping.mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
