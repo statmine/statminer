@@ -50,8 +50,7 @@ class GraphPage extends React.Component {
       let mapping = self.state.mapping;
       mapping.set_schema(d.resources[0].schema);
       self.setState({
-        table_schema : d,
-        mapping : mapping
+        table_schema : d
       });
       self.handleMappingChange(mapping);
     });
@@ -67,7 +66,7 @@ class GraphPage extends React.Component {
         console.log("Failed to load data:", e);
         return;
       }
-      console.log("schema", d.schema);
+      //console.log("schema", d.schema);
       self.setState({data: d.data, schema: d.schema});
     });
   }
@@ -79,6 +78,8 @@ class GraphPage extends React.Component {
     const fields = this.state.table_schema.resources[0].schema;
     const mapping = new Mapping(graph_description, fields);
     this.setState({graph_type: type, mapping: mapping});
+    // triggers redraw, should event flow should be optimized..
+    this.handleMappingChange(mapping);
   }
 
   render() {

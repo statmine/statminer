@@ -126,8 +126,19 @@ class Mapping {
     if (axis.accepts.indexOf(variable.type) === -1) return false;
     // if the variable is not yet on an axis; check if filter needs to be
     // modified; for now: delete filter
-    if (!this.variable_on_axis(variable.name))
+    if (!this.variable_on_axis(variable.name)){
       delete this.filter[variable.name];
+      if (variable.type == "categorical"){
+        let filter = variable.categories
+         .slice(0,6)    
+         .map((x) => x.name)
+         .filter((x) => x != variable.aggregate)
+         .slice(0,5)
+         ;
+        this.filter[variable_name] = filter 
+      }
+    }
+
     // add variable to axis
     this.map[axis.name] = [variable_name];
     return true;
