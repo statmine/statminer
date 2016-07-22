@@ -43,6 +43,7 @@ class GraphPage extends React.Component {
     }
     const dataservice = this.props.provider;
     const self = this;
+
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
@@ -59,6 +60,8 @@ class GraphPage extends React.Component {
 
   handleMappingChange(mapping) {
     const dataservice = this.props.provider;
+    // wait xxx milliseconds before starting to load the data
+    // this make selecting multiple items more smooth
     const get_data = debounce(dataservice.get_data, 200);
 
     this.setState({'mapping': mapping});
