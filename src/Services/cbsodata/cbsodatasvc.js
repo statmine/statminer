@@ -83,7 +83,7 @@
           ocat = ref1[j];
           cat = {
             name: field.encode(ocat.Key),
-            title: ocat.Title,
+            title: to_label(ocat.Title),
             description: ocat.Description
           };
           categories.push(cat);

@@ -74,7 +74,7 @@ class Mapping {
     if (!this.schema) return undefined;
     this.fill_required_axes();
     let mapping = {};
-    const {filter, graph} = this;
+    const {filter} = this;
     
     //utility function 
     function extract_variable_filter(x){
@@ -122,6 +122,7 @@ class Mapping {
     if (!variable) return false;
     // lookup axis description
     const axis = this.graph.axes.find((x) => x.name === axis_name);
+    
     if (!axis) return false;
     // check if variable if of correct type
     if (axis.accepts.indexOf(variable.type) === -1) return false;
@@ -146,6 +147,7 @@ class Mapping {
     }
 
     // add variable to axis
+    this.remove_variable_from_axis(axis_name);
     this.map[axis.name] = [variable_name];
     return true;
   }

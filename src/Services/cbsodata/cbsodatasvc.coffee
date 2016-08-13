@@ -152,7 +152,7 @@ odata_to_datapackage= (metadata) ->
       for ocat in metadata[field.name]
         cat = 
           name: field.encode(ocat.Key)
-          title: ocat.Title
+          title: to_label ocat.Title
           description: ocat.Description
         categories.push cat
       field.aggregate = categories[0].name unless field.type is "date"

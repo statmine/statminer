@@ -9,6 +9,8 @@ import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 // import graph_descriptions from '../graph_descriptions.js';
 import { Router, Route, hashHistory } from 'react-router';
+import debounce from 'debounce';
+
 
 class GraphPage extends React.Component {
 
@@ -40,8 +42,8 @@ class GraphPage extends React.Component {
       return;
     }
     const dataservice = this.props.provider;
-
     const self = this;
+
     dataservice.get_schema(table_id, function(e, d) {
       if (e) {
         console.log("Failed to load meta:", e);
@@ -50,8 +52,7 @@ class GraphPage extends React.Component {
       let mapping = self.state.mapping;
       mapping.set_schema(d.resources[0].schema);
       self.setState({
-        table_schema : d,
-        mapping : mapping
+        table_schema : d
       });
       self.handleMappingChange(mapping);
     });
@@ -59,15 +60,18 @@ class GraphPage extends React.Component {
 
   handleMappingChange(mapping) {
     const dataservice = this.props.provider;
+    // wait xxx milliseconds before starting to load the data
+    // this make selecting multiple items more smooth
+    const get_data = debounce(dataservice.get_data, 200);
 
     this.setState({'mapping': mapping});
     let self = this;
-    dataservice.get_data(this.state.table_id, mapping.mapping, function(e, d) {
+    get_data(this.state.table_id, mapping.mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
       }
-      console.log("schema", d.schema);
+      //console.log("schema", d.schema);
       self.setState({data: d.data, schema: d.schema});
     });
   }
@@ -79,6 +83,8 @@ class GraphPage extends React.Component {
     const fields = this.state.table_schema.resources[0].schema;
     const mapping = new Mapping(graph_description, fields);
     this.setState({graph_type: type, mapping: mapping});
+    // triggers redraw, should event flow should be optimized..
+    this.handleMappingChange(mapping);
   }
 
   render() {
