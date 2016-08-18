@@ -25,7 +25,7 @@ class Filter extends React.Component {
     // create select
     return (
       <div className="filter">
-        <h3>Filter:</h3>
+        <h3>Filter</h3>
         {filter_variables}
       </div>
     );
