@@ -7,8 +7,8 @@
     "test": "npm run build",
     "start": "webpack-dev-server --colors --progress -d",
     "build": "webpack",
-    "css": "node-sass --output css css",
-    "csswatch": "node-sass --watch --output css css"
+    "css": "node-sass --output css css/statminer.scss",
+    "csswatch": "node-sass --watch --output css css/statminer.scss"
   },
   "author": "Edwin de Jonge, Jan van der Laan",
   "license": "GPL-2.0",
