@@ -1,0 +1,26 @@
+body {
+  font-family: $sans;
+  font-size: 16px;
+  color:$black;
+}
+
+h1, h2, h3, h4 {
+  font-family: $serif;
+  color: $black;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 21px;
+}
+
+nav {
+  h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .dimensionFilter {
+    margin-top: 5px;
+  }
+}
