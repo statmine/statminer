@@ -18,11 +18,12 @@ nav h3 {
 nav .dimensionFilter {
   margin-top: 5px; }
 
-.btn {
-  float: left;
+.radio-btns {
+  margin-left: -5px; }
+
+.radio-btn {
   color: #333;
   background-color: #fff;
-  border-color: #ccc;
   display: inline-block;
   margin-bottom: 0;
   font-weight: 400;
@@ -30,22 +31,28 @@ nav .dimensionFilter {
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
-  background-image: none;
-  border: 1px solid transparent;
+  border: 1px solid #ccc;
   white-space: nowrap;
   padding: 6px 12px;
-  font-size: 14px;
-  line-height: 1.42857143;
-  border-radius: 4px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none; }
+  border-radius: 4px; }
 
-.btn-selected {
+.radio-btn {
+  margin-left: 5px; }
+
+.radio-btn:active, .radio-btn:hover {
   color: #333;
-  background-color: #fff;
-  border-color: #ccc; }
+  background-color: #e6e6e6;
+  border-color: #adadad; }
+
+.radio-btn.selected {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #2e6da4; }
+
+.radio-btn.selected:active, .radio-btn.selected:hover {
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74; }
 
 #main {
   min-height: 800px;

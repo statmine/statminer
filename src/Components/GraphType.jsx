@@ -21,6 +21,10 @@ class GraphType extends React.Component {
     }
   }
 
+  handleTypeChange2(event) {
+    console.log(event.target.value);
+  }
+
   componentWillMount(){
     this.componentWillReceiveProps(this.props);
   }
@@ -32,13 +36,16 @@ class GraphType extends React.Component {
   }
 
   render() {
-    // create list with options = variables
     let {graphtypes, value, onChange} = this.props;
-
-    let options = graphtypes.map(function(v, i) {
-      return (<option key={v.name} value={v.name}>{v.title}</option>);
+    // create list with options = variables
+    let self = this;
+    let buttons = graphtypes.map(function(v, i) {
+      const c = v.name === value.name ? "radio-btn selected" : "radio-btn";
+      return (<button type="button" className={c}
+          onClick={self.handleTypeChange} value={v.name}>
+        {v.title}
+      </button>);
     });
-    //
 
     // TODO remove the onchange, this should not be in the render code. (triggers another render update)
     if (value === undefined){
@@ -50,14 +57,9 @@ class GraphType extends React.Component {
     // create select
     return (
       <div className="graphtype">
-        <div>
-          <button type="button" className="btn btn-selected">Bar chart</button>
-          <button type="button" className="btn">Line chart</button>
-          <button type="button" className="btn">Bubble chart</button>
+        <div className="radio-btns">
+          {buttons}
         </div>
-        <select value={value.name} onChange={this.handleTypeChange}>
-        {options}
-        </select>
       </div>
     );
   }
