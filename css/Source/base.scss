@@ -49,7 +49,7 @@ nav {
 
 .radio-btn {
   // float: left;
-  color: #333;
+  color: $lightblue;
   background-color: #fff;
   display: inline-block;
   margin-bottom: 0;
@@ -58,7 +58,7 @@ nav {
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid $lightblue;
   white-space: nowrap;
   padding: 6px 12px;
   border-radius: 4px;
@@ -68,17 +68,17 @@ nav {
 }
 
 .radio-btn:active, .radio-btn:hover {
-    color: #333;
-    background-color: #e6e6e6;
-    border-color: #adadad;
+    color: $lightblue2;
+    background-color: $lightgrey;
+    border-color: $lightblue2;
 }
 .radio-btn.selected {
     color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
+    background-color: $lightblue;
+    border-color: darken($lightblue, 5%);
 }
 .radio-btn.selected:active, .radio-btn.selected:hover {
     color: #fff;
-    background-color: #286090;
-    border-color: #204d74;
+    background-color: $lightblue2;
+    border-color: darken($lightblue2, 5%);
 }

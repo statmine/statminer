@@ -37,7 +37,7 @@ class GraphType extends React.Component {
 
   render() {
     let {graphtypes, value, onChange} = this.props;
-    // create list with options = variables
+    // create list with options = graph types
     let self = this;
     let buttons = graphtypes.map(function(v, i) {
       const c = v.name === value.name ? "radio-btn selected" : "radio-btn";
@@ -46,14 +46,6 @@ class GraphType extends React.Component {
         {v.title}
       </button>);
     });
-
-    // TODO remove the onchange, this should not be in the render code. (triggers another render update)
-    if (value === undefined){
-      if (typeof onChange === "function"){
-        onChange(graphtypes[0]);
-        return <div></div> ;
-      }
-    }
     // create select
     return (
       <div className="graphtype">

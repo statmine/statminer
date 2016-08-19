@@ -37,7 +37,7 @@ nav span.icon {
   margin-left: -5px; }
 
 .radio-btn {
-  color: #333;
+  color: #00a1cd;
   background-color: #fff;
   display: inline-block;
   margin-bottom: 0;
@@ -46,7 +46,7 @@ nav span.icon {
   vertical-align: middle;
   touch-action: manipulation;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid #00a1cd;
   white-space: nowrap;
   padding: 6px 12px;
   border-radius: 4px; }
@@ -55,19 +55,19 @@ nav span.icon {
   margin-left: 5px; }
 
 .radio-btn:active, .radio-btn:hover {
-  color: #333;
-  background-color: #e6e6e6;
-  border-color: #adadad; }
+  color: #0581a2;
+  background-color: #ececec;
+  border-color: #0581a2; }
 
 .radio-btn.selected {
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4; }
+  background-color: #00a1cd;
+  border-color: #008db4; }
 
 .radio-btn.selected:active, .radio-btn.selected:hover {
   color: #fff;
-  background-color: #286090;
-  border-color: #204d74; }
+  background-color: #0581a2;
+  border-color: #046d89; }
 
 #main {
   min-height: 800px;
