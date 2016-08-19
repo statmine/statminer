@@ -203,12 +203,14 @@ get_datapackage = (table) ->
 
 # odata cannot handle large filter statements, so we get more and do a post filter on the data
 prefilter = (filter) ->
+  fh = get_fieldhash()
   odata_filter = {}
   post_filter = {}
   for v, varfilter of filter
     res = odata_filter
     if varfilter.length > 10 then res = post_filter
-    res[v] = varfilter.map datefield_decoder # HACK!, should use the field.decoder
+    field = fh[v] || {decode: (x) -> x}
+    res[v] = varfilter.map field.decode  # HACK!, should use the field.decoder
   {filter:filter, post_filter:post_filter, odata_filter: odata_filter}
 
 record_encoder = (schema) ->
@@ -218,6 +220,14 @@ record_encoder = (schema) ->
       changed[field.name] = field.encode(record[field.name])
     changed
   dr
+
+get_fieldhash = () ->
+  fh = {}
+  if cached_meta
+    schema = cached_meta.resources[0].schema
+    for field in schema.fields
+      fh[field.name] = field
+  fh
 
 get_data = (table, filter, select) ->
   pf = prefilter filter

@@ -39,8 +39,9 @@ class DimensionFilter extends React.Component {
     // Create filter dialog
     return (
       <div className="dimensionFilter">
+        <span><i className="fa fa-filter fa-fw"></i></span>
         <Select value={value} options={options}
-          onChange={this.handleChange} multi={multi || false} />
+          onChange={this.handleChange} multi={multi || false}/>
       </div>);
   }
 }

@@ -5,7 +5,7 @@ let bubblechart_description = {
   title : "Bubble chart",
   can_draw : function(schema, data, mapping) {
     // schema, data and mapping are required for drawing
-    if (schema === undefined || data === undefined || mapping === undefined)
+    if (schema === undefined || data === undefined || !data.length || mapping === undefined)
       return false;
     // check required axes
     if (mapping.x === undefined || mapping.y === undefined)
