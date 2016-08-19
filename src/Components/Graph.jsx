@@ -56,7 +56,7 @@ class Graph extends React.Component {
     if (graph.can_draw(schema, data, map)) {
       return (<svg style={style} width={w} height={h}></svg>);
     } else {
-      return (<span>Invalid mapping</span>);
+      return (<span>No data</span>);
     }
   }
 }
