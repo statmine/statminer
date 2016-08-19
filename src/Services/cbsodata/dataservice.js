@@ -1,5 +1,7 @@
 const api  = require('./cbsodatasvc.js');
 
+let cached_list = null;
+
 function get_data(table_id, mapping, on_data){
     const filter = {};
     const res = {};
@@ -27,12 +29,18 @@ function get_schema(table_id, on_schema){
 }
 
 function get_table_list(on_list){
+    if (cached_list){
+        on_list(null, cached_list)
+        return;
+    }
+
     api.get_tables()
     .then((result, err) => {
         //console.log(result)
         result = result.map( (ti) => {
           return { name: ti.Identifier, title: ti.Title, summary: ti.Summary}
         });
+        cached_list = result;
         on_list(err, result)
     }) 
 }

@@ -138,9 +138,9 @@ class Mapping {
 
       if (filter.length > 2){
         filter = filter
-         .slice(0,6)
+         .slice(0,8)
          .filter((x) => x != variable.aggregate)
-         .slice(0,5)
+         .slice(0,7)
          ;
       }
       this.filter[variable_name] = filter;
