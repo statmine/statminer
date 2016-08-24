@@ -22,6 +22,22 @@ class DimensionFilter extends React.Component {
     }
   }
 
+  renderValue(value){
+    const description = value.description;
+    
+    // const description = "Hello " + value.label + "!";
+    
+    if (!description || description == ""){
+      return value.label;
+    }
+
+    return (
+      <div data-tooltip={description} title={description}>
+        <span className="label">{value.label}</span>
+      </div>
+    );
+  }
+
   render() {
     const {schema, filter, multi} = this.props;
     const prefix = this.props.prefix || "";
@@ -30,7 +46,7 @@ class DimensionFilter extends React.Component {
     if (!schema || !schema.categories) return null;
     // Create the list of categories from which the user can select
     var options = schema.categories.map( (c) =>
-      ({value: c.name, label: prefix + c.title})
+      ({value: c.name, label: prefix + c.title, description: c.description})
     );
     // Check existence of current filter; derive value for select from this
     let value = options.filter((v) =>
@@ -40,7 +56,7 @@ class DimensionFilter extends React.Component {
     return (
       <div className="dimensionFilter">
         <span className="icon"><i className="fa fa-filter fa-fw"></i></span>
-        <Select value={value} options={options}
+        <Select value={value} options={options} valueRenderer={this.renderValue}
           onChange={this.handleChange} multi={multi || false}/>
       </div>);
   }

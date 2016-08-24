@@ -21,17 +21,8 @@ $purple: #af0e80;
 $purple2: #82045e;
 $lightgrey: #ececec;
 
-$colour1: $lightblue;
-$colour2: $darkblue;
-$colour3: $applegreen;
-$colour4: $grassgreen;
-$colour5: $orange;
-$colour6: $purple;
-$colour7: $yellow;
-$colour8: $red;
-
-
+@import 'font-awesome/font-awesome.scss';
 @import 'Source/base.scss';
 @import 'Source/two_column_layout.scss';
 @import 'Source/graph.scss';
-@import 'font-awesome/font-awesome.scss';
+//@import 'Source/_tooltip.scss';
