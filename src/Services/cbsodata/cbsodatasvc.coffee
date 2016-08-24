@@ -213,6 +213,13 @@ prefilter = (filter) ->
     res[v] = varfilter.map field.decode  # HACK!, should use the field.decoder
   {filter:filter, post_filter:post_filter, odata_filter: odata_filter}
 
+postfilter = (filter) ->
+  pf = (record) ->
+    for v, codes of filter
+      if codes.indexOf(record[v]) < 0 then return false
+    true
+  pf
+
 record_encoder = (schema) ->
   dr = (record) ->
     changed = {}
@@ -242,6 +249,9 @@ get_data = (table, filter, select) ->
       get_datapackage(table).then(() -> add_fields(data))
     
   api.get_data(table, pf.odata_filter, select)
+    .then((data) ->
+      data.filter postfilter(pf.post_filter)
+    )
     .then((data) ->
       add_fields(data)
     )
