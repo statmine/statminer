@@ -49,7 +49,7 @@ class MapAxis extends React.Component {
     const filter = mapping.length ? mapping[0].filter : undefined;
     // Render
     return (
-      <div className="axis">
+      <div className="axis" data-axis-name={axis.name}>
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice} />

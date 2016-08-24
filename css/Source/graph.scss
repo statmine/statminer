@@ -12,6 +12,15 @@ div.tip {
   box-shadow: 2px 2px 2px #888888;
 }
 
+$colour1: $lightblue;
+$colour2: $darkblue;
+$colour3: $applegreen;
+$colour4: $grassgreen;
+$colour5: $orange;
+$colour6: $purple;
+$colour7: $yellow;
+$colour8: $red;
+
 
 @mixin area($color){
   fill: $color;
@@ -110,8 +119,8 @@ line.colour7, path.colour7 {
 line.colour8, path.colour8 {
   stroke: #e94c0a;
   stroke-opacity: 1;
-  fill: none; }
-
+  fill: none; 
+}
 
 $low_stroke_opacity: 0.4;
 $low_fill_opacity: 0.2;
@@ -129,4 +138,49 @@ circle.colour.colourlow {
   fill-opacity: $low_fill_opacity;
   stroke-opacity: $low_stroke_opacity;
   transition: stroke-opacity $low_duration, fill-opacity $low_duration;
+}
+
+
+.axis[data-axis-name='colour'] .dimensionFilter {
+
+  .Select-value:nth-of-type(1){
+    color: white;
+    background-color: $colour1;
+  }
+
+  .Select-value:nth-of-type(2){
+    color: white;
+    background-color: $colour2;
+  }
+
+  .Select-value:nth-of-type(3){
+    color: white;
+    background-color: $colour3;
+  }
+  
+  .Select-value:nth-of-type(4){
+    color: white;
+    background-color: $colour4;
+  }
+
+  .Select-value:nth-of-type(5){
+    color: white;
+    background-color: $colour5;
+  }
+  
+  .Select-value:nth-of-type(6){
+    color: white;
+    background-color: $colour6;
+  }
+
+  .Select-value:nth-of-type(7){
+    color: #333333;
+    background-color: $colour7;
+  }
+  
+  .Select-value:nth-of-type(8){
+    color: white;
+    background-color: $colour8;
+  }
+
 }
