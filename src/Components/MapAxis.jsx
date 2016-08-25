@@ -9,6 +9,7 @@ class MapAxis extends React.Component {
     super(props);
     this.handleVariableChange = this.handleVariableChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.renderValue = this.renderValue.bind(this);
   }
 
   handleVariableChange(event) {
@@ -24,6 +25,42 @@ class MapAxis extends React.Component {
     if (typeof this.props.onFilterChange === "function") {
       this.props.onFilterChange(event);
     }
+  }
+
+  renderValue(value) {
+    const {schema, mapping} = this.props;
+    const selected_var = mapping.length ? mapping[0].variable : undefined;    
+    // Lookup schema and filter of selected variable for filter
+    const field = schema.fields.find((x) => x.name === selected_var);
+    if (!field){
+      return value.label;
+    }
+
+    if (field.type == "number"){
+      let unit = ` ${field.unit}`;
+      if (!field.unit || field.unit == ""){
+        unit = "";
+      }
+      return ( 
+        <div>
+          <span>{value.label} </span>
+          <span className="unit">{unit}</span>
+        </div>
+      );
+    }
+
+    const filter = mapping.length ? mapping[0].filter : undefined;
+    if (filter && filter.length && field.categories && field.categories.length){
+      return (
+        <div> {value.label} 
+          <span className="filter">{filter.length}/{field.categories.length}</span>
+        </div>
+      );     
+    }
+
+    return (
+      <span>{value.label}</span>
+    );
   }
 
   render() {
@@ -52,7 +89,8 @@ class MapAxis extends React.Component {
       <div className="axis" data-axis-name={axis.name}>
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
-          clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice} />
+          clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice}
+          valueRenderer={this.renderValue} />
         <DimensionFilter schema={variable_schema} filter={filter}
             onChange={this.handleFilterChange} multi={true} />
       </div>

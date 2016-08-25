@@ -143,6 +143,13 @@ odata_to_datapackage= (metadata) ->
     field.unit = col.Unit if col.Unit?
     field.encode = field.decode = (value) -> value
 
+    if field.type is "number"
+      if field.unit?.match /\baantal\b/
+        field.unit = field.unit.replace /\baantal\b/, ""
+        #field.title = "Aantal " + field.title.toLowerCase() 
+      field.unit = field.unit.replace /\baantal\b/, ""
+      # TODO add this to variable name?
+
     if field.type is "date"
       field.encode = datefield_encoder
       field.decode = datefield_decoder

@@ -112,3 +112,11 @@ nav {
     vertical-align: middle;
 }
 
+span.unit, span.filter {
+  background: silver;
+  border-radius: 5px;
+  border: silver solid;
+  margin-left: 5px;
+  color: gray;
+  font-size: 80%;
+}

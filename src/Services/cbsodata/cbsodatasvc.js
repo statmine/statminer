@@ -37,7 +37,7 @@
   };
 
   odata_to_datapackage = function(metadata) {
-    var cat, categories, col, data_properties, datapkg, field, fields, i, j, len, len1, ocat, ref, ref1, schema, ti;
+    var cat, categories, col, data_properties, datapkg, field, fields, i, j, len, len1, ocat, ref, ref1, ref2, schema, ti;
     data_properties = metadata.DataProperties;
     ti = metadata.TableInfos[0];
     datapkg = {
@@ -72,15 +72,21 @@
       field.encode = field.decode = function(value) {
         return value;
       };
+      if (field.type === "number") {
+        if ((ref = field.unit) != null ? ref.match(/\baantal\b/) : void 0) {
+          field.unit = field.unit.replace(/\baantal\b/, "");
+        }
+        field.unit = field.unit.replace(/\baantal\b/, "");
+      }
       if (field.type === "date") {
         field.encode = datefield_encoder;
         field.decode = datefield_decoder;
       }
-      if ((ref = field.type) === "categorical" || ref === "date") {
+      if ((ref1 = field.type) === "categorical" || ref1 === "date") {
         categories = field.categories = [];
-        ref1 = metadata[field.name];
-        for (j = 0, len1 = ref1.length; j < len1; j++) {
-          ocat = ref1[j];
+        ref2 = metadata[field.name];
+        for (j = 0, len1 = ref2.length; j < len1; j++) {
+          ocat = ref2[j];
           cat = {
             name: field.encode(ocat.Key),
             title: to_label(ocat.Title),
