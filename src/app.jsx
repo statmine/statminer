@@ -13,7 +13,7 @@ import cbsodata_svc from './Services/cbsodata/dataservice.js';
 const App = (props) => <div>{props.children}</div>
 
 // needed to map route.params unto GraphPage props.
-const DemoGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} provider={simpledata_svc} {...props.params} />
+const DemoGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} router={props.router} provider={simpledata_svc} {...props.params} />
 const DemoTableListPage = (props) => <TableListPage provider={simpledata_svc} {...props.params} />
 
 const CbsGraphPageParams = (props) => <GraphPage graph_descriptions={graph_descriptions} provider={cbsodata_svc} {...props.params} />
