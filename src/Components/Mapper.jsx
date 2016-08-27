@@ -36,7 +36,7 @@ class Mapper extends React.Component {
     const axes = description.axes.map(function(axis, i) {
       const axis_mapping = mapping.mapping[axis.name];
       return (
-        <MapAxis key={i} axis={axis} schema={schema} mapping={axis_mapping}
+        <MapAxis key={axis.name} axis={axis} schema={schema} mapping={axis_mapping}
           onChange={self.handleAxisVariableChange}
           onFilterChange={self.handleFilterChange}/>
       );

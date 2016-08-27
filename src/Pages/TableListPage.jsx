@@ -12,7 +12,7 @@ class TableListPage extends React.Component{
     renderItem(item) {
         const location = this.props.location.pathname + "/graph/" + item.name;
         return (
-            <li> 
+            <li key={item.name}> 
             <Link to={location}>
                 <h3>{item.title}</h3>
                 {item.summary}
@@ -28,7 +28,6 @@ class TableListPage extends React.Component{
     }
 
     render(){
-
         const {table_list, loading} = this.state;
         if (loading){
             return (
@@ -36,10 +35,10 @@ class TableListPage extends React.Component{
             )
         }
 
-        return(
-        <ul>
-        {table_list.map(this.renderItem)}
-        </ul>
+        return (
+            <ul>
+            {table_list.map(this.renderItem)}
+            </ul>
         )
     }
 }
