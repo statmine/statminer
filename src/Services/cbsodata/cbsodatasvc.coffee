@@ -122,7 +122,19 @@ odata_to_datapackage= (metadata) ->
     name: datapkg.name
     path: "?"
     schema: {fields: fields}
-    
+  
+  # HACK to set hierarchy from topic tree in col.Title 
+  parents = {}
+  for col in data_properties
+    parents[col.ID] = col
+    if col.ParentID
+      parent = parents[col.ParentID]
+      if col.Title is "Totaal"
+        col.Title = parent.Title
+      else 
+        col.Title = parent.Title + ": " + col.Title
+
+  #
   for col in data_properties when col.Position?
     field = 
       name: col.Key

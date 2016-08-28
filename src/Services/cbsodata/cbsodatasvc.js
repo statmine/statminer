@@ -37,7 +37,7 @@
   };
 
   odata_to_datapackage = function(metadata) {
-    var cat, categories, col, data_properties, datapkg, field, fields, i, j, len, len1, ocat, ref, ref1, ref2, schema, ti;
+    var cat, categories, col, data_properties, datapkg, field, fields, i, j, l, len, len1, len2, ocat, parent, parents, ref, ref1, ref2, schema, ti;
     data_properties = metadata.DataProperties;
     ti = metadata.TableInfos[0];
     datapkg = {
@@ -55,8 +55,21 @@
         fields: fields
       }
     };
+    parents = {};
     for (i = 0, len = data_properties.length; i < len; i++) {
       col = data_properties[i];
+      parents[col.ID] = col;
+      if (col.ParentID) {
+        parent = parents[col.ParentID];
+        if (col.Title === "Totaal") {
+          col.Title = parent.Title;
+        } else {
+          col.Title = parent.Title + ": " + col.Title;
+        }
+      }
+    }
+    for (j = 0, len1 = data_properties.length; j < len1; j++) {
+      col = data_properties[j];
       if (!(col.Position != null)) {
         continue;
       }
@@ -85,8 +98,8 @@
       if ((ref1 = field.type) === "categorical" || ref1 === "date") {
         categories = field.categories = [];
         ref2 = metadata[field.name];
-        for (j = 0, len1 = ref2.length; j < len1; j++) {
-          ocat = ref2[j];
+        for (l = 0, len2 = ref2.length; l < len2; l++) {
+          ocat = ref2[l];
           cat = {
             name: field.encode(ocat.Key),
             title: to_label(ocat.Title),

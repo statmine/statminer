@@ -27,7 +27,8 @@ class GraphPage extends React.Component {
       table_schema: undefined,
       data: undefined,
       schema: undefined,
-      graph_type: graph_type
+      graph_type: graph_type,
+      loading_data: true
     };
     // bind methods to this
     this.handleMappingChange = this.handleMappingChange.bind(this);
@@ -63,8 +64,9 @@ class GraphPage extends React.Component {
     // wait xxx milliseconds before starting to load the data
     // this make selecting multiple items more smooth
     const get_data = debounce(dataservice.get_data, 200);
+    //const get_data = dataservice.get_data;
 
-    this.setState({'mapping': mapping});
+    this.setState({'mapping': mapping, loading_data: true});
     let self = this;
     get_data(this.state.table_id, mapping.mapping, function(e, d) {
       if (e) {
@@ -72,7 +74,7 @@ class GraphPage extends React.Component {
         return;
       }
       //console.log("schema", d.schema);
-      self.setState({data: d.data, schema: d.schema});
+      self.setState({data: d.data, schema: d.schema, loading_data: false});
     });
   }
 
@@ -88,21 +90,26 @@ class GraphPage extends React.Component {
   }
 
   render() {
-    const {mapping, table_schema, schema, data, graph_type} = this.state;
+    const {mapping, table_schema, schema, data, graph_type, loading_data} = this.state;
     const graph_description = this.props.graph_descriptions[graph_type];
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
     const title = table_schema ? table_schema.title : undefined;
+    const loading = (loading_data) ? 
+      <div className="loading">
+        <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+      </div> : null;
 
-    return (
+    return (  
       <div>
         <div id="main">
           <article>
             <h2>{title}</h2>
+            { loading }
             <Graph width="900" height="400"
               schema={schema} data={data}
               graph={graph_description}
               schema={schema} data={data}
-              mapping={mapping} />
+              mapping={mapping} update={!loading_data} />
           </article>
           <nav>
             <GraphType graphtypes={this.props.graph_descriptions}

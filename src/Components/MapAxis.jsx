@@ -27,6 +27,17 @@ class MapAxis extends React.Component {
     }
   }
 
+  renderOption(option){
+    if (!option.unit){
+      return option.label;
+    }
+    return (
+      <div> 
+        <span>{option.label}</span> <span className="unit">{option.unit}</span>
+      </div>
+    );
+  }
+
   renderValue(value) {
     const {schema, mapping} = this.props;
     const selected_var = mapping.length ? mapping[0].variable : undefined;    
@@ -39,7 +50,11 @@ class MapAxis extends React.Component {
     if (field.type == "number"){
       let unit = ` ${field.unit}`;
       if (!field.unit || field.unit == ""){
-        unit = "";
+        return ( 
+          <div>
+            <span>{value.label} </span>
+          </div>
+        );
       }
       return ( 
         <div>
@@ -74,7 +89,7 @@ class MapAxis extends React.Component {
     const options = schema.fields
       .filter((f) => supported_types.indexOf(f.type) >= 0)
       .sort((a,b) => a.title > b.title)
-      .map((f) => ({value: f.name, label: f.title}))
+      .map((f) => ({value: f.name, label: f.title, unit: f.unit}))
       ;
 
     // Determine if and which variable is currently selected
@@ -90,7 +105,7 @@ class MapAxis extends React.Component {
         <h3>{axis.title}</h3>
         <Select name="filter-axis" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice}
-          valueRenderer={this.renderValue} />
+          valueRenderer={this.renderValue} optionRenderer={this.renderOption}/>
         <DimensionFilter schema={variable_schema} filter={filter}
             onChange={this.handleFilterChange} multi={true} />
       </div>

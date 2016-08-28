@@ -37,6 +37,14 @@ class Graph extends React.Component {
     return map;
   }
 
+  // used to keep old chart while loading new data...(otherwise flickering behavior)
+  shouldComponentUpdate(next_props){
+    if (!next_props.update){
+      return false;
+    }
+    return true;
+  }
+
   componentDidMount() {
     this.renderGraph();
   }
@@ -60,5 +68,11 @@ class Graph extends React.Component {
     }
   }
 }
+
+Graph.defaultProps = {
+  update: true
+};
+
+
 
 export default Dimensions()(Graph);

@@ -128,22 +128,23 @@ class Mapping {
     if (axis.accepts.indexOf(variable.type) === -1) return false;
     // if the variable is not yet on an axis; check if filter needs to be
     // modified; for now: delete filter
-    if (!this.variable_on_axis(variable.name))
+    if (!this.variable_on_axis(variable.name)){
       delete this.filter[variable_name];
 
-    // choose a small selection without the aggregate.
-    if (variable.type === "categorical"){
-      let filter = variable.categories
-        .map((x) => x.name);
+      // choose a small selection without the aggregate.
+      if (variable.type === "categorical"){
+        let filter = variable.categories
+          .map((x) => x.name);
 
-      if (filter.length > 2){
-        filter = filter
-         .slice(0,8)
-         .filter((x) => x != variable.aggregate)
-         .slice(0,7)
-         ;
+        if (filter.length > 2){
+          filter = filter
+          .slice(0,8)
+          .filter((x) => x != variable.aggregate)
+          .slice(0,7)
+          ;
+        }
+        this.filter[variable_name] = filter;
       }
-      this.filter[variable_name] = filter;
     }
 
     // add variable to axis
