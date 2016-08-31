@@ -9,7 +9,11 @@ import Mapper from '../Components/Mapper.jsx';
 import GraphType from '../Components/GraphType.jsx';
 // import graph_descriptions from '../graph_descriptions.js';
 import { Router, Route, hashHistory } from 'react-router';
+
+import TableSelect from '../Components/TableSelect.jsx';
 import debounce from 'debounce';
+
+import withRouter from 'react-router';
 
 
 class GraphPage extends React.Component {
@@ -17,6 +21,7 @@ class GraphPage extends React.Component {
   constructor(props) {
 
     super(props);
+    console.log("props", props);
 
     // set initial state
     const graph_type = 0; // TODO introduce initialGraphType property
@@ -38,7 +43,7 @@ class GraphPage extends React.Component {
   componentDidMount() {
     // get the meta from the server; not sure if this is the right method to
     // put this into
-    const {table_id} = this.state;
+    const {table_id} = this.props;
     if (!table_id){
       return;
     }
@@ -59,7 +64,42 @@ class GraphPage extends React.Component {
     });
   }
 
-  handleMappingChange(mapping) {
+  componentWillReceiveProps(props){
+    const graph_type = 0; // TODO introduce initialGraphType property
+    const graph_description = props.graph_descriptions[graph_type];
+
+    this.state = {
+      mapping: new Mapping(graph_description, undefined),
+      table_id: props.table_id,
+      table_schema: undefined,
+      data: undefined,
+      schema: undefined,
+      graph_type: graph_type,
+      loading_data: true
+    };
+
+    const dataservice = props.provider;
+    const self = this;
+
+    const table_id = props.table_id;
+
+    dataservice.get_schema(table_id, function(e, d) {
+      if (e) {
+        console.log("Failed to load meta:", e);
+        return;
+      }
+      let mapping = self.state.mapping;
+      mapping.set_schema(d.resources[0].schema);
+      self.setState({
+        table_schema : d
+      });
+      self.handleMappingChange(mapping, props.table_id);
+    });    
+  }
+
+  handleMappingChange(mapping, table_id) {
+    table_id = table_id || this.props.table_id;
+
     const dataservice = this.props.provider;
     // wait xxx milliseconds before starting to load the data
     // this make selecting multiple items more smooth
@@ -68,7 +108,7 @@ class GraphPage extends React.Component {
 
     this.setState({'mapping': mapping, loading_data: true});
     let self = this;
-    get_data(this.state.table_id, mapping.mapping, function(e, d) {
+    get_data(table_id, mapping.mapping, function(e, d) {
       if (e) {
         console.log("Failed to load data:", e);
         return;
@@ -94,6 +134,10 @@ class GraphPage extends React.Component {
     const graph_description = this.props.graph_descriptions[graph_type];
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
     const title = table_schema ? table_schema.title : undefined;
+    const name = table_schema ? table_schema.name : undefined;
+    
+    const router = this.props.router || this.context.router;
+
     const loading = (loading_data) ? 
       <div className="loading">
         <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
@@ -103,7 +147,7 @@ class GraphPage extends React.Component {
       <div>
         <div id="main">
           <article>
-            <h2>{title}</h2>
+            <TableSelect value={name} provider={this.props.provider} router={router} />
             { loading }
             <Graph width="900" height="400"
               schema={schema} data={data}
