@@ -156,10 +156,11 @@ odata_to_datapackage= (metadata) ->
     field.encode = field.decode = (value) -> value
 
     if field.type is "number"
-      if field.unit?.match /\baantal\b/
-        field.unit = field.unit.replace /\baantal\b/, ""
+      useless = /\b(aantal|absoluut)\b/
+      if field.unit?.match useless
+        field.unit = field.unit.replace useless, ""
         #field.title = "Aantal " + field.title.toLowerCase() 
-      field.unit = field.unit.replace /\baantal\b/, ""
+      field.unit = field.unit.replace useless, ""
       # TODO add this to variable name?
 
     if field.type is "date"

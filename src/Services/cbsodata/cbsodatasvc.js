@@ -37,7 +37,7 @@
   };
 
   odata_to_datapackage = function(metadata) {
-    var cat, categories, col, data_properties, datapkg, field, fields, i, j, l, len, len1, len2, ocat, parent, parents, ref, ref1, ref2, schema, ti;
+    var cat, categories, col, data_properties, datapkg, field, fields, i, j, l, len, len1, len2, ocat, parent, parents, ref, ref1, ref2, schema, ti, useless;
     data_properties = metadata.DataProperties;
     ti = metadata.TableInfos[0];
     datapkg = {
@@ -86,10 +86,11 @@
         return value;
       };
       if (field.type === "number") {
-        if ((ref = field.unit) != null ? ref.match(/\baantal\b/) : void 0) {
-          field.unit = field.unit.replace(/\baantal\b/, "");
+        useless = /\b(aantal|absoluut)\b/;
+        if ((ref = field.unit) != null ? ref.match(useless) : void 0) {
+          field.unit = field.unit.replace(useless, "");
         }
-        field.unit = field.unit.replace(/\baantal\b/, "");
+        field.unit = field.unit.replace(useless, "");
       }
       if (field.type === "date") {
         field.encode = datefield_encoder;
