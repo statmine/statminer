@@ -13,15 +13,13 @@ import { Router, Route, hashHistory } from 'react-router';
 import TableSelect from '../Components/TableSelect.jsx';
 import debounce from 'debounce';
 
-import withRouter from 'react-router';
-
 
 class GraphPage extends React.Component {
 
   constructor(props) {
 
     super(props);
-    console.log("props", props);
+    //console.log("props", props);
 
     // set initial state
     const graph_type = 0; // TODO introduce initialGraphType property
@@ -145,9 +143,11 @@ class GraphPage extends React.Component {
 
     return (  
       <div>
+          <nav>
+            <TableSelect value={name} provider={this.props.provider} router={router} />
+          </nav>
         <div id="main">
           <article>
-            <TableSelect value={name} provider={this.props.provider} router={router} />
             { loading }
             <Graph width="900" height="400"
               schema={schema} data={data}
