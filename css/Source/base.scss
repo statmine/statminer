@@ -131,3 +131,9 @@ div.loading {
   color: $lightblue;
   opacity: 0.8;
 }
+
+
+// fixes the tags with large height
+.Select--multi .Select-value {
+  max-height: 1.8em;
+}

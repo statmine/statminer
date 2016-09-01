@@ -2289,6 +2289,9 @@ div.loading {
   color: #00a1cd;
   opacity: 0.8; }
 
+.Select--multi .Select-value {
+  max-height: 1.8em; }
+
 #main {
   min-height: 800px;
   margin: 0px;
