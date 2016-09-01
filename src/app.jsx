@@ -22,8 +22,8 @@ const CbsTableListPage = (props) => <TableListPage provider={cbsodata_svc} {...p
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="cbs/graph/80576eng" />
       <IndexRedirect to="demo/graph/diabetes" />
+      <IndexRedirect to="cbs/graph/82685NED" />
       <Route path="demo" component={DemoTableListPage} />
       <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
       <Route path="cbs" component={CbsTableListPage} />
