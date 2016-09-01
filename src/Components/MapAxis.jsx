@@ -2,6 +2,14 @@ import React from 'react';
 import Select from 'react-select';
 import DimensionFilter from './DimensionFilter.jsx'
 
+function describe(value) {
+  const description = value.description;
+  if (!description || description == ""){
+    return {};
+  }
+  return {"data-tooltip": description, 'title': description};
+}
+
 
 class MapAxis extends React.Component {
 
@@ -32,7 +40,7 @@ class MapAxis extends React.Component {
       return option.label;
     }
     return (
-      <div> 
+      <div {...describe(option)} > 
         <span>{option.label}</span> <span className="unit">{option.unit}</span>
       </div>
     );
@@ -51,13 +59,13 @@ class MapAxis extends React.Component {
       let unit = ` ${field.unit}`;
       if (!field.unit || field.unit == ""){
         return ( 
-          <div>
+          <div {...describe(value)}>
             <span>{value.label} </span>
           </div>
         );
       }
       return ( 
-        <div>
+        <div {...describe(value)} >
           <span>{value.label} </span>
           <span className="unit">{unit}</span>
         </div>
@@ -89,7 +97,7 @@ class MapAxis extends React.Component {
     const options = schema.fields
       .filter((f) => supported_types.indexOf(f.type) >= 0)
       .sort((a,b) => a.title > b.title)
-      .map((f) => ({value: f.name, label: f.title, unit: f.unit}))
+      .map((f) => ({value: f.name, label: f.title, unit: f.unit, description: f.description}))
       ;
 
     // Determine if and which variable is currently selected
@@ -112,5 +120,7 @@ class MapAxis extends React.Component {
     );
   }
 }
+
+
 
 export default MapAxis;

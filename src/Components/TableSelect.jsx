@@ -36,14 +36,20 @@ class TableSelect extends React.Component {
   }
 
   renderValue(value) {
-    return value.label;
+    return (
+      <div>
+        <span><i className="fa fa-table" aria-hidden="true"></i> </span>
+        {value.label}
+      </div>
+    );
   }
 
   renderOption({option}) {
-      return ( 
-      <span title={option.summary}>
+      return (
+      <div title={option.summary}> 
+      <span><i className="fa fa-table" aria-hidden="true"></i> </span>
         {option.label}
-      </span>
+      </div>
       );
   }
 

@@ -34,7 +34,7 @@ function get_table_list(on_list){
         return;
     }
 
-    api.get_tables()
+    api.get_tables({Language: "nl", OutputStatus: "Regulier"})
     .then((result, err) => {
         //console.log(result)
         result = result.map( (ti) => {
