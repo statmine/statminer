@@ -60,13 +60,13 @@ class MapAxis extends React.Component {
       if (!field.unit || field.unit == ""){
         return ( 
           <div {...describe(value)}>
-            <span>{value.label} </span>
+            <span className="label">{value.label} </span>
           </div>
         );
       }
       return ( 
         <div {...describe(value)} >
-          <span>{value.label} </span>
+          <span className="label">{value.label} </span>
           <span className="unit">{unit}</span>
         </div>
       );

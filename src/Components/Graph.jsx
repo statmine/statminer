@@ -9,7 +9,7 @@ class Graph extends React.Component {
   }
 
   renderGraph() {
-    const {graph, schema, data, mapping, height, width} = this.props;
+    const {graph, schema, data, mapping} = this.props;
     const w = (this.props.containerWidth - 10) || this.props.width;
     const h = (this.props.containerHeight - 100) || this.props.height;
     const map = this.convertMapping(mapping.mapping);

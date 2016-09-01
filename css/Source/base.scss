@@ -104,7 +104,7 @@ nav {
 //     display: inline-block;
 // }
 
-[data-tooltip]  .label:after {
+[data-tooltip]:after {
     font-family: FontAwesome;
     content: $fa-var-info-circle;
     //display: inline-block;

@@ -3014,7 +3014,7 @@ nav span.icon {
   position: relative;
   cursor: pointer; }
 
-[data-tooltip] .label:after {
+[data-tooltip]:after {
   font-family: FontAwesome;
   content: "";
   padding-left: 4px;

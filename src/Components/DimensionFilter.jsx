@@ -1,6 +1,14 @@
 import React from 'react';
 import Select from 'react-select';
 
+function describe(value){
+  const {description} = value;
+  if (!description || description == ""){
+    return {};
+  }
+  return {'data-tooltip': description, 'title': description};
+}
+
 class DimensionFilter extends React.Component {
 
   constructor(props) {
@@ -23,18 +31,11 @@ class DimensionFilter extends React.Component {
   }
 
   renderValue(value){
-    const description = value.description;
-    
-    // const description = "Hello " + value.label + "!";
-    
-    if (!description || description == ""){
-      return value.label;
-    }
-
     return (
-      <div data-tooltip={description} title={description}>
-        <span className="label">{value.label}</span>
-      </div>
+      <span {...describe(value)} className="label">
+        {value.label}
+      </span>
+
     );
   }
 
