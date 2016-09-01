@@ -21,6 +21,12 @@ $purple: #af0e80;
 $purple2: #82045e;
 $lightgrey: #ececec;
 
+// component stuff, needed by the application
+@import '../grph/css/light.css';
+@import '../node_modules/react-virtualized/styles.css';
+@import '../node_modules/react-select/dist/react-select.css';
+@import '../node_modules/react-virtualized-select/styles.css';
+
 @import 'font-awesome/font-awesome.scss';
 @import 'Source/base.scss';
 @import 'Source/two_column_layout.scss';
