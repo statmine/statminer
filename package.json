@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm run build",
     "start": "webpack-dev-server --colors --progress -d",
-    "build": "webpack",
+    "build": "npm run css && webpack",
     "css": "node-sass --output css css/statminer.scss",
     "css:watch": "node-sass --watch --output css css/statminer.scss"
   },
