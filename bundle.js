@@ -27484,6 +27484,8 @@
 	      var self = this;
 	      get_data(table_id, mapping.mapping, function (e, d) {
 	        if (e) {
+	          //TODO change into message/alert?
+	          self.setState({ loading_data: false });
 	          console.log("Failed to load data:", e);
 	          return;
 	        }
@@ -27519,8 +27521,8 @@
 
 	      var graph_description = this.props.graph_descriptions[graph_type];
 	      var fields = table_schema ? table_schema.resources[0].schema : undefined;
-	      var title = table_schema ? table_schema.title : undefined;
 	      var name = table_schema ? table_schema.name : undefined;
+	      var dump = this.props.dump;
 
 	      var router = this.props.router || this.context.router;
 
@@ -27533,6 +27535,15 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        _react2.default.createElement(
+	          'header',
+	          null,
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'StatMiner'
+	          )
+	        ),
 	        _react2.default.createElement(
 	          'nav',
 	          null,
@@ -27562,9 +27573,15 @@
 	              onChange: this.handleMappingChange })
 	          )
 	        ),
-	        _react2.default.createElement(_GraphDataDump2.default, (_React$createElement2 = { schema: schema, data: data,
+	        dump ? _react2.default.createElement(_GraphDataDump2.default, (_React$createElement2 = { schema: schema, data: data,
 	          graph: graph_description
-	        }, _defineProperty(_React$createElement2, 'schema', schema), _defineProperty(_React$createElement2, 'data', data), _defineProperty(_React$createElement2, 'mapping', mapping), _React$createElement2))
+	        }, _defineProperty(_React$createElement2, 'schema', schema), _defineProperty(_React$createElement2, 'data', data), _defineProperty(_React$createElement2, 'mapping', mapping), _React$createElement2)) : null,
+	        _react2.default.createElement(
+	          'footer',
+	          null,
+	          'data: ',
+	          "cbs open data"
+	        )
 	      );
 	    }
 	  }]);
@@ -27623,8 +27640,6 @@
 	      var schema = _props.schema;
 	      var data = _props.data;
 	      var mapping = _props.mapping;
-	      var height = _props.height;
-	      var width = _props.width;
 
 	      var w = this.props.containerWidth - 10 || this.props.width;
 	      var h = this.props.containerHeight - 100 || this.props.height;
@@ -28548,7 +28563,7 @@
 	            describe(value),
 	            _react2.default.createElement(
 	              'span',
-	              null,
+	              { className: 'label' },
 	              value.label,
 	              ' '
 	            )
@@ -28559,7 +28574,7 @@
 	          describe(value),
 	          _react2.default.createElement(
 	            'span',
-	            null,
+	            { className: 'label' },
 	            value.label,
 	            ' '
 	          ),
@@ -30430,6 +30445,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -30447,6 +30464,15 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function describe(value) {
+	  var description = value.description;
+
+	  if (!description || description == "") {
+	    return {};
+	  }
+	  return { 'data-tooltip': description, 'title': description };
+	}
 
 	var DimensionFilter = function (_React$Component) {
 	  _inherits(DimensionFilter, _React$Component);
@@ -30479,22 +30505,10 @@
 	  }, {
 	    key: 'renderValue',
 	    value: function renderValue(value) {
-	      var description = value.description;
-
-	      // const description = "Hello " + value.label + "!";
-
-	      if (!description || description == "") {
-	        return value.label;
-	      }
-
 	      return _react2.default.createElement(
-	        'div',
-	        { 'data-tooltip': description, title: description },
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'label' },
-	          value.label
-	        )
+	        'span',
+	        _extends({}, describe(value), { className: 'label' }),
+	        value.label
 	      );
 	    }
 	  }, {
@@ -30866,6 +30880,11 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'table-select' },
+	        _react2.default.createElement(
+	          'label',
+	          null,
+	          'Table:'
+	        ),
 	        _react2.default.createElement(_reactVirtualizedSelect2.default, { value: value, options: table_list, valueRenderer: this.renderValue,
 	          onChange: this.handleChange })
 	      );
