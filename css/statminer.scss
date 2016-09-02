@@ -27,8 +27,9 @@ $lightgrey: #ececec;
 @import '../node_modules/react-select/dist/react-select';
 @import '../node_modules/react-virtualized-select/styles';
 
+@import 'Source/_TableSelect';
 @import 'font-awesome/font-awesome';
 @import 'Source/base';
 @import 'Source/two_column_layout';
-@import 'Source/graph';
+@import 'Source/graph'; 
 //@import 'Source/_tooltip.scss';

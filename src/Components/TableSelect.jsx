@@ -58,6 +58,7 @@ class TableSelect extends React.Component {
     const {value} = this.props;
     return (
       <div className="table-select">
+        <label>Table:</label>
         <Select value={value} options={table_list} valueRenderer={this.renderValue}
           onChange={this.handleChange}  />
       </div>);

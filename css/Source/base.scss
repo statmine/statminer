@@ -137,3 +137,21 @@ div.loading {
 .Select--multi .Select-value {
   /*max-height: 1.8em;*/
 }
+
+
+
+
+header{
+  border-bottom: solid 1px $lightblue;
+
+  h3{
+    margin-top: -2px;
+    margin-bottom: 3px;
+    transition: margin 0.5s;
+  }
+
+  &:hover h3{
+    margin-top: 0px;
+    margin-bottom: 21px;    
+  }
+}

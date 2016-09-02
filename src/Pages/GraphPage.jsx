@@ -108,6 +108,8 @@ class GraphPage extends React.Component {
     let self = this;
     get_data(table_id, mapping.mapping, function(e, d) {
       if (e) {
+        //TODO change into message/alert?
+        self.setState({loading_data: false});
         console.log("Failed to load data:", e);
         return;
       }
@@ -131,21 +133,26 @@ class GraphPage extends React.Component {
     const {mapping, table_schema, schema, data, graph_type, loading_data} = this.state;
     const graph_description = this.props.graph_descriptions[graph_type];
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
-    const title = table_schema ? table_schema.title : undefined;
     const name = table_schema ? table_schema.name : undefined;
+    const dump = this.props.dump;
     
     const router = this.props.router || this.context.router;
 
-    const loading = (loading_data) ? 
-      <div className="loading">
-        <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-      </div> : null;
+    const loading = (loading_data) 
+      ? <div className="loading">
+          <i className="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        </div> 
+      : null
+      ;
 
-    return (  
+    return (
       <div>
-          <nav>
-            <TableSelect value={name} provider={this.props.provider} router={router} />
-          </nav>
+        <header>
+          <h3>StatMiner</h3> 
+        </header>  
+        <nav>
+           <TableSelect value={name} provider={this.props.provider} router={router} />
+        </nav>
         <div id="main">
           <article>
             { loading }
@@ -165,10 +172,16 @@ class GraphPage extends React.Component {
               onChange={this.handleMappingChange}/>
           </nav>
         </div>
-        <GraphDataDump  schema={schema} data={data}
+        { (dump)
+        ? <GraphDataDump schema={schema} data={data}
           graph={graph_description}
           schema={schema} data={data}
           mapping={mapping} />
+        : null
+        }
+        <footer>
+        data: {"cbs open data"}
+        </footer>
       </div>
     );
   }

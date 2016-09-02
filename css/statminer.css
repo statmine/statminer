@@ -748,6 +748,13 @@ path.colour.colourlow {
 .VirtualizedSelectDisabledOption {
   opacity: 0.5; }
 
+div.table-select {
+  display: flex;
+  margin-top: 4px; }
+  div.table-select label {
+    padding: 6px;
+    font-style: italic; }
+
 /*!
  *  Font Awesome 4.6.3 by @davegandy - http://fontawesome.io - @fontawesome
  *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -3041,6 +3048,16 @@ div.loading {
 .Select--multi .Select-value {
   /*max-height: 1.8em;*/ }
 
+header {
+  border-bottom: solid 1px #00a1cd; }
+  header h3 {
+    margin-top: -2px;
+    margin-bottom: 3px;
+    transition: margin 0.5s; }
+  header:hover h3 {
+    margin-top: 0px;
+    margin-bottom: 21px; }
+
 #main {
   min-height: 800px;
   margin: 0px;
@@ -3071,6 +3088,10 @@ div.loading {
     order: 0;
     border-right: none;
     border-bottom: 1px solid #eee; } }
+
+header h3 {
+  margin-top: 10;
+  margin-bottom: 10; }
 
 svg * {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif; }
