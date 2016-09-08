@@ -181,9 +181,8 @@ class GraphPage extends React.Component {
         : null
         }
         <footer>
-        data:
         <span className="title">
-        {provider.title}</span>: <span className="licence">{provider.licence}</span>
+        {provider.title}</span>: <span className="licence">{provider.license}</span>
         </footer>
       </div>
     );

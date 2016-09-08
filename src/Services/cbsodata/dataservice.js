@@ -49,7 +49,7 @@ export default {
     get_data : get_data,
     get_schema: get_schema,
     get_table_list: get_table_list,
-    name: "cbsodata",
+    name: "cbs",
     title: "CBS opendata",
-    licence: "© Centraal Bureau voor de Statistiek, 2016"
+    license: "© Centraal Bureau voor de Statistiek, 2016"
 }

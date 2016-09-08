@@ -18,8 +18,11 @@ class TableSelect extends React.Component {
   }
 
   handleChange(event) {
+    const {router, provider} = this.props;
     if (event) {
-      this.props.router.push("/cbs/graph/" + event.value)
+      const location = `/${provider.name}/graph/${event.value}`;
+      //console.log("location", location);
+      router.push(location);
     }
   }
   

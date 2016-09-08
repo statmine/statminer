@@ -3058,6 +3058,10 @@ header {
     margin-top: 0px;
     margin-bottom: 21px; }
 
+footer {
+  text-align: right;
+  font-style: italic; }
+
 #main {
   min-height: 800px;
   margin: 0px;

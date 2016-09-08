@@ -38,4 +38,8 @@ var dataservice = (function() {
   return dataservice;
 })();
 
+dataservice.name = "demo";
+dataservice.title= "StatMiner demo data";
+dataservice.license = "";
+
 module.exports = dataservice;
