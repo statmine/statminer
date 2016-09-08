@@ -48,5 +48,8 @@ function get_table_list(on_list){
 export default {
     get_data : get_data,
     get_schema: get_schema,
-    get_table_list: get_table_list
+    get_table_list: get_table_list,
+    name: "cbsodata",
+    title: "CBS opendata",
+    licence: "© Centraal Bureau voor de Statistiek, 2016"
 }

@@ -135,6 +135,7 @@ class GraphPage extends React.Component {
     const fields = table_schema ? table_schema.resources[0].schema : undefined;
     const name = table_schema ? table_schema.name : undefined;
     const dump = this.props.dump;
+    const provider = this.props.provider;
     
     const router = this.props.router || this.context.router;
 
@@ -151,7 +152,7 @@ class GraphPage extends React.Component {
           <h3>StatMiner</h3> 
         </header>  
         <nav>
-           <TableSelect value={name} provider={this.props.provider} router={router} />
+           <TableSelect value={name} provider={provider} router={router} />
         </nav>
         <div id="main">
           <article>
@@ -180,7 +181,9 @@ class GraphPage extends React.Component {
         : null
         }
         <footer>
-        data: {"cbs open data"}
+        data:
+        <span className="title">
+        {provider.title}</span>: <span className="licence">{provider.licence}</span>
         </footer>
       </div>
     );
