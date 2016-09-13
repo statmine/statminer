@@ -1,9 +1,11 @@
 StatMiner
 ====================================
 
+[Demo version](http://statmine.github.io/statminer)
+
 StatMiner is a tool to interactively and visually explore data sets from 
 statistical agencies. 
-It was developed for the statistical database of [Statistics Netherlands (cbs)](www.cbs.nl),
+It was developed for the statistical database of [Statistics Netherlands (cbs)](http://www.cbs.nl),
 but can easily extended to be used on different data sources.
 
 ## Development
