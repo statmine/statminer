@@ -22,12 +22,10 @@ const CbsTableListPage = (props) => <TableListPage provider={cbsodata_svc} {...p
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
-      <IndexRedirect to="demo/graph/diabetes" />
-      <IndexRedirect to="cbs/graph/03766eng" />
-      <Route path="demo" component={DemoTableListPage} />
-      <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
-      <Route path="cbs" component={CbsTableListPage} />
-      <Route path="cbs/graph/:table_id" component={withRouter(CbsGraphPageParams)} />
+      <IndexRedirect to="demo/en/graph/diabetes" />
+      <IndexRedirect to="cbs/en/graph/03766eng" />
+      <Route path="demo/en/graph/:table_id" component={DemoGraphPageParams} />
+      <Route path="cbs/:language/graph/:table_id" component={withRouter(CbsGraphPageParams)} />
     </Route>
   </Router>,
   document.getElementById('app')

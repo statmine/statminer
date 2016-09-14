@@ -56,7 +56,7 @@ export default {
     },
     set language(la){
         language_ = la;
-        cached_list = null; // clear language cache.
+        cached_list = null; 
     },
     name: "cbs",
     title: "CBS opendata",

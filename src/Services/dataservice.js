@@ -41,5 +41,6 @@ var dataservice = (function() {
 dataservice.name = "demo";
 dataservice.title= "StatMiner demo data";
 dataservice.license = "";
+dataservice.language = "en";
 
 module.exports = dataservice;
