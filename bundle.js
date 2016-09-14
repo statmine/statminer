@@ -113,7 +113,7 @@
 	    _reactRouter.Route,
 	    { path: '/', component: App },
 	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'demo/graph/diabetes' }),
-	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'cbs/graph/82685NED' }),
+	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'cbs/graph/03766eng' }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'demo', component: DemoTableListPage }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'demo/graph/:table_id', component: DemoGraphPageParams }),
 	    _react2.default.createElement(_reactRouter.Route, { path: 'cbs', component: CbsTableListPage }),
@@ -240,25 +240,40 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
 	(function () {
 	    try {
-	        cachedSetTimeout = setTimeout;
-	    } catch (e) {
-	        cachedSetTimeout = function () {
-	            throw new Error('setTimeout is not defined');
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
 	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
 	    }
 	    try {
-	        cachedClearTimeout = clearTimeout;
-	    } catch (e) {
-	        cachedClearTimeout = function () {
-	            throw new Error('clearTimeout is not defined');
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
 	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -279,6 +294,11 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -27503,6 +27523,7 @@
 	      var fields = table_schema ? table_schema.resources[0].schema : undefined;
 	      var name = table_schema ? table_schema.name : undefined;
 	      var dump = this.props.dump;
+	      var provider = this.props.provider;
 
 	      var router = this.props.router || this.context.router;
 
@@ -27522,12 +27543,21 @@
 	            'h3',
 	            null,
 	            'StatMiner'
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'statmine' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: 'http://research.cbs.nl/Projects/StatMine' },
+	              'Interested?'
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'nav',
 	          null,
-	          _react2.default.createElement(_TableSelect2.default, { value: name, provider: this.props.provider, router: router })
+	          _react2.default.createElement(_TableSelect2.default, { value: name, provider: provider, router: router })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -27559,8 +27589,21 @@
 	        _react2.default.createElement(
 	          'footer',
 	          null,
-	          'data: ',
-	          "cbs open data"
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'title' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: provider.url },
+	              provider.title
+	            )
+	          ),
+	          ': ',
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'licence' },
+	            provider.license
+	          )
 	        )
 	      );
 	    }
@@ -35726,16 +35769,11 @@
 	    // If we don't have a selected item but list size or number of children have decreased,
 	    // Make sure we aren't scrolled too far past the current content.
 	  } else if (!hasScrollToIndex && cellCount > 0 && (size < previousSize || cellCount < previousCellsCount)) {
-	    scrollToIndex = cellCount - 1;
-
-	    var calculatedScrollOffset = cellSizeAndPositionManager.getUpdatedOffsetForIndex({
-	      containerSize: size,
-	      currentOffset: scrollOffset,
-	      targetIndex: scrollToIndex
-	    });
-
+	    // We need to ensure that the current scroll offset is still within the collection's range.
+	    // To do this, we don't need to measure everything; CellMeasurer would perform poorly.
+	    // Just check to make sure we're still okay.
 	    // Only adjust the scroll position if we've scrolled below the last set of rows.
-	    if (calculatedScrollOffset < scrollOffset) {
+	    if (scrollOffset > cellSizeAndPositionManager.getTotalSize() - size) {
 	      updateScrollIndexCallback(cellCount - 1);
 	    }
 	  }
@@ -38174,6 +38212,10 @@
 	  return dataservice;
 	}();
 
+	dataservice.name = "demo";
+	dataservice.title = "StatMiner demo data";
+	dataservice.license = "";
+
 	module.exports = dataservice;
 
 /***/ },
@@ -38188,6 +38230,7 @@
 	var api = __webpack_require__(317);
 
 	var cached_list = null;
+	var language_ = "en";
 
 	function get_data(table_id, mapping, on_data) {
 	    var filter = {};
@@ -38221,7 +38264,8 @@
 	        return;
 	    }
 
-	    api.get_tables({ Language: "nl", OutputStatus: "Regulier" }).then(function (result, err) {
+	    //api.get_tables({Language: "nl", OutputStatus: "Regulier"})
+	    api.get_tables({ Language: language_ }).then(function (result, err) {
 	        //console.log(result)
 	        result = result.map(function (ti) {
 	            return { name: ti.Identifier, title: ti.Title, summary: ti.Summary };
@@ -38235,9 +38279,17 @@
 	    get_data: get_data,
 	    get_schema: get_schema,
 	    get_table_list: get_table_list,
+	    get language() {
+	        return language_;
+	    },
+	    set language(la) {
+	        language_ = la;
+	        cached_list = null; // clear language cache.
+	    },
 	    name: "cbs",
 	    title: "CBS opendata",
-	    license: "(c) Centraal Bureau voor de Statistiek"
+	    license: "© Centraal Bureau voor de Statistiek, 2016",
+	    url: "http://www.cbs.nl"
 	};
 
 /***/ },
