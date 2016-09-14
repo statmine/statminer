@@ -148,15 +148,24 @@ header{
     margin-top: -2px;
     margin-bottom: 3px;
     transition: margin 0.5s;
+    display: inline-block;
   }
 
   &:hover h3{
     margin-top: 0px;
-    margin-bottom: 21px;    
+    margin-bottom: 10px;    
+  }
+
+  span.statmine{
+    float: right; 
+    a {
+      color: $lightblue;
+    }
   }
 }
 
 footer{
   text-align: right;
   font-style: italic;
+  font-size: 80%;
 }

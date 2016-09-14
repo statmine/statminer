@@ -46,6 +46,7 @@ class GraphPage extends React.Component {
       return;
     }
     const dataservice = this.props.provider;
+    dataservice.language = this.props.language;
     const self = this;
 
     dataservice.get_schema(table_id, function(e, d) {
@@ -77,6 +78,8 @@ class GraphPage extends React.Component {
     };
 
     const dataservice = props.provider;
+    dataservice.language = props.language;
+
     const self = this;
 
     const table_id = props.table_id;
@@ -136,6 +139,7 @@ class GraphPage extends React.Component {
     const name = table_schema ? table_schema.name : undefined;
     const dump = this.props.dump;
     const provider = this.props.provider;
+    const language = this.props.language || "en";
     
     const router = this.props.router || this.context.router;
 
@@ -149,10 +153,11 @@ class GraphPage extends React.Component {
     return (
       <div>
         <header>
-          <h3>StatMiner</h3> 
+          <h3>StatMiner</h3>
+          <span className="statmine"><a href="http://research.cbs.nl/Projects/StatMine">Interested?</a></span>
         </header>  
         <nav>
-           <TableSelect value={name} provider={provider} router={router} />
+           <TableSelect value={name} provider={provider} router={router} language={language} />
         </nav>
         <div id="main">
           <article>
@@ -182,7 +187,8 @@ class GraphPage extends React.Component {
         }
         <footer>
         <span className="title">
-        {provider.title}</span>: <span className="licence">{provider.license}</span>
+          <a href={provider.url}>{provider.title}</a>
+        </span>: <span className="licence">{provider.license}</span>
         </footer>
       </div>
     );

@@ -112,12 +112,10 @@
 	  _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: App },
-	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'demo/graph/diabetes' }),
-	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'cbs/graph/82685NED' }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'demo', component: DemoTableListPage }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'demo/graph/:table_id', component: DemoGraphPageParams }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'cbs', component: CbsTableListPage }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'cbs/graph/:table_id', component: (0, _reactRouter.withRouter)(CbsGraphPageParams) })
+	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'demo/en/graph/diabetes' }),
+	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'cbs/en/graph/03766eng' }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'demo/en/graph/:table_id', component: DemoGraphPageParams }),
+	    _react2.default.createElement(_reactRouter.Route, { path: 'cbs/:language/graph/:table_id', component: (0, _reactRouter.withRouter)(CbsGraphPageParams) })
 	  )
 	), document.getElementById('app'));
 
@@ -27420,6 +27418,7 @@
 	        return;
 	      }
 	      var dataservice = this.props.provider;
+	      dataservice.language = this.props.language;
 	      var self = this;
 
 	      dataservice.get_schema(table_id, function (e, d) {
@@ -27452,6 +27451,8 @@
 	      };
 
 	      var dataservice = props.provider;
+	      dataservice.language = props.language;
+
 	      var self = this;
 
 	      var table_id = props.table_id;
@@ -27524,6 +27525,7 @@
 	      var name = table_schema ? table_schema.name : undefined;
 	      var dump = this.props.dump;
 	      var provider = this.props.provider;
+	      var language = this.props.language || "en";
 
 	      var router = this.props.router || this.context.router;
 
@@ -27543,12 +27545,21 @@
 	            'h3',
 	            null,
 	            'StatMiner'
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'statmine' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: 'http://research.cbs.nl/Projects/StatMine' },
+	              'Interested?'
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(
 	          'nav',
 	          null,
-	          _react2.default.createElement(_TableSelect2.default, { value: name, provider: provider, router: router })
+	          _react2.default.createElement(_TableSelect2.default, { value: name, provider: provider, router: router, language: language })
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -27583,7 +27594,11 @@
 	          _react2.default.createElement(
 	            'span',
 	            { className: 'title' },
-	            provider.title
+	            _react2.default.createElement(
+	              'a',
+	              { href: provider.url },
+	              provider.title
+	            )
 	          ),
 	          ': ',
 	          _react2.default.createElement(
@@ -30834,7 +30849,7 @@
 	      var provider = _props.provider;
 
 	      if (event) {
-	        var location = '/' + provider.name + '/graph/' + event.value;
+	        var location = '/' + provider.name + '/' + provider.language + '/graph/' + event.value;
 	        //console.log("location", location);
 	        router.push(location);
 	      }
@@ -30842,9 +30857,27 @@
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      this.componentWillReceiveProps(this.props);
+	      // const provider = this.props.provider;
+	      // provider.language = this.props.language;
+
+	      // const set_tables = (e, table_list) => {
+	      //   table_list = table_list
+	      //     .map( function(t){return {value: t.name, label: t.title, summary: t.summary}; })
+	      //     .sort((a,b) => a.label > b.label)
+	      //     ;
+	      //   this.setState({table_list, loading: false})
+	      // }
+	      // provider.get_table_list(set_tables)
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(props) {
 	      var _this2 = this;
 
-	      var provider = this.props.provider;
+	      var provider = props.provider;
+	      provider.language = props.language;
+
 	      var set_tables = function set_tables(e, table_list) {
 	        table_list = table_list.map(function (t) {
 	          return { value: t.name, label: t.title, summary: t.summary };
@@ -30912,7 +30945,8 @@
 
 	TableSelect.propTypes = {
 	  value: _react2.default.PropTypes.string,
-	  provider: _react2.default.PropTypes.object
+	  provider: _react2.default.PropTypes.object,
+	  language: _react2.default.PropTypes.string
 	};
 
 	exports.default = TableSelect;
@@ -38202,6 +38236,7 @@
 	dataservice.name = "demo";
 	dataservice.title = "StatMiner demo data";
 	dataservice.license = "";
+	dataservice.language = "en";
 
 	module.exports = dataservice;
 
@@ -38217,6 +38252,7 @@
 	var api = __webpack_require__(317);
 
 	var cached_list = null;
+	var language_ = "en";
 
 	function get_data(table_id, mapping, on_data) {
 	    var filter = {};
@@ -38250,7 +38286,8 @@
 	        return;
 	    }
 
-	    api.get_tables({ Language: "nl", OutputStatus: "Regulier" }).then(function (result, err) {
+	    //api.get_tables({Language: "nl", OutputStatus: "Regulier"})
+	    api.get_tables({ Language: language_ }).then(function (result, err) {
 	        //console.log(result)
 	        result = result.map(function (ti) {
 	            return { name: ti.Identifier, title: ti.Title, summary: ti.Summary };
@@ -38264,9 +38301,17 @@
 	    get_data: get_data,
 	    get_schema: get_schema,
 	    get_table_list: get_table_list,
+	    get language() {
+	        return language_;
+	    },
+	    set language(la) {
+	        language_ = la;
+	        cached_list = null;
+	    },
 	    name: "cbs",
 	    title: "CBS opendata",
-	    license: "© Centraal Bureau voor de Statistiek, 2016"
+	    license: "© Centraal Bureau voor de Statistiek, 2016",
+	    url: "http://www.cbs.nl"
 	};
 
 /***/ },
