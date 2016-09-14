@@ -3053,14 +3053,20 @@ header {
   header h3 {
     margin-top: -2px;
     margin-bottom: 3px;
-    transition: margin 0.5s; }
+    transition: margin 0.5s;
+    display: inline-block; }
   header:hover h3 {
     margin-top: 0px;
-    margin-bottom: 21px; }
+    margin-bottom: 10px; }
+  header span.statmine {
+    float: right; }
+    header span.statmine a {
+      color: #00a1cd; }
 
 footer {
   text-align: right;
-  font-style: italic; }
+  font-style: italic;
+  font-size: 80%; }
 
 #main {
   min-height: 800px;

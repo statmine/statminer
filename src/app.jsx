@@ -23,7 +23,7 @@ ReactDOM.render(
   <Router history={hashHistory}>
     <Route path="/" component={App}>
       <IndexRedirect to="demo/graph/diabetes" />
-      <IndexRedirect to="cbs/graph/82685NED" />
+      <IndexRedirect to="cbs/graph/03766eng" />
       <Route path="demo" component={DemoTableListPage} />
       <Route path="demo/graph/:table_id" component={DemoGraphPageParams} />
       <Route path="cbs" component={CbsTableListPage} />

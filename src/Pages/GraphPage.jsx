@@ -149,7 +149,8 @@ class GraphPage extends React.Component {
     return (
       <div>
         <header>
-          <h3>StatMiner</h3> 
+          <h3>StatMiner</h3>
+          <span className="statmine"><a href="http://research.cbs.nl/Projects/StatMine">Interested?</a></span>
         </header>  
         <nav>
            <TableSelect value={name} provider={provider} router={router} />
@@ -182,7 +183,8 @@ class GraphPage extends React.Component {
         }
         <footer>
         <span className="title">
-        {provider.title}</span>: <span className="licence">{provider.license}</span>
+          <a href={provider.url}>{provider.title}</a>
+        </span>: <span className="licence">{provider.license}</span>
         </footer>
       </div>
     );

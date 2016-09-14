@@ -1,6 +1,7 @@
 const api  = require('./cbsodatasvc.js');
 
 let cached_list = null;
+let language_ = "en";
 
 function get_data(table_id, mapping, on_data){
     const filter = {};
@@ -34,7 +35,8 @@ function get_table_list(on_list){
         return;
     }
 
-    api.get_tables({Language: "nl", OutputStatus: "Regulier"})
+    //api.get_tables({Language: "nl", OutputStatus: "Regulier"})
+    api.get_tables({Language: language_})
     .then((result, err) => {
         //console.log(result)
         result = result.map( (ti) => {
@@ -49,7 +51,15 @@ export default {
     get_data : get_data,
     get_schema: get_schema,
     get_table_list: get_table_list,
+    get language(){
+        return language_;
+    },
+    set language(la){
+        language_ = la;
+        cached_list = null; // clear language cache.
+    },
     name: "cbs",
     title: "CBS opendata",
-    license: "© Centraal Bureau voor de Statistiek, 2016"
+    license: "© Centraal Bureau voor de Statistiek, 2016",
+    url: "http://www.cbs.nl"
 }
