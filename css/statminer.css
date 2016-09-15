@@ -3058,9 +3058,10 @@ header {
   header:hover h3 {
     margin-top: 0px;
     margin-bottom: 10px; }
-  header span.statmine {
-    float: right; }
-    header span.statmine a {
+  header span.statmine, header span.github {
+    float: right;
+    padding: 2px; }
+    header span.statmine a, header span.github a {
       color: #00a1cd; }
 
 footer {
