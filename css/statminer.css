@@ -2979,7 +2979,8 @@ nav span.icon {
   background: #eee;
   margin-right: -2px;
   border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px; }
+  border-bottom-left-radius: 4px;
+  color: #163a72; }
 
 .radio-btns {
   margin-left: -5px; }
@@ -3025,12 +3026,13 @@ nav span.icon {
   font-family: FontAwesome;
   content: "";
   padding-left: 4px;
+  color: #0581a2;
   vertical-align: middle; }
 
 span.unit, span.filter {
-  background: #ccc;
+  background: #00a1cd;
   border-radius: 4px;
-  border: #ccc solid;
+  border: #00a1cd solid;
   margin-left: 5px;
   color: white;
   font-size: 80%;
