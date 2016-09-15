@@ -154,7 +154,10 @@ class GraphPage extends React.Component {
       <div>
         <header>
           <h3>StatMiner</h3>
-          <span className="statmine"><a href="http://research.cbs.nl/Projects/StatMine">Interested?</a></span>
+          <span className="statmine"><a href="http://research.cbs.nl/Projects/StatMine">Interested?</a>
+          </span>
+          <span className="github"><a href="http://github.com/statmine/statminer"><i className="fa fa-github fa-fw"></i></a>
+          </span>
         </header>  
         <nav>
            <TableSelect value={name} provider={provider} router={router} language={language} />

@@ -156,8 +156,9 @@ header{
     margin-bottom: 10px;    
   }
 
-  span.statmine{
+  span.statmine, span.github {
     float: right; 
+    padding: 2px;
     a {
       color: $lightblue;
     }
