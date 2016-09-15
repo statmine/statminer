@@ -7,6 +7,7 @@ import GraphPage from './Pages/GraphPage.jsx';
 import TableListPage from './Pages/TableListPage.jsx';
 import simpledata_svc from './Services/dataservice.js';
 import cbsodata_svc from './Services/cbsodata/dataservice.js';
+import "babel-polyfill";
 
 // load data providers
 // TODO place this into a seperate config js.
