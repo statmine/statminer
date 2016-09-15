@@ -20,13 +20,13 @@ function get_data(table_id, mapping, on_data){
     //console.log(filter, res);
     api.get_data(table_id, filter, select).then( (result, err) =>{
         on_data(err, result);
-    });
-} 
+    }).catch((err) => console.log(err));
+}
 
 function get_schema(table_id, on_schema){
     api.get_schema(table_id).then((result, err) =>{
         on_schema(err, result);
-    })
+    }).catch((err) => console.log(err));
 }
 
 function get_table_list(on_list){
@@ -44,7 +44,7 @@ function get_table_list(on_list){
         });
         cached_list = result;
         on_list(err, result)
-    }) 
+    }).catch((err) => console.log(err));
 }
 
 export default {
@@ -56,7 +56,7 @@ export default {
     },
     set language(la){
         language_ = la;
-        cached_list = null; 
+        cached_list = null;
     },
     name: "cbs",
     title: "Statistics Netherlands/CBS opendata",

@@ -46239,12 +46239,16 @@
 	    //console.log(filter, res);
 	    api.get_data(table_id, filter, select).then(function (result, err) {
 	        on_data(err, result);
+	    }).catch(function (err) {
+	        return console.log(err);
 	    });
 	}
 
 	function get_schema(table_id, on_schema) {
 	    api.get_schema(table_id).then(function (result, err) {
 	        on_schema(err, result);
+	    }).catch(function (err) {
+	        return console.log(err);
 	    });
 	}
 
@@ -46262,6 +46266,8 @@
 	        });
 	        cached_list = result;
 	        on_list(err, result);
+	    }).catch(function (err) {
+	        return console.log(err);
 	    });
 	}
 
