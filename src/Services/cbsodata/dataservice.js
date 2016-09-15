@@ -59,7 +59,7 @@ export default {
         cached_list = null; 
     },
     name: "cbs",
-    title: "CBS opendata",
+    title: "Statistics Netherlands/CBS opendata",
     license: "© Centraal Bureau voor de Statistiek, 2016",
     url: "http://www.cbs.nl"
 }
