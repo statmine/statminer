@@ -3,6 +3,7 @@ import rest from 'rest';
 
 let cached_list = null;
 let language_ = "en";
+let debug = false;
 
 function get_data(table_id, mapping, on_data){
     const filter = {};
@@ -35,7 +36,11 @@ function get_table_list(on_list){
         on_list(null, cached_list)
         return;
     }
-
+    
+    if (debug){
+        console.log("debug")
+    }
+    
     //api.get_tables({Language: "nl", OutputStatus: "Regulier"})
     api.get_tables({Language: language_})
     .then((result, err) => {
