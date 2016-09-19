@@ -1,4 +1,5 @@
 git checkout gh-pages
+git pull
 rm bundle.js
 git merge dev
 npm run build
