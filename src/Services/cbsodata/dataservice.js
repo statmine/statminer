@@ -1,4 +1,5 @@
 const api  = require('./cbsodatasvc.js');
+import rest from 'rest';
 
 let cached_list = null;
 let language_ = "en";

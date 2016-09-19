@@ -1,7 +1,7 @@
 StatMiner
 ====================================
 
-[Demo version](http://statmine.github.io/statminer)
+[Democ version](http://statmine.github.io/statminer)
 
 StatMiner is a tool to interactively and visually explore data sets from 
 statistical agencies. 
