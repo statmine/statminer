@@ -3021,6 +3021,12 @@ nav span.icon {
   background-color: #0581a2;
   border-color: #046d89; }
 
+.radio-btn[disabled], .radio-btn[disabled]:hover {
+  border-color: silver;
+  color: silver;
+  background-color: #ececec;
+  cursor: not-allowed; }
+
 [data-tooltip] {
   position: relative;
   cursor: pointer; }

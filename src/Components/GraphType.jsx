@@ -36,13 +36,14 @@ class GraphType extends React.Component {
   }
 
   render() {
-    let {graphtypes, value, onChange} = this.props;
+    let {graphtypes, value, enabled} = this.props;
     // create list with options = graph types
     let self = this;
     let buttons = graphtypes.map(function(v, i) {
       const c = v.name === value.name ? "radio-btn selected" : "radio-btn";
+      const disabled = (enabled[v.name]) ? {} : {"disabled" : true};
       return (<button key={v.name} type="button" className={c}
-          onClick={self.handleTypeChange} value={v.name}>
+          onClick={self.handleTypeChange} value={v.name} {...disabled} > 
         {v.title}
       </button>);
     });

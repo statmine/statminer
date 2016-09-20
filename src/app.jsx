@@ -33,7 +33,7 @@ ReactDOM.render(
       <IndexRedirect to="cbs/nl/graph/82311NED" />
       <Redirect from=":provider" to=":provider/en" />       
       <Redirect from=":provider/:language" to=":provider/:language/graph/unknown" />       
-      <Route path=":provider/:language/graph/:table_id" component={withRouter(GP)} />
+      <Route path=":provider/:language/graph/:table_id(/:dump)" component={withRouter(GP)} />
     </Route>
   </Router>,
   document.getElementById('app')

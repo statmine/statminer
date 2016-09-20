@@ -89,6 +89,13 @@ nav {
     border-color: darken($lightblue2, 5%);
 }
 
+.radio-btn[disabled], .radio-btn[disabled]:hover {
+  border-color: silver;
+  color: silver; 
+  background-color: $lightgrey;
+  cursor: not-allowed;
+}
+
 [data-tooltip]{
   position: relative;
   cursor: pointer;

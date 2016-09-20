@@ -140,7 +140,14 @@ class GraphPage extends React.Component {
     const dump = this.props.dump;
     const provider = this.props.provider;
     const language = this.props.language || "en";
-    
+    const graph_descriptions = this.props.graph_descriptions;
+    const enabled = {};
+    if (fields){
+      for (let gd of graph_descriptions){
+        enabled[gd.name] = gd.is_compatible(fields);
+      }
+    }
+
     const router = this.props.router || this.context.router;
 
     const loading = (loading_data) 
@@ -168,11 +175,11 @@ class GraphPage extends React.Component {
             <Graph width="900" height="400"
               schema={schema} data={data}
               graph={graph_description}
-              schema={schema} data={data}
               mapping={mapping} update={!loading_data} />
           </article>
           <nav>
-            <GraphType graphtypes={this.props.graph_descriptions}
+            <GraphType graphtypes={graph_descriptions}
+              enabled={enabled}
               value = {graph_description}
               onChange={this.handleGraphTypeChange}/>
             <Mapper description={graph_description}

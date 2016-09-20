@@ -3,13 +3,23 @@ let bubblechart_description = {
   name : "bubblechart",
   graph : grph.bubble(),
   title : "Bubble chart",
+  is_compatible: (schema) => {
+    if (!schema){
+      return false;
+    }    
+    const fields = schema.fields;
+    return fields
+      .filter((field) => field.type == "number")
+      .length > 1
+      ;
+  },
   can_draw : function(schema, data, mapping) {
     // schema, data and mapping are required for drawing
     if (schema === undefined || data === undefined || !data.length || mapping === undefined)
       return false;
     // check required axes
     if (mapping.x === undefined || mapping.y === undefined)
-      return false;
+      return false; 
     // TODO?: check types
     return true;
   },

@@ -3,6 +3,15 @@ let linechart_description = {
   name : "linechart",
   title : "Line chart",
   graph : grph.line(),
+  is_compatible: (schema) => {
+    if (!schema){
+      return false;
+    }
+    const fields = schema.fields;
+    return (  fields.find( (field) => field.type == "number")
+           && fields.find( (field) => field.type == "date")
+    );
+  },
   can_draw : function(schema, data, mapping) {
     // schema, data and mapping are required for drawing
     if (schema === undefined || data === undefined || !data.length || mapping === undefined)

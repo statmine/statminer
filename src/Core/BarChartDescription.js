@@ -3,6 +3,15 @@ let barchart_description = {
     name : "barchart",
     title : "Bar chart",
     graph : grph.bar(),
+    is_compatible: (schema) => {
+      if (!schema){
+        return false;
+      }
+      const fields = schema.fields;
+      return ( fields.find((field) => field.type == "number")
+            && fields.find((field) => field.type == "categorical")
+             )
+    },
     can_draw : function(schema, data, mapping) {
       // schema, data and mapping are required for drawing
       if (schema === undefined || data === undefined || !data.length || mapping === undefined)
