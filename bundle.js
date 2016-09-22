@@ -7975,40 +7975,25 @@
 	var cachedSetTimeout;
 	var cachedClearTimeout;
 
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
 	(function () {
 	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
+	        cachedSetTimeout = setTimeout;
 	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
+	        cachedSetTimeout = function () {
+	            throw new Error('setTimeout is not defined');
+	        }
 	    }
 	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
+	        cachedClearTimeout = clearTimeout;
 	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
+	        cachedClearTimeout = function () {
+	            throw new Error('clearTimeout is not defined');
+	        }
 	    }
 	} ())
 	function runTimeout(fun) {
 	    if (cachedSetTimeout === setTimeout) {
 	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
 	        return setTimeout(fun, 0);
 	    }
 	    try {
@@ -8029,11 +8014,6 @@
 	function runClearTimeout(marker) {
 	    if (cachedClearTimeout === clearTimeout) {
 	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
 	        return clearTimeout(marker);
 	    }
 	    try {
@@ -8205,15 +8185,15 @@
 
 	var _GraphPage2 = _interopRequireDefault(_GraphPage);
 
-	var _TableListPage = __webpack_require__(611);
+	var _TableListPage = __webpack_require__(612);
 
 	var _TableListPage2 = _interopRequireDefault(_TableListPage);
 
-	var _dataservice = __webpack_require__(612);
+	var _dataservice = __webpack_require__(613);
 
 	var _dataservice2 = _interopRequireDefault(_dataservice);
 
-	var _dataservice3 = __webpack_require__(613);
+	var _dataservice3 = __webpack_require__(614);
 
 	var _dataservice4 = _interopRequireDefault(_dataservice3);
 
@@ -8256,7 +8236,7 @@
 	    _react2.default.createElement(_reactRouter.IndexRedirect, { to: 'cbs/nl/graph/82311NED' }),
 	    _react2.default.createElement(_reactRouter.Redirect, { from: ':provider', to: ':provider/en' }),
 	    _react2.default.createElement(_reactRouter.Redirect, { from: ':provider/:language', to: ':provider/:language/graph/unknown' }),
-	    _react2.default.createElement(_reactRouter.Route, { path: ':provider/:language/graph/:table_id', component: (0, _reactRouter.withRouter)(GP) })
+	    _react2.default.createElement(_reactRouter.Route, { path: ':provider/:language/graph/:table_id(/:dump)', component: (0, _reactRouter.withRouter)(GP) })
 	  )
 	), document.getElementById('app'));
 
@@ -29487,6 +29467,17 @@
 	  name: "linechart",
 	  title: "Line chart",
 	  graph: grph.line(),
+	  is_compatible: function is_compatible(schema) {
+	    if (!schema) {
+	      return false;
+	    }
+	    var fields = schema.fields;
+	    return fields.find(function (field) {
+	      return field.type == "number";
+	    }) && fields.find(function (field) {
+	      return field.type == "date";
+	    });
+	  },
 	  can_draw: function can_draw(schema, data, mapping) {
 	    // schema, data and mapping are required for drawing
 	    if (schema === undefined || data === undefined || !data.length || mapping === undefined) return false;
@@ -29536,6 +29527,17 @@
 	  name: "barchart",
 	  title: "Bar chart",
 	  graph: grph.bar(),
+	  is_compatible: function is_compatible(schema) {
+	    if (!schema) {
+	      return false;
+	    }
+	    var fields = schema.fields;
+	    return fields.find(function (field) {
+	      return field.type == "number";
+	    }) && fields.find(function (field) {
+	      return field.type == "categorical";
+	    });
+	  },
 	  can_draw: function can_draw(schema, data, mapping) {
 	    // schema, data and mapping are required for drawing
 	    if (schema === undefined || data === undefined || !data.length || mapping === undefined) return false;
@@ -29585,6 +29587,15 @@
 	  name: "bubblechart",
 	  graph: grph.bubble(),
 	  title: "Bubble chart",
+	  is_compatible: function is_compatible(schema) {
+	    if (!schema) {
+	      return false;
+	    }
+	    var fields = schema.fields;
+	    return fields.filter(function (field) {
+	      return field.type == "number";
+	    }).length > 1;
+	  },
 	  can_draw: function can_draw(schema, data, mapping) {
 	    // schema, data and mapping are required for drawing
 	    if (schema === undefined || data === undefined || !data.length || mapping === undefined) return false;
@@ -35322,7 +35333,7 @@
 
 	var _TableSelect2 = _interopRequireDefault(_TableSelect);
 
-	var _debounce = __webpack_require__(609);
+	var _debounce = __webpack_require__(610);
 
 	var _debounce2 = _interopRequireDefault(_debounce);
 
@@ -35469,7 +35480,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _React$createElement, _React$createElement2;
+	      var _React$createElement;
 
 	      var _state = this.state;
 	      var mapping = _state.mapping;
@@ -35485,6 +35496,34 @@
 	      var dump = this.props.dump;
 	      var provider = this.props.provider;
 	      var language = this.props.language || "en";
+	      var graph_descriptions = this.props.graph_descriptions;
+	      var enabled = {};
+	      if (fields) {
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	          for (var _iterator = graph_descriptions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var gd = _step.value;
+
+	            enabled[gd.name] = gd.is_compatible(fields);
+	          }
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	              _iterator.return();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
+	      }
 
 	      var router = this.props.router || this.context.router;
 
@@ -35510,7 +35549,7 @@
 	            { className: 'statmine' },
 	            _react2.default.createElement(
 	              'a',
-	              { href: 'http://research.cbs.nl/Projects/StatMine' },
+	              { href: 'https://www.cbs.nl/nl-nl/onze-diensten/innovatie/project/statminer' },
 	              'Interested?'
 	            )
 	          ),
@@ -35536,15 +35575,16 @@
 	            'article',
 	            null,
 	            loading,
-	            _react2.default.createElement(_Graph2.default, (_React$createElement = { width: '900', height: '400',
+	            _react2.default.createElement(_Graph2.default, { width: '900', height: '400',
 	              schema: schema, data: data,
-	              graph: graph_description
-	            }, _defineProperty(_React$createElement, 'schema', schema), _defineProperty(_React$createElement, 'data', data), _defineProperty(_React$createElement, 'mapping', mapping), _defineProperty(_React$createElement, 'update', !loading_data), _React$createElement))
+	              graph: graph_description,
+	              mapping: mapping, update: !loading_data })
 	          ),
 	          _react2.default.createElement(
 	            'nav',
 	            null,
-	            _react2.default.createElement(_GraphType2.default, { graphtypes: this.props.graph_descriptions,
+	            _react2.default.createElement(_GraphType2.default, { graphtypes: graph_descriptions,
+	              enabled: enabled,
 	              value: graph_description,
 	              onChange: this.handleGraphTypeChange }),
 	            _react2.default.createElement(_Mapper2.default, { description: graph_description,
@@ -35553,9 +35593,9 @@
 	              onChange: this.handleMappingChange })
 	          )
 	        ),
-	        dump ? _react2.default.createElement(_GraphDataDump2.default, (_React$createElement2 = { schema: schema, data: data,
+	        dump ? _react2.default.createElement(_GraphDataDump2.default, (_React$createElement = { schema: schema, data: data,
 	          graph: graph_description
-	        }, _defineProperty(_React$createElement2, 'schema', schema), _defineProperty(_React$createElement2, 'data', data), _defineProperty(_React$createElement2, 'mapping', mapping), _React$createElement2)) : null,
+	        }, _defineProperty(_React$createElement, 'schema', schema), _defineProperty(_React$createElement, 'data', data), _defineProperty(_React$createElement, 'mapping', mapping), _React$createElement)) : null,
 	        _react2.default.createElement(
 	          'footer',
 	          null,
@@ -38640,6 +38680,8 @@
 	  value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(299);
@@ -38729,16 +38771,17 @@
 	      var _props2 = this.props;
 	      var graphtypes = _props2.graphtypes;
 	      var value = _props2.value;
-	      var onChange = _props2.onChange;
+	      var enabled = _props2.enabled;
 	      // create list with options = graph types
 
 	      var self = this;
 	      var buttons = graphtypes.map(function (v, i) {
 	        var c = v.name === value.name ? "radio-btn selected" : "radio-btn";
+	        var disabled = enabled[v.name] ? {} : { "disabled": true };
 	        return _react2.default.createElement(
 	          "button",
-	          { key: v.name, type: "button", className: c,
-	            onClick: self.handleTypeChange, value: v.name },
+	          _extends({ key: v.name, type: "button", className: c,
+	            onClick: self.handleTypeChange, value: v.name }, disabled),
 	          v.title
 	        );
 	      });
@@ -39623,6 +39666,11 @@
 	  _createClass(AutoSizer, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
+	      // Delay access of parentNode until mount.
+	      // This handles edge-cases where the component has already been unmounted before its ref has been set,
+	      // As well as libraries like react-lite which have a slightly different lifecycle.
+	      this._parentNode = this._autoSizer.parentNode;
+
 	      // Defer requiring resize handler in order to support server-side rendering.
 	      // See issue #41
 	      this._detectElementResize = __webpack_require__(566);
@@ -39712,8 +39760,7 @@
 	  }, {
 	    key: '_setRef',
 	    value: function _setRef(autoSizer) {
-	      // In case the component has been unmounted
-	      this._parentNode = autoSizer && autoSizer.parentNode;
+	      this._autoSizer = autoSizer;
 	    }
 	  }]);
 
@@ -40957,6 +41004,7 @@
 	      var _this2 = this;
 
 	      var _props3 = this.props;
+	      var autoHeight = _props3.autoHeight;
 	      var cellCount = _props3.cellCount;
 	      var cellLayoutManager = _props3.cellLayoutManager;
 	      var className = _props3.className;
@@ -40992,7 +41040,7 @@
 	      }) : [];
 
 	      var collectionStyle = {
-	        height: height,
+	        height: autoHeight ? 'auto' : height,
 	        width: width
 	      };
 
@@ -41029,7 +41077,7 @@
 	              height: totalHeight,
 	              maxHeight: totalHeight,
 	              maxWidth: totalWidth,
-	              pointerEvents: isScrolling ? 'none' : 'auto',
+	              pointerEvents: isScrolling ? 'none' : '',
 	              width: totalWidth
 	            }
 	          },
@@ -41270,6 +41318,12 @@
 
 	CollectionView.propTypes = {
 	  'aria-label': _react.PropTypes.string,
+
+	  /**
+	   * Removes fixed height from the scrollingContainer so that the total height
+	   * of rows can stretch the window. Intended for use with WindowScroller
+	   */
+	  autoHeight: _react.PropTypes.bool,
 
 	  /**
 	   * Number of cells in collection.
@@ -42096,6 +42150,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.DEFAULT_SCROLLING_RESET_TIME_INTERVAL = undefined;
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -42157,7 +42212,7 @@
 	 * Specifies the number of miliseconds during which to disable pointer events while a scroll is in progress.
 	 * This improves performance and makes scrolling smoother.
 	 */
-	var IS_SCROLLING_TIMEOUT = 150;
+	var DEFAULT_SCROLLING_RESET_TIME_INTERVAL = exports.DEFAULT_SCROLLING_RESET_TIME_INTERVAL = 150;
 
 	/**
 	 * Controls whether the Grid updates the DOM element's scrollLeft/scrollTop based on the current state or just observes it.
@@ -42183,6 +42238,8 @@
 
 	    _this.state = {
 	      isScrolling: false,
+	      scrollDirectionHorizontal: _getOverscanIndices.SCROLL_DIRECTION_FIXED,
+	      scrollDirectionVertical: _getOverscanIndices.SCROLL_DIRECTION_FIXED,
 	      scrollLeft: 0,
 	      scrollTop: 0
 	    };
@@ -42259,6 +42316,11 @@
 
 	      this._columnSizeAndPositionManager.resetCell(columnIndex);
 	      this._rowSizeAndPositionManager.resetCell(rowIndex);
+
+	      // Clear cell cache in case we are scrolling;
+	      // Invalid row heights likely mean invalid cached content as well.
+	      this._cellCache = {};
+
 	      this.forceUpdate();
 	    }
 	  }, {
@@ -42547,7 +42609,7 @@
 	              height: totalRowsHeight,
 	              maxWidth: totalColumnsWidth,
 	              maxHeight: totalRowsHeight,
-	              pointerEvents: isScrolling ? 'none' : 'auto'
+	              pointerEvents: isScrolling ? 'none' : ''
 	            }
 	          },
 	          childrenToDisplay
@@ -42579,6 +42641,8 @@
 	      var rowCount = props.rowCount;
 	      var width = props.width;
 	      var isScrolling = state.isScrolling;
+	      var scrollDirectionHorizontal = state.scrollDirectionHorizontal;
+	      var scrollDirectionVertical = state.scrollDirectionVertical;
 	      var scrollLeft = state.scrollLeft;
 	      var scrollTop = state.scrollTop;
 
@@ -42614,6 +42678,7 @@
 	        var overscanColumnIndices = (0, _getOverscanIndices2.default)({
 	          cellCount: columnCount,
 	          overscanCellsCount: overscanColumnCount,
+	          scrollDirection: scrollDirectionHorizontal,
 	          startIndex: this._renderedColumnStartIndex,
 	          stopIndex: this._renderedColumnStopIndex
 	        });
@@ -42621,6 +42686,7 @@
 	        var overscanRowIndices = (0, _getOverscanIndices2.default)({
 	          cellCount: rowCount,
 	          overscanCellsCount: overscanRowCount,
+	          scrollDirection: scrollDirectionVertical,
 	          startIndex: this._renderedRowStartIndex,
 	          stopIndex: this._renderedRowStopIndex
 	        });
@@ -42660,11 +42726,14 @@
 	  }, {
 	    key: '_enablePointerEventsAfterDelay',
 	    value: function _enablePointerEventsAfterDelay() {
+	      var scrollingResetTimeInterval = this.props.scrollingResetTimeInterval;
+
+
 	      if (this._disablePointerEventsTimeoutId) {
 	        clearTimeout(this._disablePointerEventsTimeoutId);
 	      }
 
-	      this._disablePointerEventsTimeoutId = setTimeout(this._enablePointerEventsAfterDelayCallback, IS_SCROLLING_TIMEOUT);
+	      this._disablePointerEventsTimeoutId = setTimeout(this._enablePointerEventsAfterDelayCallback, scrollingResetTimeInterval);
 	    }
 	  }, {
 	    key: '_enablePointerEventsAfterDelayCallback',
@@ -42675,7 +42744,9 @@
 	      this._cellCache = {};
 
 	      this.setState({
-	        isScrolling: false
+	        isScrolling: false,
+	        scrollDirectionHorizontal: _getOverscanIndices.SCROLL_DIRECTION_FIXED,
+	        scrollDirectionVertical: _getOverscanIndices.SCROLL_DIRECTION_FIXED
 	      });
 	    }
 	  }, {
@@ -42909,6 +42980,10 @@
 	        // For more information see https://github.com/bvaughn/react-virtualized/pull/124
 	        var scrollPositionChangeReason = event.cancelable ? SCROLL_POSITION_CHANGE_REASONS.OBSERVED : SCROLL_POSITION_CHANGE_REASONS.REQUESTED;
 
+	        // Track scrolling direction so we can more efficiently overscan rows to reduce empty space around the edges while scrolling.
+	        var scrollDirectionVertical = scrollTop > this.state.scrollTop ? _getOverscanIndices.SCROLL_DIRECTION_FORWARD : _getOverscanIndices.SCROLL_DIRECTION_BACKWARD;
+	        var scrollDirectionHorizontal = scrollLeft > this.state.scrollLeft ? _getOverscanIndices.SCROLL_DIRECTION_FORWARD : _getOverscanIndices.SCROLL_DIRECTION_BACKWARD;
+
 	        if (!this.state.isScrolling) {
 	          this.setState({
 	            isScrolling: true
@@ -42917,6 +42992,8 @@
 
 	        this._setNextState({
 	          isScrolling: true,
+	          scrollDirectionHorizontal: scrollDirectionHorizontal,
+	          scrollDirectionVertical: scrollDirectionVertical,
 	          scrollLeft: scrollLeft,
 	          scrollPositionChangeReason: scrollPositionChangeReason,
 	          scrollTop: scrollTop
@@ -43049,6 +43126,9 @@
 	   */
 	  rowCount: _react.PropTypes.number.isRequired,
 
+	  /** Wait this amount of time after the last scroll event before resetting Grid `pointer-events`. */
+	  scrollingResetTimeInterval: _react.PropTypes.number,
+
 	  /** Horizontal offset. */
 	  scrollLeft: _react.PropTypes.number,
 
@@ -43100,6 +43180,7 @@
 	  },
 	  overscanColumnCount: 0,
 	  overscanRowCount: 10,
+	  scrollingResetTimeInterval: DEFAULT_SCROLLING_RESET_TIME_INTERVAL,
 	  scrollToAlignment: 'auto',
 	  style: {},
 	  tabIndex: 0
@@ -43686,11 +43767,16 @@
 	  value: true
 	});
 	exports.default = getOverscanIndices;
+	var SCROLL_DIRECTION_BACKWARD = exports.SCROLL_DIRECTION_BACKWARD = -1;
+	var SCROLL_DIRECTION_FIXED = exports.SCROLL_DIRECTION_FIXED = 0;
+	var SCROLL_DIRECTION_FORWARD = exports.SCROLL_DIRECTION_FORWARD = 1;
+
 	/**
 	 * Calculates the number of cells to overscan before and after a specified range.
 	 * This function ensures that overscanning doesn't exceed the available cells.
 	 *
 	 * @param cellCount Number of rows or columns in the current axis
+	 * @param scrollDirection One of SCROLL_DIRECTION_BACKWARD
 	 * @param overscanCellsCount Maximum number of cells to over-render in either direction
 	 * @param startIndex Begin of range of visible cells
 	 * @param stopIndex End of range of visible cells
@@ -43698,12 +43784,27 @@
 	function getOverscanIndices(_ref) {
 	  var cellCount = _ref.cellCount;
 	  var overscanCellsCount = _ref.overscanCellsCount;
+	  var scrollDirection = _ref.scrollDirection;
 	  var startIndex = _ref.startIndex;
 	  var stopIndex = _ref.stopIndex;
 
+	  var overscanStartIndex = void 0;
+	  var overscanStopIndex = void 0;
+
+	  if (scrollDirection === SCROLL_DIRECTION_FORWARD) {
+	    overscanStartIndex = startIndex;
+	    overscanStopIndex = stopIndex + overscanCellsCount * 2;
+	  } else if (scrollDirection === SCROLL_DIRECTION_BACKWARD) {
+	    overscanStartIndex = startIndex - overscanCellsCount * 2;
+	    overscanStopIndex = stopIndex;
+	  } else {
+	    overscanStartIndex = startIndex - overscanCellsCount;
+	    overscanStopIndex = stopIndex + overscanCellsCount;
+	  }
+
 	  return {
-	    overscanStartIndex: Math.max(0, startIndex - overscanCellsCount),
-	    overscanStopIndex: Math.min(cellCount - 1, stopIndex + overscanCellsCount)
+	    overscanStartIndex: Math.max(0, overscanStartIndex),
+	    overscanStopIndex: Math.min(cellCount - 1, overscanStopIndex)
 	  };
 	}
 
@@ -45739,16 +45840,21 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.WindowScroller = exports.default = undefined;
+	exports.IS_SCROLLING_TIMEOUT = exports.WindowScroller = exports.default = undefined;
 
 	var _WindowScroller2 = __webpack_require__(608);
 
 	var _WindowScroller3 = _interopRequireDefault(_WindowScroller2);
 
+	var _onScroll = __webpack_require__(609);
+
+	var _onScroll2 = _interopRequireDefault(_onScroll);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = _WindowScroller3.default;
 	exports.WindowScroller = _WindowScroller3.default;
+	exports.IS_SCROLLING_TIMEOUT = _onScroll2.default;
 
 /***/ },
 /* 608 */
@@ -45759,7 +45865,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.IS_SCROLLING_TIMEOUT = undefined;
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -45779,6 +45884,8 @@
 
 	var _raf2 = _interopRequireDefault(_raf);
 
+	var _onScroll = __webpack_require__(609);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45786,12 +45893,6 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	/**
-	 * Specifies the number of miliseconds during which to disable pointer events while a scroll is in progress.
-	 * This improves performance and makes scrolling smoother.
-	 */
-	var IS_SCROLLING_TIMEOUT = exports.IS_SCROLLING_TIMEOUT = 150;
 
 	var WindowScroller = function (_Component) {
 	  _inherits(WindowScroller, _Component);
@@ -45831,20 +45932,15 @@
 	        });
 	      }
 
-	      window.addEventListener('scroll', this._onScrollWindow, false);
+	      (0, _onScroll.registerScrollListener)(this);
 	      window.addEventListener('resize', this._onResizeWindow, false);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      window.removeEventListener('scroll', this._onScrollWindow, false);
+	      (0, _onScroll.unregisterScrollListener)(this);
+
 	      window.removeEventListener('resize', this._onResizeWindow, false);
-
-	      if (this._disablePointerEventsTimeoutId) {
-	        clearTimeout(this._disablePointerEventsTimeoutId);
-
-	        this._enablePointerEventsIfDisabled();
-	      }
 	    }
 
 	    /**
@@ -45893,33 +45989,11 @@
 	      return (0, _reactAddonsShallowCompare2.default)(this, nextProps, nextState);
 	    }
 	  }, {
-	    key: '_enablePointerEventsAfterDelay',
-	    value: function _enablePointerEventsAfterDelay() {
-	      if (this._disablePointerEventsTimeoutId) {
-	        clearTimeout(this._disablePointerEventsTimeoutId);
-	      }
-
-	      this._disablePointerEventsTimeoutId = setTimeout(this._enablePointerEventsAfterDelayCallback, IS_SCROLLING_TIMEOUT);
-	    }
-	  }, {
 	    key: '_enablePointerEventsAfterDelayCallback',
 	    value: function _enablePointerEventsAfterDelayCallback() {
-	      this._enablePointerEventsIfDisabled();
-
 	      this.setState({
 	        isScrolling: false
 	      });
-	    }
-	  }, {
-	    key: '_enablePointerEventsIfDisabled',
-	    value: function _enablePointerEventsIfDisabled() {
-	      if (this._disablePointerEventsTimeoutId) {
-	        this._disablePointerEventsTimeoutId = null;
-
-	        document.body.style.pointerEvents = this._originalBodyPointerEvents;
-
-	        this._originalBodyPointerEvents = null;
-	      }
 	    }
 	  }, {
 	    key: '_onResizeWindow',
@@ -45943,14 +46017,6 @@
 	      var scrollY = 'scrollY' in window ? window.scrollY : document.documentElement.scrollTop;
 
 	      var scrollTop = Math.max(0, scrollY - this._positionFromTop);
-
-	      if (this._originalBodyPointerEvents == null) {
-	        this._originalBodyPointerEvents = document.body.style.pointerEvents;
-
-	        document.body.style.pointerEvents = 'none';
-
-	        this._enablePointerEventsAfterDelay();
-	      }
 
 	      var state = {
 	        isScrolling: true,
@@ -45992,6 +46058,85 @@
 
 /***/ },
 /* 609 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.registerScrollListener = registerScrollListener;
+	exports.unregisterScrollListener = unregisterScrollListener;
+	var mountedInstances = [];
+	var originalBodyPointerEvents = null;
+	var disablePointerEventsTimeoutId = null;
+
+	/**
+	 * Specifies the number of miliseconds during which to disable pointer events while a scroll is in progress.
+	 * This improves performance and makes scrolling smoother.
+	 */
+	var IS_SCROLLING_TIMEOUT = exports.IS_SCROLLING_TIMEOUT = 150;
+
+	function enablePointerEventsIfDisabled() {
+	  if (disablePointerEventsTimeoutId) {
+	    disablePointerEventsTimeoutId = null;
+
+	    document.body.style.pointerEvents = originalBodyPointerEvents;
+
+	    originalBodyPointerEvents = null;
+	  }
+	}
+
+	function enablePointerEventsAfterDelayCallback() {
+	  enablePointerEventsIfDisabled();
+	  mountedInstances.forEach(function (component) {
+	    return component._enablePointerEventsAfterDelayCallback();
+	  });
+	}
+
+	function enablePointerEventsAfterDelay() {
+	  if (disablePointerEventsTimeoutId) {
+	    clearTimeout(disablePointerEventsTimeoutId);
+	  }
+
+	  disablePointerEventsTimeoutId = setTimeout(enablePointerEventsAfterDelayCallback, IS_SCROLLING_TIMEOUT);
+	}
+
+	function onScrollWindow(event) {
+	  if (originalBodyPointerEvents == null) {
+	    originalBodyPointerEvents = document.body.style.pointerEvents;
+
+	    document.body.style.pointerEvents = 'none';
+
+	    enablePointerEventsAfterDelay();
+	  }
+	  mountedInstances.forEach(function (component) {
+	    return component._onScrollWindow(event);
+	  });
+	}
+
+	function registerScrollListener(component) {
+	  if (!mountedInstances.length) {
+	    window.addEventListener('scroll', onScrollWindow);
+	  }
+	  mountedInstances.push(component);
+	}
+
+	function unregisterScrollListener(component) {
+	  mountedInstances = mountedInstances.filter(function (c) {
+	    return c !== component;
+	  });
+	  if (!mountedInstances.length) {
+	    window.removeEventListener('scroll', onScrollWindow);
+	    if (disablePointerEventsTimeoutId) {
+	      clearTimeout(disablePointerEventsTimeoutId);
+	      enablePointerEventsIfDisabled();
+	    }
+	  }
+	}
+
+/***/ },
+/* 610 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -45999,7 +46144,7 @@
 	 * Module dependencies.
 	 */
 
-	var now = __webpack_require__(610);
+	var now = __webpack_require__(611);
 
 	/**
 	 * Returns a function, that, as long as it continues to be invoked, will not
@@ -46050,7 +46195,7 @@
 
 
 /***/ },
-/* 610 */
+/* 611 */
 /***/ function(module, exports) {
 
 	module.exports = Date.now || now
@@ -46061,7 +46206,7 @@
 
 
 /***/ },
-/* 611 */
+/* 612 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46159,7 +46304,7 @@
 	exports.default = TableListPage;
 
 /***/ },
-/* 612 */
+/* 613 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -46209,18 +46354,27 @@
 	module.exports = dataservice;
 
 /***/ },
-/* 613 */
+/* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	var api = __webpack_require__(614);
+
+	var _rest = __webpack_require__(615);
+
+	var _rest2 = _interopRequireDefault(_rest);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var api = __webpack_require__(621);
+
 
 	var cached_list = null;
 	var language_ = "en";
+	var debug = false;
 
 	function get_data(table_id, mapping, on_data) {
 	    var filter = {};
@@ -46258,6 +46412,10 @@
 	        return;
 	    }
 
+	    if (debug) {
+	        console.log("debug");
+	    }
+
 	    //api.get_tables({Language: "nl", OutputStatus: "Regulier"})
 	    api.get_tables({ Language: language_ }).then(function (result, err) {
 	        //console.log(result)
@@ -46289,7 +46447,557 @@
 	};
 
 /***/ },
-/* 614 */
+/* 615 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2014-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	var rest = __webpack_require__(616),
+	    browser = __webpack_require__(618);
+
+	rest.setPlatformDefaultClient(browser);
+
+	module.exports = rest;
+
+
+/***/ },
+/* 616 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2014-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	/**
+	 * Plain JS Object containing properties that represent an HTTP request.
+	 *
+	 * Depending on the capabilities of the underlying client, a request
+	 * may be cancelable. If a request may be canceled, the client will add
+	 * a canceled flag and cancel function to the request object. Canceling
+	 * the request will put the response into an error state.
+	 *
+	 * @field {string} [method='GET'] HTTP method, commonly GET, POST, PUT, DELETE or HEAD
+	 * @field {string|UrlBuilder} [path=''] path template with optional path variables
+	 * @field {Object} [params] parameters for the path template and query string
+	 * @field {Object} [headers] custom HTTP headers to send, in addition to the clients default headers
+	 * @field [entity] the HTTP entity, common for POST or PUT requests
+	 * @field {boolean} [canceled] true if the request has been canceled, set by the client
+	 * @field {Function} [cancel] cancels the request if invoked, provided by the client
+	 * @field {Client} [originator] the client that first handled this request, provided by the interceptor
+	 *
+	 * @class Request
+	 */
+
+	/**
+	 * Plain JS Object containing properties that represent an HTTP response
+	 *
+	 * @field {Object} [request] the request object as received by the root client
+	 * @field {Object} [raw] the underlying request object, like XmlHttpRequest in a browser
+	 * @field {number} [status.code] status code of the response (i.e. 200, 404)
+	 * @field {string} [status.text] status phrase of the response
+	 * @field {Object] [headers] response headers hash of normalized name, value pairs
+	 * @field [entity] the response body
+	 *
+	 * @class Response
+	 */
+
+	/**
+	 * HTTP client particularly suited for RESTful operations.
+	 *
+	 * @field {function} wrap wraps this client with a new interceptor returning the wrapped client
+	 *
+	 * @param {Request} the HTTP request
+	 * @returns {ResponsePromise<Response>} a promise the resolves to the HTTP response
+	 *
+	 * @class Client
+	 */
+
+	 /**
+	  * Extended when.js Promises/A+ promise with HTTP specific helpers
+	  *q
+	  * @method entity promise for the HTTP entity
+	  * @method status promise for the HTTP status code
+	  * @method headers promise for the HTTP response headers
+	  * @method header promise for a specific HTTP response header
+	  *
+	  * @class ResponsePromise
+	  * @extends Promise
+	  */
+
+	var client, target, platformDefault;
+
+	client = __webpack_require__(617);
+
+	if (typeof Promise !== 'function' && console && console.log) {
+		console.log('An ES6 Promise implementation is required to use rest.js. See https://github.com/cujojs/when/blob/master/docs/es6-promise-shim.md for using when.js as a Promise polyfill.');
+	}
+
+	/**
+	 * Make a request with the default client
+	 * @param {Request} the HTTP request
+	 * @returns {Promise<Response>} a promise the resolves to the HTTP response
+	 */
+	function defaultClient() {
+		return target.apply(void 0, arguments);
+	}
+
+	/**
+	 * Change the default client
+	 * @param {Client} client the new default client
+	 */
+	defaultClient.setDefaultClient = function setDefaultClient(client) {
+		target = client;
+	};
+
+	/**
+	 * Obtain a direct reference to the current default client
+	 * @returns {Client} the default client
+	 */
+	defaultClient.getDefaultClient = function getDefaultClient() {
+		return target;
+	};
+
+	/**
+	 * Reset the default client to the platform default
+	 */
+	defaultClient.resetDefaultClient = function resetDefaultClient() {
+		target = platformDefault;
+	};
+
+	/**
+	 * @private
+	 */
+	defaultClient.setPlatformDefaultClient = function setPlatformDefaultClient(client) {
+		if (platformDefault) {
+			throw new Error('Unable to redefine platformDefaultClient');
+		}
+		target = platformDefault = client;
+	};
+
+	module.exports = client(defaultClient);
+
+
+/***/ },
+/* 617 */
+/***/ function(module, exports) {
+
+	/*
+	 * Copyright 2014-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	/**
+	 * Add common helper methods to a client impl
+	 *
+	 * @param {function} impl the client implementation
+	 * @param {Client} [target] target of this client, used when wrapping other clients
+	 * @returns {Client} the client impl with additional methods
+	 */
+	module.exports = function client(impl, target) {
+
+		if (target) {
+
+			/**
+			 * @returns {Client} the target client
+			 */
+			impl.skip = function skip() {
+				return target;
+			};
+
+		}
+
+		/**
+		 * Allow a client to easily be wrapped by an interceptor
+		 *
+		 * @param {Interceptor} interceptor the interceptor to wrap this client with
+		 * @param [config] configuration for the interceptor
+		 * @returns {Client} the newly wrapped client
+		 */
+		impl.wrap = function wrap(interceptor, config) {
+			return interceptor(impl, config);
+		};
+
+		/**
+		 * @deprecated
+		 */
+		impl.chain = function chain() {
+			if (typeof console !== 'undefined') {
+				console.log('rest.js: client.chain() is deprecated, use client.wrap() instead');
+			}
+
+			return impl.wrap.apply(this, arguments);
+		};
+
+		return impl;
+
+	};
+
+
+/***/ },
+/* 618 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2012-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	var normalizeHeaderName, responsePromise, client, headerSplitRE;
+
+	normalizeHeaderName = __webpack_require__(619);
+	responsePromise = __webpack_require__(620);
+	client = __webpack_require__(617);
+
+	// according to the spec, the line break is '\r\n', but doesn't hold true in practice
+	headerSplitRE = /[\r|\n]+/;
+
+	function parseHeaders(raw) {
+		// Note: Set-Cookie will be removed by the browser
+		var headers = {};
+
+		if (!raw) { return headers; }
+
+		raw.trim().split(headerSplitRE).forEach(function (header) {
+			var boundary, name, value;
+			boundary = header.indexOf(':');
+			name = normalizeHeaderName(header.substring(0, boundary).trim());
+			value = header.substring(boundary + 1).trim();
+			if (headers[name]) {
+				if (Array.isArray(headers[name])) {
+					// add to an existing array
+					headers[name].push(value);
+				}
+				else {
+					// convert single value to array
+					headers[name] = [headers[name], value];
+				}
+			}
+			else {
+				// new, single value
+				headers[name] = value;
+			}
+		});
+
+		return headers;
+	}
+
+	function safeMixin(target, source) {
+		Object.keys(source || {}).forEach(function (prop) {
+			// make sure the property already exists as
+			// IE 6 will blow up if we add a new prop
+			if (source.hasOwnProperty(prop) && prop in target) {
+				try {
+					target[prop] = source[prop];
+				}
+				catch (e) {
+					// ignore, expected for some properties at some points in the request lifecycle
+				}
+			}
+		});
+
+		return target;
+	}
+
+	module.exports = client(function xhr(request) {
+		return responsePromise.promise(function (resolve, reject) {
+			/*jshint maxcomplexity:20 */
+
+			var client, method, url, headers, entity, headerName, response, XHR;
+
+			request = typeof request === 'string' ? { path: request } : request || {};
+			response = { request: request };
+
+			if (request.canceled) {
+				response.error = 'precanceled';
+				reject(response);
+				return;
+			}
+
+			XHR = request.engine || XMLHttpRequest;
+			if (!XHR) {
+				reject({ request: request, error: 'xhr-not-available' });
+				return;
+			}
+
+			entity = request.entity;
+			request.method = request.method || (entity ? 'POST' : 'GET');
+			method = request.method;
+			url = response.url = request.path || '';
+
+			try {
+				client = response.raw = new XHR();
+
+				// mixin extra request properties before and after opening the request as some properties require being set at different phases of the request
+				safeMixin(client, request.mixin);
+				client.open(method, url, true);
+				safeMixin(client, request.mixin);
+
+				headers = request.headers;
+				for (headerName in headers) {
+					/*jshint forin:false */
+					if (headerName === 'Content-Type' && headers[headerName] === 'multipart/form-data') {
+						// XMLHttpRequest generates its own Content-Type header with the
+						// appropriate multipart boundary when sending multipart/form-data.
+						continue;
+					}
+
+					client.setRequestHeader(headerName, headers[headerName]);
+				}
+
+				request.canceled = false;
+				request.cancel = function cancel() {
+					request.canceled = true;
+					client.abort();
+					reject(response);
+				};
+
+				client.onreadystatechange = function (/* e */) {
+					if (request.canceled) { return; }
+					if (client.readyState === (XHR.DONE || 4)) {
+						response.status = {
+							code: client.status,
+							text: client.statusText
+						};
+						response.headers = parseHeaders(client.getAllResponseHeaders());
+						response.entity = client.responseText;
+
+						// #125 -- Sometimes IE8-9 uses 1223 instead of 204
+						// http://stackoverflow.com/questions/10046972/msie-returns-status-code-of-1223-for-ajax-request
+						if (response.status.code === 1223) {
+							response.status.code = 204;
+						}
+
+						if (response.status.code > 0) {
+							// check status code as readystatechange fires before error event
+							resolve(response);
+						}
+						else {
+							// give the error callback a chance to fire before resolving
+							// requests for file:// URLs do not have a status code
+							setTimeout(function () {
+								resolve(response);
+							}, 0);
+						}
+					}
+				};
+
+				try {
+					client.onerror = function (/* e */) {
+						response.error = 'loaderror';
+						reject(response);
+					};
+				}
+				catch (e) {
+					// IE 6 will not support error handling
+				}
+
+				client.send(entity);
+			}
+			catch (e) {
+				response.error = 'loaderror';
+				reject(response);
+			}
+
+		});
+	});
+
+
+/***/ },
+/* 619 */
+/***/ function(module, exports) {
+
+	/*
+	 * Copyright 2012-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	/**
+	 * Normalize HTTP header names using the pseudo camel case.
+	 *
+	 * For example:
+	 *   content-type         -> Content-Type
+	 *   accepts              -> Accepts
+	 *   x-custom-header-name -> X-Custom-Header-Name
+	 *
+	 * @param {string} name the raw header name
+	 * @return {string} the normalized header name
+	 */
+	function normalizeHeaderName(name) {
+		return name.toLowerCase()
+			.split('-')
+			.map(function (chunk) { return chunk.charAt(0).toUpperCase() + chunk.slice(1); })
+			.join('-');
+	}
+
+	module.exports = normalizeHeaderName;
+
+
+/***/ },
+/* 620 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Copyright 2014-2016 the original author or authors
+	 * @license MIT, see LICENSE.txt for details
+	 *
+	 * @author Scott Andrews
+	 */
+
+	'use strict';
+
+	/*jshint latedef: nofunc */
+
+	var normalizeHeaderName = __webpack_require__(619);
+
+	function property(promise, name) {
+		return promise.then(
+			function (value) {
+				return value && value[name];
+			},
+			function (value) {
+				return Promise.reject(value && value[name]);
+			}
+		);
+	}
+
+	/**
+	 * Obtain the response entity
+	 *
+	 * @returns {Promise} for the response entity
+	 */
+	function entity() {
+		/*jshint validthis:true */
+		return property(this, 'entity');
+	}
+
+	/**
+	 * Obtain the response status
+	 *
+	 * @returns {Promise} for the response status
+	 */
+	function status() {
+		/*jshint validthis:true */
+		return property(property(this, 'status'), 'code');
+	}
+
+	/**
+	 * Obtain the response headers map
+	 *
+	 * @returns {Promise} for the response headers map
+	 */
+	function headers() {
+		/*jshint validthis:true */
+		return property(this, 'headers');
+	}
+
+	/**
+	 * Obtain a specific response header
+	 *
+	 * @param {String} headerName the header to retrieve
+	 * @returns {Promise} for the response header's value
+	 */
+	function header(headerName) {
+		/*jshint validthis:true */
+		headerName = normalizeHeaderName(headerName);
+		return property(this.headers(), headerName);
+	}
+
+	/**
+	 * Follow a related resource
+	 *
+	 * The relationship to follow may be define as a plain string, an object
+	 * with the rel and params, or an array containing one or more entries
+	 * with the previous forms.
+	 *
+	 * Examples:
+	 *   response.follow('next')
+	 *
+	 *   response.follow({ rel: 'next', params: { pageSize: 100 } })
+	 *
+	 *   response.follow([
+	 *       { rel: 'items', params: { projection: 'noImages' } },
+	 *       'search',
+	 *       { rel: 'findByGalleryIsNull', params: { projection: 'noImages' } },
+	 *       'items'
+	 *   ])
+	 *
+	 * @param {String|Object|Array} rels one, or more, relationships to follow
+	 * @returns ResponsePromise<Response> related resource
+	 */
+	function follow(rels) {
+		/*jshint validthis:true */
+		rels = [].concat(rels);
+
+		return make(rels.reduce(function (response, rel) {
+			return response.then(function (response) {
+				if (typeof rel === 'string') {
+					rel = { rel: rel };
+				}
+				if (typeof response.entity.clientFor !== 'function') {
+					throw new Error('Hypermedia response expected');
+				}
+				var client = response.entity.clientFor(rel.rel);
+				return client({ params: rel.params });
+			});
+		}, this));
+	}
+
+	/**
+	 * Wrap a Promise as an ResponsePromise
+	 *
+	 * @param {Promise<Response>} promise the promise for an HTTP Response
+	 * @returns {ResponsePromise<Response>} wrapped promise for Response with additional helper methods
+	 */
+	function make(promise) {
+		promise.status = status;
+		promise.headers = headers;
+		promise.header = header;
+		promise.entity = entity;
+		promise.follow = follow;
+		return promise;
+	}
+
+	function responsePromise(obj, callback, errback) {
+		return make(Promise.resolve(obj).then(callback, errback));
+	}
+
+	responsePromise.make = make;
+	responsePromise.reject = function (val) {
+		return make(Promise.reject(val));
+	};
+	responsePromise.promise = function (func) {
+		return make(new Promise(func));
+	};
+
+	module.exports = responsePromise;
+
+
+/***/ },
+/* 621 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -46325,9 +47033,9 @@
 	    }return -1;
 	  };
 
-	  api = __webpack_require__(615).api;
+	  api = __webpack_require__(622).api;
 
-	  catalog = __webpack_require__(615).catalog;
+	  catalog = __webpack_require__(622).catalog;
 
 	  TIME = "Cbs.OData.TimeDimension";
 
@@ -46638,15 +47346,15 @@
 	}).call(undefined);
 
 /***/ },
-/* 615 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.10.0
 	(function() {
 	  module.exports = {
-	    api: __webpack_require__(616),
-	    bulk: __webpack_require__(636),
-	    catalog: __webpack_require__(637)
+	    api: __webpack_require__(623),
+	    bulk: __webpack_require__(643),
+	    catalog: __webpack_require__(644)
 	  };
 
 
@@ -46659,16 +47367,16 @@
 
 
 /***/ },
-/* 616 */
+/* 623 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.10.0
 	(function() {
 	  var API, Promise, get_data, get_meta, get_topic_tree, read_odata;
 
-	  Promise = __webpack_require__(617);
+	  Promise = __webpack_require__(624);
 
-	  read_odata = __webpack_require__(624).read_odata;
+	  read_odata = __webpack_require__(631).read_odata;
 
 	  API = "http://opendata.cbs.nl/ODataApi/odata";
 
@@ -46777,23 +47485,23 @@
 
 
 /***/ },
-/* 617 */
+/* 624 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(618)
-	__webpack_require__(621)
-	__webpack_require__(622)
-	__webpack_require__(623)
+	module.exports = __webpack_require__(625)
+	__webpack_require__(628)
+	__webpack_require__(629)
+	__webpack_require__(630)
 
 /***/ },
-/* 618 */
+/* 625 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var asap = __webpack_require__(619)
+	var asap = __webpack_require__(626)
 
 	module.exports = Promise;
 	function Promise(fn) {
@@ -46899,7 +47607,7 @@
 
 
 /***/ },
-/* 619 */
+/* 626 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {
@@ -47016,10 +47724,10 @@
 	module.exports = asap;
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294), __webpack_require__(620).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294), __webpack_require__(627).setImmediate))
 
 /***/ },
-/* 620 */
+/* 627 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(294).nextTick;
@@ -47098,16 +47806,16 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(620).setImmediate, __webpack_require__(620).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(627).setImmediate, __webpack_require__(627).clearImmediate))
 
 /***/ },
-/* 621 */
+/* 628 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Promise = __webpack_require__(618)
-	var asap = __webpack_require__(619)
+	var Promise = __webpack_require__(625)
+	var asap = __webpack_require__(626)
 
 	module.exports = Promise
 	Promise.prototype.done = function (onFulfilled, onRejected) {
@@ -47120,15 +47828,15 @@
 	}
 
 /***/ },
-/* 622 */
+/* 629 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	//This file contains the ES6 extensions to the core Promises/A+ API
 
-	var Promise = __webpack_require__(618)
-	var asap = __webpack_require__(619)
+	var Promise = __webpack_require__(625)
+	var asap = __webpack_require__(626)
 
 	module.exports = Promise
 
@@ -47234,15 +47942,15 @@
 
 
 /***/ },
-/* 623 */
+/* 630 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	//This file contains then/promise specific extensions that are only useful for node.js interop
 
-	var Promise = __webpack_require__(618)
-	var asap = __webpack_require__(619)
+	var Promise = __webpack_require__(625)
+	var asap = __webpack_require__(626)
 
 	module.exports = Promise
 
@@ -47303,18 +48011,18 @@
 
 
 /***/ },
-/* 624 */
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.10.0
 	(function() {
 	  var Promise, get_column_filter, get_filter, get_select, parse_url, read_odata, request;
 
-	  request = __webpack_require__(625);
+	  request = __webpack_require__(632);
 
-	  parse_url = (__webpack_require__(630)).parse;
+	  parse_url = (__webpack_require__(637)).parse;
 
-	  Promise = __webpack_require__(617);
+	  Promise = __webpack_require__(624);
 
 	  read_odata = function(url, filter, select) {
 	    var promise_cb;
@@ -47415,7 +48123,7 @@
 
 
 /***/ },
-/* 625 */
+/* 632 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -47432,9 +48140,9 @@
 	  root = this;
 	}
 
-	var Emitter = __webpack_require__(626);
-	var requestBase = __webpack_require__(627);
-	var isObject = __webpack_require__(628);
+	var Emitter = __webpack_require__(633);
+	var requestBase = __webpack_require__(634);
+	var isObject = __webpack_require__(635);
 
 	/**
 	 * Noop.
@@ -47446,7 +48154,7 @@
 	 * Expose `request`.
 	 */
 
-	var request = module.exports = __webpack_require__(629).bind(null, Request);
+	var request = module.exports = __webpack_require__(636).bind(null, Request);
 
 	/**
 	 * Determine XHR.
@@ -48397,7 +49105,7 @@
 
 
 /***/ },
-/* 626 */
+/* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -48566,13 +49274,13 @@
 
 
 /***/ },
-/* 627 */
+/* 634 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module of mixed-in functions shared between node and client code
 	 */
-	var isObject = __webpack_require__(628);
+	var isObject = __webpack_require__(635);
 
 	/**
 	 * Clear previous timeout.
@@ -48919,7 +49627,7 @@
 
 
 /***/ },
-/* 628 */
+/* 635 */
 /***/ function(module, exports) {
 
 	/**
@@ -48938,7 +49646,7 @@
 
 
 /***/ },
-/* 629 */
+/* 636 */
 /***/ function(module, exports) {
 
 	// The node and browser modules expose versions of this with the
@@ -48976,7 +49684,7 @@
 
 
 /***/ },
-/* 630 */
+/* 637 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -49000,7 +49708,7 @@
 	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 	// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-	var punycode = __webpack_require__(631);
+	var punycode = __webpack_require__(638);
 
 	exports.parse = urlParse;
 	exports.resolve = urlResolve;
@@ -49072,7 +49780,7 @@
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(633);
+	    querystring = __webpack_require__(640);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && isObject(url) && url instanceof Url) return url;
@@ -49689,7 +50397,7 @@
 
 
 /***/ },
-/* 631 */
+/* 638 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -50221,10 +50929,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(632)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(639)(module), (function() { return this; }())))
 
 /***/ },
-/* 632 */
+/* 639 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -50240,17 +50948,17 @@
 
 
 /***/ },
-/* 633 */
+/* 640 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(634);
-	exports.encode = exports.stringify = __webpack_require__(635);
+	exports.decode = exports.parse = __webpack_require__(641);
+	exports.encode = exports.stringify = __webpack_require__(642);
 
 
 /***/ },
-/* 634 */
+/* 641 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -50336,7 +51044,7 @@
 
 
 /***/ },
-/* 635 */
+/* 642 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -50406,16 +51114,16 @@
 
 
 /***/ },
-/* 636 */
+/* 643 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.10.0
 	(function() {
 	  var BULK, Promise, get_data, get_meta, read_odata;
 
-	  Promise = __webpack_require__(617);
+	  Promise = __webpack_require__(624);
 
-	  read_odata = __webpack_require__(624).read_odata;
+	  read_odata = __webpack_require__(631).read_odata;
 
 	  BULK = "http://opendata.cbs.nl/ODataFeed/odata";
 
@@ -50468,20 +51176,20 @@
 
 
 /***/ },
-/* 637 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Generated by CoffeeScript 1.10.0
 	(function() {
 	  var CATALOG, Promise, add_children, get_featured, get_table_featured, get_table_themes, get_tables, get_theme_tree, get_themes, read_odata, utils;
 
-	  utils = __webpack_require__(624);
+	  utils = __webpack_require__(631);
 
-	  Promise = __webpack_require__(617);
+	  Promise = __webpack_require__(624);
 
 	  CATALOG = "http://opendata.cbs.nl/ODataCatalog";
 
-	  read_odata = __webpack_require__(624).read_odata;
+	  read_odata = __webpack_require__(631).read_odata;
 
 	  get_tables = function(filter, select, callback) {
 	    var url;
