@@ -1,3 +1,4 @@
+import check_period from './Period';
 
 // Class that keeps track of the mapping of variables on the axes of a graph
 //
