@@ -122,7 +122,7 @@ rules:
   no-multi-str: error
   no-multiple-empty-lines: error
   no-native-reassign: error
-  no-negated-condition: error
+  no-negated-condition: 'off'
   no-nested-ternary: 'off'
   no-new: error
   no-new-func: error

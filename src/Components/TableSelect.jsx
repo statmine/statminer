@@ -2,6 +2,8 @@ import React from 'react';
 
 // Then import the virtualized Select HOC
 import Select from 'react-virtualized-select';
+import Localize from '../Localize/Localize';
+const strings = Localize.strings;
 
 class TableSelect extends React.Component {
 
@@ -78,7 +80,7 @@ class TableSelect extends React.Component {
     const {value} = this.props;
     return (
       <div className="table-select">
-        <label>Table:</label>
+        <label>{strings.table}:</label>
         <Select value={value} options={table_list} valueRenderer={this.renderValue}
           onChange={this.handleChange}  />
       </div>);

@@ -13,6 +13,7 @@ import { Router, Route, hashHistory } from 'react-router';
 import TableSelect from '../Components/TableSelect.jsx';
 import debounce from 'debounce';
 
+import Localize from '../Localize/Localize';
 
 class GraphPage extends React.Component {
 

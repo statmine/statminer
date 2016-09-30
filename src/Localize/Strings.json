@@ -1,0 +1,12 @@
+{
+  "nl":{
+    "colour": "Kleur",
+    "x-axis": "x-as",
+    "table": "Tabel"
+  },
+  "en": {
+    "colour": "Color",
+    "x-axis": "X-axis",
+    "table": "Table" 
+  }
+}
