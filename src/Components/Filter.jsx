@@ -18,9 +18,9 @@ class Filter extends React.Component {
     const {filter, schema} = this.props;
     const self = this;
     let filter_variables = filter.map(function(f, i) {
-      var variable_schema = schema.fields.find((x) => x.name === f.variable);
-      return (<DimensionFilter key={i} schema={variable_schema}
-        filter={f.filter}  onChange={self.handleFilterChange} prefix={variable_schema.title + ": "}/>);
+      var field = schema.fields.find((x) => x.name === f.variable);
+      return (<DimensionFilter key={i} schema={field}
+        filter={f.filter}  onChange={self.handleFilterChange} prefix={field.title + ": "}/>);
     });
     // create select
     return (

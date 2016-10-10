@@ -10,7 +10,6 @@ function describe(value) {
   return {"data-tooltip": description, 'title': description};
 }
 
-
 class MapAxis extends React.Component {
 
   constructor(props) {
@@ -105,7 +104,7 @@ class MapAxis extends React.Component {
     
     const no_choice = (selected_var) && options.length < 2;
     // Lookup schema and filter of selected variable for filter
-    const variable_schema = schema.fields.find((x) => x.name === selected_var);
+    const field = schema.fields.find((x) => x.name === selected_var);
     const filter = mapping.length ? mapping[0].filter : undefined;
     // Render
     return (
@@ -114,7 +113,7 @@ class MapAxis extends React.Component {
         <Select name="filter-axis" value={selected_var} options={options}
           clearable={!axis.required} onChange={this.handleVariableChange} disabled={no_choice}
           valueRenderer={this.renderValue} optionRenderer={this.renderOption}/>
-        <DimensionFilter schema={variable_schema} filter={filter}
+        <DimensionFilter schema={field} filter={filter}
             onChange={this.handleFilterChange} multi={true} />
       </div>
     );
