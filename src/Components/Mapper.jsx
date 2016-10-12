@@ -33,12 +33,12 @@ class Mapper extends React.Component {
     // Create one element for each of the axes of the graph with which the
     // variables for that axis can be selected
     const self = this;
-    const axes = description.axes.map(function(axis, i) {
+    const axes = description.axes.map(function(axis) {
       const axis_mapping = mapping.mapping[axis.name];
       return (
         <MapAxis key={axis.name} axis={axis} schema={schema} mapping={axis_mapping}
           onChange={self.handleAxisVariableChange}
-          onFilterChange={self.handleFilterChange}/>
+          onFilterChandge={self.handleFilterChange}/>
       );
     });
     // Return mapper component

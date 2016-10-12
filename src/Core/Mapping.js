@@ -43,6 +43,20 @@ class Mapping {
     this.schema = schema;
   }
 
+  // extended schema with pseudo fields: subselections in fields, e.g. years and quarters etc.
+  get variables() {
+    const variables = {fields:[]};
+
+    if (!this.schema){
+      return variables;
+    }
+    const fields = variables.fields;
+    for (const f of this.schema.fields){
+      fields.push({name:f.name, title: f.title, description: f.description, categories: f.categories});
+    }
+    return variables;
+  }
+
   default_category(variable_name) {
     const variable = this.schema.fields.find((x) => x.name === variable_name);
     if (!variable) return undefined;
@@ -96,7 +110,6 @@ class Mapping {
     // add filter to mapping
     mapping.filter = [];
     const self = this;
-    // TODO: select default category
     mapping.filter = this.schema.fields
       .filter((x) => !self.variable_on_axis(x.name)) 
       .filter((x) => (x.categories))                 
@@ -108,10 +121,10 @@ class Mapping {
   }
 
   variable_on_axis(variable_name) {
-    for (var axis_name in this.map) {
-      if (this.map.hasOwnProperty(axis_name)) {
-        if (this.map[axis_name].indexOf(variable_name) !== -1) return true;
-      }
+    const map = this.map;
+    for (let axis in map){
+      const [variable] = map[axis];
+      if (variable == variable_name) return true;
     }
     return false;
   }

@@ -45,10 +45,12 @@ class DimensionFilter extends React.Component {
 
     // Only need to render when a categorical variable is selected on the axis
     if (!schema || !schema.categories) return null;
+
     // Create the list of categories from which the user can select
     var options = schema.categories.map( (c) =>
       ({value: c.name, label: prefix + c.title, description: c.description})
     );
+    
     // Check existence of current filter; derive value for select from this
     let value = options.filter((v) =>
       (filter && filter.indexOf(v.value) !== -1));
