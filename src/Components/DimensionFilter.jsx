@@ -48,7 +48,10 @@ class DimensionFilter extends React.Component {
 
     // Create the list of categories from which the user can select
     var options = schema.categories.map( (c) =>
-      ({value: c.name, label: prefix + c.title, description: c.description})
+      ({ value: c.name,
+         label: prefix + c.title,
+         description: c.description
+      })
     );
     
     // Check existence of current filter; derive value for select from this
@@ -66,7 +69,11 @@ class DimensionFilter extends React.Component {
 }
 
 DimensionFilter.propTypes = {
-  prefix: React.PropTypes.string
+  prefix: React.PropTypes.string,
+  schema: React.PropTypes.object,
+  filter: React.PropTypes.object,
+  multi: React.PropTypes.bool,
+  onChange: React.PropTypes.func
 }
 
 export default DimensionFilter;
