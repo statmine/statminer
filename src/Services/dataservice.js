@@ -28,12 +28,12 @@ var dataservice = (function() {
     d3.json(address + `/table/${id}/query`)
       .header('Content-Type', 'application/json')
       .post(JSON.stringify(query), on_data);
-  }
+  };
 
   dataservice.get_table_list = function(on_list){
     //TODO implement list of table
     d3.json(address + "/tables", on_list);
-  }
+  };
 
   return dataservice;
 })();

@@ -65,6 +65,6 @@ class DimensionFilter extends React.Component {
 
 DimensionFilter.propTypes = {
   prefix: React.PropTypes.string
-}
+};
 
 export default DimensionFilter;

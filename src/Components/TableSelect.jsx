@@ -33,9 +33,9 @@ class TableSelect extends React.Component {
         .map( function(t){return {value: t.name, label: t.title, summary: t.summary};})
         .sort((a,b) => a.label > b.label)
         ;
-      this.setState({table_list, loading: false})
-    }
-    provider.get_table_list(set_tables)
+      this.setState({table_list, loading: false});
+    };
+    provider.get_table_list(set_tables);
   }
 
   renderValue(value) {
@@ -71,6 +71,6 @@ class TableSelect extends React.Component {
 TableSelect.propTypes = {
   value: React.PropTypes.string,
   provider: React.PropTypes.object
-}
+};
 
 export default TableSelect;

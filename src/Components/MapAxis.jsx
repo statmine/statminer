@@ -1,6 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
-import DimensionFilter from './DimensionFilter.jsx'
+import DimensionFilter from './DimensionFilter.jsx';
 
 function describe(value) {
   const description = value.description;

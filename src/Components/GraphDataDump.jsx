@@ -18,7 +18,7 @@ class GraphDataDump extends React.Component {
   }
 
   render() {
-    const {graph, schema, data, mapping, width, height} = this.props;
+    const {graph, schema, data, mapping} = this.props;
     const map = this.convertMapping(mapping.mapping);
     const json = JSON.stringify({graph_type: graph.name,
       mapping: mapping.mapping, map: map, schema: schema, data: data}, null, 2);
