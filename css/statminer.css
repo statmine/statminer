@@ -389,7 +389,8 @@ path.colour.colourlow {
 
 .Select.is-disabled .Select-arrow-zone {
   cursor: default;
-  pointer-events: none; }
+  pointer-events: none;
+  opacity: 0.35; }
 
 .Select-control {
   background-color: #fff;
@@ -422,7 +423,8 @@ path.colour.colourlow {
   background: #fff;
   border-color: #b3b3b3 #ccc #d9d9d9; }
 
-.is-open > .Select-control > .Select-arrow {
+.is-open > .Select-control .Select-arrow {
+  top: -2px;
   border-color: transparent transparent #999;
   border-width: 0 5px 5px; }
 
@@ -558,7 +560,8 @@ path.colour.colourlow {
   border-width: 5px 5px 2.5px;
   display: inline-block;
   height: 0;
-  width: 0; }
+  width: 0;
+  position: relative; }
 
 .is-open .Select-arrow,
 .Select-arrow-zone:hover > .Select-arrow {
@@ -573,7 +576,8 @@ path.colour.colourlow {
   width: 1px;
   margin: -1px;
   clip: rect(0, 0, 0, 0);
-  overflow: hidden; }
+  overflow: hidden;
+  float: left; }
 
 @-webkit-keyframes Select-animation-fadeIn {
   from {
